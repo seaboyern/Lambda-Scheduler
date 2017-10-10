@@ -1,5 +1,7 @@
 package com.example.lambda.lambdaorganizer;
 
 
-public class GradeCalculator {
+import android.support.v7.app.AppCompatActivity;
+
+public class GradeCalculator extends AppCompatActivity {
 }

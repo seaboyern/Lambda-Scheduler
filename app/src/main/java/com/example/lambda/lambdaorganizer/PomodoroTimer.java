@@ -1,5 +1,7 @@
 package com.example.lambda.lambdaorganizer;
 
 
-public class PomodoroTimer {
+import android.support.v7.app.AppCompatActivity;
+
+public class PomodoroTimer extends AppCompatActivity {
 }

@@ -1,5 +1,8 @@
 package com.example.lambda.lambdaorganizer;
 
 
-public class ScheduleOverview {
+import android.support.v7.app.AppCompatActivity;
+
+public class ScheduleOverview extends AppCompatActivity {
+
 }
