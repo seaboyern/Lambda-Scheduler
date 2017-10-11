@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.graphics.RectF;
@@ -16,7 +17,8 @@ import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 
-
+import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidListener;
 
 public class ScheduleOverview extends AppCompatActivity implements WeekView.EventClickListener,
         MonthLoader.MonthChangeListener, WeekView.EmptyViewClickListener {
@@ -32,6 +34,10 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_overview);
 
+        //////////////////////
+        // Set up Week view //
+        // ///////////////////
+
         // Get a reference for the week view in the layout.
         mWeekView = (WeekView) findViewById(R.id.weekView);
 
@@ -43,6 +49,26 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         mWeekView.setOnEventClickListener(this);
         mWeekView.setEmptyViewClickListener(this);
 
+        ///////////////////////
+        // Set up Month View //
+        ///////////////////////
+
+        CaldroidFragment caldroidFragment = new CaldroidFragment();
+
+        // Get the current date
+        Calendar cal = Calendar.getInstance();
+
+        // Arguments for creating the Caldroid calendar
+        Bundle args = new Bundle();
+        args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
+        args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
+        caldroidFragment.setArguments(args);
+
+        android.support.v4.app.FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+        // Turn the Linear layout in the activity_schedule_overview
+        // layout into a Caldroid calendar
+        t.replace(R.id.caldroid, caldroidFragment);
+        t.commit();
     }
 
     public WeekView getWeekView() {
