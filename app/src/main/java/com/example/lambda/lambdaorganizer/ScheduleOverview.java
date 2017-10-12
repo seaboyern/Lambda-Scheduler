@@ -15,6 +15,7 @@ import android.widget.Toast;
 import android.view.MenuInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
@@ -78,6 +79,11 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         return mWeekView;
     }
 
+    /**
+     * Creates an options menu when user taps the button in the top right corner.
+     * @param menu
+     * @return True if menu created successfully
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -85,13 +91,27 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         return true;
     }
 
+    /**
+     * Called when the user selects an option from the options menu.
+     * @param item
+     * @return True if selection processed successfully.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Get instance of the caldroid calendar view
+        LinearLayout caldroid = (LinearLayout)this.findViewById(R.id.caldroid);
+
         switch(item.getItemId()) {
             case R.id.weekview:
+                // Hide the caldroid calendar and show the week view
+                caldroid.setVisibility(View.GONE);
+                mWeekView.setVisibility(View.VISIBLE);
                 Toast.makeText(this, "Week view", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.monthview:
+                // Hide the week view and show the caldroid calendar
+                mWeekView.setVisibility(View.GONE);
+                caldroid.setVisibility(View.VISIBLE);
                 Toast.makeText(this, "Month view", Toast.LENGTH_SHORT).show();
                 return true;
             default:
