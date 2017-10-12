@@ -12,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.graphics.RectF;
 import android.widget.Toast;
+import android.view.MenuInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
@@ -73,6 +76,27 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
 
     public WeekView getWeekView() {
         return mWeekView;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.scheduler_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.weekview:
+                Toast.makeText(this, "Week view", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.monthview:
+                Toast.makeText(this, "Month view", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
