@@ -6,6 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import database.schema.CourseContract;
+import database.schema.PomodoroContract;
+import database.schema.TaskContract;
+
 /**
  * Created by mahmudfasihulazam on 2017-10-10.
  * Singleton wrapper for local SQLite Database
@@ -28,15 +32,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(PomodoroContract.DELETE_TABLE);
-        sqLiteDatabase.execSQL(PomodoroContract.CREATE_TABLE);
+    public void onCreate(SQLiteDatabase db) {
+        Log.v(TAG, TaskContract.CREATE_TABLE);
+        db.execSQL(TaskContract.DELETE_TABLE);
+        db.execSQL(TaskContract.CREATE_TABLE);
+        InitDb.initDb(this);
         // More tables should be created here:
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL(PomodoroContract.DELETE_TABLE);
         sqLiteDatabase.execSQL(PomodoroContract.CREATE_TABLE);
     }
 

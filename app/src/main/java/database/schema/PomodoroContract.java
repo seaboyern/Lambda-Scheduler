@@ -1,4 +1,4 @@
-package database;
+package database.schema;
 
 import android.provider.BaseColumns;
 
@@ -10,7 +10,7 @@ public final class PomodoroContract {
     /**
      * Table creation command:
      */
-    static final String CREATE_TABLE =
+    public static final String CREATE_TABLE =
             "CREATE TABLE IF NOT EXISTS " +
                     PomodoroEntry.TABLE_NAME + " (" +
                     PomodoroEntry._ID + " INTEGER PRIMARY KEY," +
@@ -21,7 +21,7 @@ public final class PomodoroContract {
     /**
      * Table deletion command:
      */
-    static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + PomodoroEntry.TABLE_NAME;
+    public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + PomodoroEntry.TABLE_NAME;
 
     /**
      * Singleton constructor
