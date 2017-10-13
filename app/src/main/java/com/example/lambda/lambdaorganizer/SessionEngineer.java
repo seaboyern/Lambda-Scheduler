@@ -329,7 +329,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mService = new com.google.api.services.calendar.Calendar.Builder(
                     transport, jsonFactory, credential)
-                    .setApplicationName("Google Calendar API Android Quickstart")
+                    .setApplicationName("Lambda Organizer")
                     .build();
         }
 
