@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sessionEngLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context="com.example.lambda.lambdaorganizer.SessionEngineer">
+
+    <TextView
+        android:id="@+id/textViewAPI"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_weight="0.00"
+        android:text="Session Creation"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.02"
+        android:text="Results From Google Calendar"
+        android:textAlignment="viewStart"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textviewAPIResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.81"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/Sync_Google"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:text="Sync Google"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/add_study_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:text="Add Study Session"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/Back_Menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:text="Back To Menu"
+        android:textStyle="bold" />
+</LinearLayout>
