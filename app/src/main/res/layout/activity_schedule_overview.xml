@@ -28,4 +28,13 @@
         app:dayBackgroundColor="#05000000"
         app:todayBackgroundColor="#1848adff"
         app:headerColumnBackground="#ffffffff"/>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/caldroid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    </LinearLayout>
+
 </RelativeLayout>
