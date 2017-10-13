@@ -23,7 +23,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "lambda.db";
 
-
     /**
      * Constructor
      */
@@ -49,7 +48,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Returns a String representation of the specified table:
      */
     public String getTableAsString(String tableName) {
-        Log.d(TAG, "getTableAsString called");
         String tableString = String.format("Table %s:\n", tableName);
         Cursor allRows = this.getReadableDatabase().rawQuery("SELECT * FROM " + tableName, null);
         if (allRows.moveToFirst()) {

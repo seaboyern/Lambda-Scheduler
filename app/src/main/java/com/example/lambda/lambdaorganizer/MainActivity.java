@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
                         // Helper for opening a database connection:
                         DatabaseHelper dbOpener = new DatabaseHelper(getBaseContext());
                         dbOpener.onCreate(dbOpener.getWritableDatabase());
-
                     }
                 }).start();
             }

@@ -32,8 +32,7 @@ public final class TaskContract {
     /**
      * Singleton constructor
      */
-    private TaskContract() {
-    }
+    private TaskContract() {}
 
     /**
      * Fields and table name
