@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import database.schema.TaskContract;
+import entities.Task;
 
 /**
  * Created by mahmudfasihulazam on 2017-10-12.
@@ -143,6 +144,8 @@ public final class InitDb {
                     queryResult = "Date parse error";
                 }
                 Log.v(TAG, queryResult);
+                Task task = new Task(cur);
+                Log.v(TAG, task.toString());
             } while(cur.moveToNext());
         }
 
