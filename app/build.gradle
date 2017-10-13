@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
+    //Please do not channge any settings
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile('com.google.api-client:google-api-client-android:1.23.0') {
         exclude group: 'org.apache.httpcomponents'
