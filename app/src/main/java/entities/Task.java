@@ -1,5 +1,6 @@
 package entities;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -12,14 +13,21 @@ import database.schema.TaskContract;
  * Created by mahmudfasihulazam on 2017-10-12.
  */
 
-public class Task {
+public class Task implements DatabaseObject {
 
+    /**
+     * Fields:
+     */
     private String title;
     private Date date;
     private String desc;
     private Date start;
     private Date end;
     private int priority;
+
+    /**
+     * Android log tag:
+     */
     private static String TAG = "Task";
 
     public Task(Cursor cur) {
@@ -34,33 +42,32 @@ public class Task {
         String endStr = cur.getString(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_END));
         this.setPriority(cur.getInt(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_PRIO)));
         SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat timeFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
 
         // Parse dates and times:
         try {
             this.setDate(dateFmt.parse(dateStr));
-            this.setStart(dateFmt.parse(dateStr + " " + startStr));
-            this.setEnd(dateFmt.parse(dateStr + " " + endStr));
+            this.setStart(timeFmt.parse(startStr));
+            this.setEnd(timeFmt.parse(endStr));
         } catch(Exception e) {
-            Log.e(TAG, "Date parse error");
             e.printStackTrace();
         }
     }
 
-    public Task(String title, String date, String desc, String start, String end, int priority) {
+    public Task(String title, String date, String start, String end, String desc, int priority) {
         this.title = title;
         this.desc = desc;
         this.priority = priority;
         SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat timeFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
         // Parse dates and times:
         try {
             this.setDate(dateFmt.parse(date));
-            this.setStart(dateFmt.parse(date + " " + start));
-            this.setEnd(dateFmt.parse(date + " " + end));
+            this.setStart(timeFmt.parse(start));
+            this.setEnd(timeFmt.parse(end));
         } catch(Exception e) {
-            Log.e(TAG, "Date parse error");
-            e.printStackTrace();
+            throw new RuntimeException(
+                    "Format error: Date: " + date + "; Start: " + start + "; End: " + end);
         }
     }
 
@@ -115,27 +122,37 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task: Title: "
-                + this.title + "; Date: "
-                + this.date.toString()
-                + "; Start: "
-                + this.start.toString()
-                + "; End: " + this.end.toString()
-                + "; Description: " + this.desc;
+        SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
+        return "Task: Title: " + this.title
+                + "; Date: " + dateFmt.format(this.date)
+                + "; Start: " + timeFmt.format(this.start)
+                + "; End: " + timeFmt.format(this.end)
+                + "; Description: " + this.desc
+                + "; Priority: " + this.priority;
     }
 
     /**
      * Does this task conflict with a given task?
      */
-    public boolean conflict(Task otherTask) {
+    public boolean conflict(final Task otherTask) {
         return true;
     }
 
     /**
      * Insert this task into the database
      */
-    public void insertIntoDb() {
-        return;
+    public ContentValues databaseObject() {
+        SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
+        ContentValues values = new ContentValues();
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_TITLE, this.title);
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_DATE, dateFmt.format(this.date));
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_START, timeFmt.format(this.start));
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_END, timeFmt.format(this.end));
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_DESC, this.desc);
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_PRIO, this.priority);
+        return values;
     }
 
 }
