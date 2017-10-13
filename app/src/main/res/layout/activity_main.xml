@@ -35,14 +35,6 @@
             android:layout_height="wrap_content"
             android:text="Session Engineer (WIP)" />
 
-        <TextView
-            android:id="@+id/text_view_id"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-
-            />
-
-
         <Button
             android:id="@+id/launch_pomodoro_btn"
             android:layout_weight="1"
