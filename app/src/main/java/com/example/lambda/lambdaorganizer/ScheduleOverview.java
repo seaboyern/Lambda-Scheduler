@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -31,9 +32,10 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
     private static final int TYPE_WEEK_VIEW = 3;
-    private int mWeekViewType = TYPE_THREE_DAY_VIEW;
+    private int mWeekViewType = TYPE_WEEK_VIEW;
     private WeekView mWeekView;
     private List<WeekViewEvent> mEvents;
+    protected SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,14 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         ///////////////////////
 
         CaldroidFragment caldroidFragment = new CaldroidFragment();
+        CaldroidListener caldroidListener = new CaldroidListener() {
+            @Override
+            public void onSelectDate(Date date, View view) {
+                Toast.makeText(getApplicationContext(), dateFormatter.format(date),
+                        Toast.LENGTH_SHORT).show();
+            }
+        };
+        caldroidFragment.setCaldroidListener(caldroidListener);
 
         // Get the current date
         Calendar cal = Calendar.getInstance();

@@ -13,7 +13,6 @@
     tools:context="com.example.lambda.lambdaorganizer.ScheduleOverview" >
 
     <com.alamkanak.weekview.WeekView
-        android:visibility="gone"
         android:id="@+id/weekView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,10 +30,11 @@
         app:headerColumnBackground="#ffffffff"/>
 
     <LinearLayout
-                android:id="@+id/caldroid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+        android:visibility="gone"
+        android:id="@+id/caldroid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     </LinearLayout>
 
 </RelativeLayout>
