@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         btnToDoList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ToDoListManager.class));
+                startActivity(new Intent(MainActivity.this, ToDoList.class));
             }
         });
 
