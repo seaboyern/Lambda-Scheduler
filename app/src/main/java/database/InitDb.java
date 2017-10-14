@@ -24,9 +24,7 @@ public final class InitDb {
     public static String TAG = "InitDb";
     private InitDb(){}
 
-    public static void initDb(DatabaseHelper dbOpener) {
-        SQLiteDatabase db_w = dbOpener.getWritableDatabase();
-        SQLiteDatabase db_r = dbOpener.getReadableDatabase();
+    public static void initDb(SQLiteDatabase db_w) {
 
         // Populate task table:
         Task[] tasks = new Task[10];
@@ -94,7 +92,7 @@ public final class InitDb {
             // INSERT INTO task:
         }
 
-        Cursor cur = db_r.rawQuery("SELECT * FROM task", null);
+        Cursor cur = db_w.rawQuery("SELECT * FROM task", null);
         int i = 0;
         if(cur.moveToFirst()) {
             do {
@@ -102,6 +100,8 @@ public final class InitDb {
                 Log.v(TAG, task.toString());
             } while(cur.moveToNext());
         }
+
+        cur.close();
 
     }
 }

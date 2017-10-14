@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import database.DatabaseHelper;
+import database.InitDb;
 import database.schema.PomodoroContract;
 import database.schema.TaskContract;
 
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                         // Create a database with dummy data:
                         // Helper for opening a database connection:
                         DatabaseHelper dbOpener = new DatabaseHelper(getBaseContext());
-                        dbOpener.onCreate(dbOpener.getWritableDatabase());
+                        InitDb.initDb(dbOpener.getWritableDatabase());
                         dbOpener.close();
                     }
                 }).start();
