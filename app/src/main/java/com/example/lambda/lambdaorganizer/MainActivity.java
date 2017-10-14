@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import database.DatabaseHelper;
 import database.InitDb;
@@ -70,6 +71,14 @@ public class MainActivity extends AppCompatActivity {
         btnDbTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this,
+                                "Please check the android monitor for results",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
                 // Run database operations on a separate thread to prevent UI blocking:
                 new Thread(new Runnable() {
                     @Override

@@ -1,17 +1,8 @@
 package database;
 
-import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.format.DateFormat;
 import android.util.Log;
-import android.widget.Toast;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import database.schema.TaskContract;
 import entities.Task;
 
@@ -26,6 +17,8 @@ public final class InitDb {
 
     public static void initDb(SQLiteDatabase db_w) {
 
+        db_w.execSQL(TaskContract.DELETE_TABLE);
+        db_w.execSQL(TaskContract.CREATE_TABLE);
         // Populate task table:
         Task[] tasks = new Task[10];
         try {
@@ -85,9 +78,13 @@ public final class InitDb {
                 long newRowId =
                         db_w.insert(TaskContract.TaskEntry.TABLE_NAME, null, i.databaseObject());
                 // Log table status:
-                Log.v(TAG, "Database command executed; row id: " + newRowId);
+                if(0 <= newRowId) {
+                    Log.v(TAG, "Database command executed; row id: " + newRowId);
+                } else {
+                    Log.e(TAG, "Entry exists: " + i.getTitle());
+                }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage());
             }
             // INSERT INTO task:
         }
