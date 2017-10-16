@@ -14,5 +14,5 @@
     <item
         android:id="@+id/change_term"
         android:title="Change Term"
-        app:actionLayout="@layout/switch_terms" />
+        app:actionLayout="@layout/grade_calc_switch_terms" />
 </menu>

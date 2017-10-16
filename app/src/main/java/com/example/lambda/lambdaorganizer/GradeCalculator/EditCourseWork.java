@@ -13,6 +13,6 @@ public class EditCourseWork extends AppCompatActivity{
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.grade_calc_main); //<--change view when ready
+        setContentView(R.layout.grade_calc_edit_course_work);
     }
 }
