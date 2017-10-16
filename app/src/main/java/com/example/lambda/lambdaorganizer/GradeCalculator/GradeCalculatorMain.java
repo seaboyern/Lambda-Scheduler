@@ -26,21 +26,21 @@ public class GradeCalculatorMain extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-
-    public boolean onOptionItemSelected(final MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.edit_course_work:
-                //go to edit course work view
+                setContentView(R.layout.grade_calc_edit_course_work);
                 return true;
             case R.id.edit_courses:
-                //go to edit course view
+                setContentView(R.layout.grade_calc_edit_courses);
                 return true;
             case R.id.edit_terms:
-                //go to edit terms view
+                setContentView(R.layout.grade_calc_edit_terms);
                 return true;
             case R.id.change_term:
-                //interface to select terms
+                setContentView(R.layout.grade_calc_switch_terms);
                 return true;
 
             default:
