@@ -1,17 +1,8 @@
 package database;
 
-import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.format.DateFormat;
 import android.util.Log;
-import android.widget.Toast;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import database.schema.TaskContract;
 import entities.Task;
 
@@ -24,10 +15,10 @@ public final class InitDb {
     public static String TAG = "InitDb";
     private InitDb(){}
 
-    public static void initDb(DatabaseHelper dbOpener) {
-        SQLiteDatabase db_w = dbOpener.getWritableDatabase();
-        SQLiteDatabase db_r = dbOpener.getReadableDatabase();
+    public static void initDb(SQLiteDatabase db_w) {
 
+        db_w.execSQL(TaskContract.DELETE_TABLE);
+        db_w.execSQL(TaskContract.CREATE_TABLE);
         // Populate task table:
         Task[] tasks = new Task[10];
         try {
@@ -87,14 +78,18 @@ public final class InitDb {
                 long newRowId =
                         db_w.insert(TaskContract.TaskEntry.TABLE_NAME, null, i.databaseObject());
                 // Log table status:
-                Log.v(TAG, "Database command executed; row id: " + newRowId);
+                if(0 <= newRowId) {
+                    Log.v(TAG, "Database command executed; row id: " + newRowId);
+                } else {
+                    Log.e(TAG, "Entry exists: " + i.getTitle());
+                }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage());
             }
             // INSERT INTO task:
         }
 
-        Cursor cur = db_r.rawQuery("SELECT * FROM task", null);
+        Cursor cur = db_w.rawQuery("SELECT * FROM task", null);
         int i = 0;
         if(cur.moveToFirst()) {
             do {
@@ -102,6 +97,8 @@ public final class InitDb {
                 Log.v(TAG, task.toString());
             } while(cur.moveToNext());
         }
+
+        cur.close();
 
     }
 }

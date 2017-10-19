@@ -2,11 +2,11 @@ package entities;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import database.DatabaseObject;
 import database.schema.TaskContract;
 
 /**

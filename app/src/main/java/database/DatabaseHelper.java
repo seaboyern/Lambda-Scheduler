@@ -35,7 +35,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.v(TAG, TaskContract.CREATE_TABLE);
         db.execSQL(TaskContract.DELETE_TABLE);
         db.execSQL(TaskContract.CREATE_TABLE);
-        InitDb.initDb(this);
         // More tables should be created here:
     }
 

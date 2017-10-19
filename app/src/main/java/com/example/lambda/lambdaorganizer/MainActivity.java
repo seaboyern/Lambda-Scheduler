@@ -5,10 +5,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.GradeCalculator.GradeCalculatorMain;
 
 import database.DatabaseHelper;
+
+import database.InitDb;
+import database.schema.PomodoroContract;
+import database.schema.TaskContract;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,6 +71,14 @@ public class MainActivity extends AppCompatActivity {
         btnDbTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this,
+                                "Please check the android monitor for results",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
                 // Run database operations on a separate thread to prevent UI blocking:
                 new Thread(new Runnable() {
                     @Override
@@ -73,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                         // Create a database with dummy data:
                         // Helper for opening a database connection:
                         DatabaseHelper dbOpener = new DatabaseHelper(getBaseContext());
-                        dbOpener.onCreate(dbOpener.getWritableDatabase());
+                        InitDb.initDb(dbOpener.getWritableDatabase());
                         dbOpener.close();
                     }
                 }).start();
