@@ -77,17 +77,7 @@ public class ToDoAdd extends AppCompatActivity {
             DatabaseHelper dbOpener = new DatabaseHelper(getBaseContext());
             SQLiteDatabase db_w = dbOpener.getWritableDatabase();
             try {
-                long status = db_w.insert(
-                        TaskContract.TaskEntry.TABLE_NAME, null,
-                        this.task.databaseObject());
-                if(0 <= status) {
-                    sendNotification("Task added: " + task.getTitle());
-                    clearFields();
-                } else {
-                    toast("Non-unique task cannot be added");
-                }
             } catch(Exception e) {
-                toast("Unknown error");
             } finally {
                 dbOpener.close();
             }

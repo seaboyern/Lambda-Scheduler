@@ -9,11 +9,19 @@ import android.provider.BaseColumns;
 
 public class CourseContract {
     /**
+     * Singleton constructor
+     */
+    private CourseContract() {
+    }
+
+    public static final String TABLE_NAME = "course";
+
+    /**
      * Table creation command:
      */
     public static final String CREATE_TABLE =
             "CREATE TABLE IF NOT EXISTS " +
-                    CourseEntry.TABLE_NAME + " (" +
+                    TABLE_NAME + " (" +
                     CourseEntry.COLUMN_NAME_ID + " TEXT PRIMARY KEY," +
                     CourseEntry.COLUMN_NAME_TITLE + " TEXT," +
                     CourseEntry.COLUMN_NAME_YEAR + " INTEGER," +
@@ -23,20 +31,13 @@ public class CourseContract {
     /**
      * Table deletion command:
      */
-    public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + CourseEntry.TABLE_NAME;
-
-    /**
-     * Singleton constructor
-     */
-    private CourseContract() {
-    }
+    public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     /**
      * Fields and table name
      */
     public static class CourseEntry implements BaseColumns {
-        public static final String TABLE_NAME = "course";
-        public static final String COLUMN_NAME_ID = "id";
+        public static final String COLUMN_NAME_ID = "course_id";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_YEAR = "year";
         public static final String COLUMN_NAME_TARGET_GRADE = "target";
