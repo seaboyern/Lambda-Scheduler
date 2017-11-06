@@ -83,9 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         // Create a database with dummy data:
                         // Helper for opening a database connection:
-                        DatabaseHelper dbOpener = new DatabaseHelper(getBaseContext());
-                        InitDb.initDb(dbOpener);
-                        dbOpener.close();
+                        InitDb.initDb(getBaseContext());
                     }
                 }).start();
             }

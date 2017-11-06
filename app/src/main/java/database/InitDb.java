@@ -4,6 +4,8 @@ import android.content.ContentValues;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import android.content.Context;
 import android.util.Log;
 
 import database.schema.AssignmentContract;
@@ -12,6 +14,9 @@ import database.schema.CourseCommitmentContract;
 import database.schema.CourseContract;
 import database.schema.ExamContract;
 import database.schema.TaskContract;
+import database.tables.AssignmentTable;
+import database.tables.CommitmentTable;
+import database.tables.CourseCommitmentTable;
 
 /**
  * Created by mahmudfasihulazam on 2017-10-12.
@@ -22,15 +27,7 @@ public final class InitDb {
     public static String TAG = "InitDb";
     private InitDb(){}
 
-    public static void initDb(DatabaseHelper db) {
-        // Print all tables:
-        Log.v(TAG, db.getTableAsString(CommitmentContract.TABLE_NAME));
-        Log.v(TAG, db.getTableAsString(CourseCommitmentContract.TABLE_NAME));
-        Log.v(TAG, db.getTableAsString(AssignmentContract.TABLE_NAME));
-        Log.v(TAG, db.getTableAsString(ExamContract.TABLE_NAME));
-        Log.v(TAG, db.getTableAsString(CourseContract.TABLE_NAME));
-        Log.v(TAG, db.getTableAsString(TaskContract.TABLE_NAME));
-
+    public static void initDb(Context c) {
         // Insert an assignment:
         // Insert commitment entry:
         ContentValues values = new ContentValues();
@@ -39,7 +36,16 @@ public final class InitDb {
         values.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_PRIO, 10);
         values.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_TYPE,
                 CourseCommitmentContract.TABLE_NAME);
-        db.getWritableDatabase().insert(CommitmentContract.TABLE_NAME, null, values);
+        try {
+            CommitmentTable.getInstance(c).remove(values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            CommitmentTable.getInstance(c).insert(values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Insert course commitment entry:
         values = new ContentValues();
@@ -50,29 +56,36 @@ public final class InitDb {
         values.put(CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_WT, 5.0);
         values.put(CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_REQ, 5.0);
         values.put(CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_ACH, 5.0);
-        db.getWritableDatabase().insert(CourseCommitmentContract.TABLE_NAME, null, values);
+        try {
+            CourseCommitmentTable.getInstance(c).remove(values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            CourseCommitmentTable.getInstance(c).insert(values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Insert assignment entry:
         values = new ContentValues();
         values.put(AssignmentContract.AssignmentEntry.COLUMN_NAME_TITLE, "A1");
         values.put(AssignmentContract.AssignmentEntry.COLUMN_NAME_CRID, "CMPT 370");
         try {
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            values.put(AssignmentContract.AssignmentEntry.COLUMN_NAME_DEADLINE,
-                    fmt.format(fmt.parse("2017-11-21 23:59:00")));
-        } catch (ParseException e) {
+            AssignmentTable.getInstance(c).remove(values);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        db.getWritableDatabase().insert(AssignmentContract.TABLE_NAME, null, values);
+        try {
+            AssignmentTable.getInstance(c).insert(values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Print all tables:
-        Log.v(TAG, db.getTableAsString(CommitmentContract.TABLE_NAME));
-        Log.v(TAG, db.getTableAsString(CourseCommitmentContract.TABLE_NAME));
-        Log.v(TAG, db.getTableAsString(AssignmentContract.TABLE_NAME));
-        Log.v(TAG, db.getTableAsString(ExamContract.TABLE_NAME));
-        Log.v(TAG, db.getTableAsString(CourseContract.TABLE_NAME));
-        Log.v(TAG, db.getTableAsString(TaskContract.TABLE_NAME));
-
+        Log.v(TAG, CommitmentTable.getInstance(c).toString());
+        Log.v(TAG, CourseCommitmentTable.getInstance(c).toString());
+        Log.v(TAG, AssignmentTable.getInstance(c).toString());
 
     }
 }
