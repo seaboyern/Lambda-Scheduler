@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import database.DatabaseHelper;
-import database.schema.AssignmentContract;
+import database.DatabaseObject;
 
 /**
  * Created by mahmudfasihulazam on 2017-11-05.
@@ -13,7 +13,6 @@ import database.schema.AssignmentContract;
 public abstract class Table {
     protected Context myContext;
     protected String tableName;
-    protected String primaryKeyName;
 
     protected Table(Context c) {
         this.myContext = c;
@@ -30,11 +29,12 @@ public abstract class Table {
         }
     }
 
-    public void insert(ContentValues record) {
+    public void insert(DatabaseObject record) {
         DatabaseHelper dbHelper = new DatabaseHelper(this.myContext);
         long status = -1;
         try {
-            status = dbHelper.getWritableDatabase().insert(this.tableName, null, record);
+            status = dbHelper.getWritableDatabase().insert(this.tableName, null,
+                    record.databaseObject());
         } catch(Exception e) {
             throw new RuntimeException(e.getMessage());
         } finally {
@@ -43,14 +43,18 @@ public abstract class Table {
         }
     }
 
-    public void remove(ContentValues record) {
+    public void remove(DatabaseObject record) {
         DatabaseHelper dbHelper = new DatabaseHelper(this.myContext);
-        dbHelper.getWritableDatabase().execSQL("DELETE FROM " + this.tableName
-                + " WHERE " + this.primaryKeyName + " = "
-                + "'" + record.get(this.primaryKeyName) + "'");
-        dbHelper.close();
+        try {
+            dbHelper.getWritableDatabase().execSQL(this.removeQuery(record.databaseObject()));
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            dbHelper.close();
+        }
     }
 
     public abstract ContentValues query(String q);
+    protected abstract  String removeQuery(ContentValues values);
 
 }

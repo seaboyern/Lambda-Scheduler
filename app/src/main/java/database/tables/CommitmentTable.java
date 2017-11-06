@@ -16,7 +16,6 @@ public class CommitmentTable extends Table {
     private CommitmentTable(Context c) {
         super(c);
         this.tableName = CommitmentContract.TABLE_NAME;
-        this.primaryKeyName = CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE;
     }
 
     public static Table getInstance(Context c) {
@@ -29,6 +28,17 @@ public class CommitmentTable extends Table {
     @Override
     public ContentValues query(String q) {
         return null;
+    }
+
+    @Override
+    protected String removeQuery(ContentValues values) {
+        return "DELETE FROM " + CommitmentContract.TABLE_NAME + " WHERE "
+                + CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE + " = '"
+                + values.get(CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE)
+                + "' AND "
+                + CommitmentContract.CommitmentEntry.COLUMN_NAME_TYPE + " = '"
+                + values.get(CommitmentContract.CommitmentEntry.COLUMN_NAME_TYPE)
+                + "';";
     }
 
 }

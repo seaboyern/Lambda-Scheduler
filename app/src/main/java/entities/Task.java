@@ -28,7 +28,7 @@ public class Task implements DatabaseObject {
     /**
      * Android log tag:
      */
-    private static String TAG = "Task";
+    private static String TAG = "TaskTable";
 
     public Task(String title, String date, String start, String end, String desc, int priority) {
         this.title = title;
@@ -100,7 +100,7 @@ public class Task implements DatabaseObject {
     public String toString() {
         SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
-        return "Task: Title: " + this.title
+        return "TaskTable: Title: " + this.title
                 + "; Date: " + dateFmt.format(this.date)
                 + "; Start: " + timeFmt.format(this.start)
                 + "; End: " + timeFmt.format(this.end)

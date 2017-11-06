@@ -3,7 +3,6 @@ package database.tables;
 import android.content.ContentValues;
 import android.content.Context;
 
-import database.DatabaseHelper;
 import database.schema.CourseCommitmentContract;
 
 /**
@@ -16,7 +15,6 @@ public class CourseCommitmentTable extends Table {
     private CourseCommitmentTable(Context c) {
         super(c);
         this.tableName = CourseCommitmentContract.TABLE_NAME;
-        this.primaryKeyName = CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_TITLE;
     }
 
     public static Table getInstance(Context c) {
@@ -31,5 +29,15 @@ public class CourseCommitmentTable extends Table {
         return null;
     }
 
+    @Override
+    protected String removeQuery(ContentValues values) {
+        return "DELETE FROM " + CourseCommitmentContract.TABLE_NAME + " WHERE "
+                + CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_TITLE + " = '"
+                + values.get(CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_TITLE)
+                + "' AND "
+                + CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_CRID + " = '"
+                + values.get(CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_CRID)
+                + "';";
+    }
 
 }

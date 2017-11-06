@@ -3,6 +3,9 @@ package database.tables;
 import android.content.ContentValues;
 import android.content.Context;
 
+import java.util.Map;
+import java.util.Set;
+
 import database.DatabaseHelper;
 import database.schema.AssignmentContract;
 
@@ -16,7 +19,6 @@ public class AssignmentTable extends Table {
     private AssignmentTable(Context c) {
         super(c);
         this.tableName = AssignmentContract.TABLE_NAME;
-        this.primaryKeyName = AssignmentContract.AssignmentEntry.COLUMN_NAME_TITLE;
     }
 
     public static Table getInstance(Context c) {
@@ -29,6 +31,17 @@ public class AssignmentTable extends Table {
     @Override
     public ContentValues query(String q) {
         return null;
+    }
+
+    @Override
+    protected String removeQuery(ContentValues values) {
+        return "DELETE FROM " + AssignmentContract.TABLE_NAME + " WHERE "
+                + AssignmentContract.AssignmentEntry.COLUMN_NAME_TITLE + " = '"
+                + values.get(AssignmentContract.AssignmentEntry.COLUMN_NAME_TITLE)
+                + "' AND "
+                + AssignmentContract.AssignmentEntry.COLUMN_NAME_CRID + " = '"
+                + values.get(AssignmentContract.AssignmentEntry.COLUMN_NAME_CRID)
+                + "';";
     }
 
 }
