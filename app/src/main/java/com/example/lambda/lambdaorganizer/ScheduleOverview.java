@@ -30,9 +30,9 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         WeekView.EventLongPressListener{
 
     private static final int TYPE_DAY_VIEW = 1;
-    private static final int TYPE_THREE_DAY_VIEW = 2;
-    private static final int TYPE_WEEK_VIEW = 3;
-    private int mWeekViewType = TYPE_WEEK_VIEW;
+    private static final int TYPE_THREE_DAY_VIEW = 3;
+    private static final int TYPE_WEEK_VIEW = 7;
+    private int mWeekViewType = TYPE_THREE_DAY_VIEW;
     private WeekView mWeekView;
     private List<WeekViewEvent> mEvents;
     protected SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
@@ -59,6 +59,8 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         mWeekView.setOnEventClickListener(this);
         mWeekView.setEmptyViewClickListener(this);
         mWeekView.setEventLongPressListener(this);
+
+        mWeekView.setNumberOfVisibleDays(mWeekViewType);
 
         ///////////////////////
         // Set up Month View //
@@ -180,8 +182,14 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         // Populate the week view with some events.
-
-        return mEvents;
+        // Work around Week view library adding the events 3 times
+        ArrayList<WeekViewEvent> eventsMonth = new ArrayList<WeekViewEvent>();
+        for (int i = 0; i < mEvents.size(); i++) {
+            if (mEvents.get(i).getStartTime().get(Calendar.MONTH) == newMonth) {
+                eventsMonth.add(mEvents.get(i));
+            }
+        }
+        return eventsMonth;
     }
 
     /**
