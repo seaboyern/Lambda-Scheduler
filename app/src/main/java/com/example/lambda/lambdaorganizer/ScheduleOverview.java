@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.util.Log;
 
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
@@ -35,6 +36,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     private int mWeekViewType = TYPE_THREE_DAY_VIEW;
     private WeekView mWeekView;
     private List<WeekViewEvent> mEvents;
+    private static final String TAG = "ScheduleOverview";
     protected SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
 
     @Override
@@ -193,6 +195,19 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     }
 
     /**
+     * Checks if two WeekViewEvent objects are equal.
+     * @param event1 The first WeekViewEvent.
+     * @param event2 The second WeekViewEvent.
+     * @return True if the objects represent the same event.
+     */
+    private boolean eventsEqual(WeekViewEvent event1, WeekViewEvent event2) {
+        return (event1.getStartTime() == event2.getStartTime())
+            && (event1.getEndTime() == event2.getEndTime())
+            && (event1.getName() == event2.getName())
+            && (event1.getId() == event2.getId());
+    }
+
+    /**
      * Add a new task to the weekly view
      * @param title
      * @param startTime
@@ -216,8 +231,13 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     }
 
     public void deleteTask(WeekViewEvent event) {
-        Toast.makeText(this, "TODO: remove event " + event.getName(), Toast.LENGTH_SHORT).show();
-        mEvents.remove(mEvents.indexOf(event));
+        ArrayList<WeekViewEvent> UpdatedList = new ArrayList<WeekViewEvent>();
+        for(WeekViewEvent e: mEvents) {
+            if(!eventsEqual(e, event)) {
+                UpdatedList.add(e);
+            }
+        }
+        mEvents = UpdatedList;
         mWeekView.notifyDatasetChanged();
     }
 }
