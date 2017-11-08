@@ -30,6 +30,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
@@ -51,8 +52,9 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class SessionEngineer extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
         GoogleAccountCredential mCredential;
         private TextView mOutputText;
-        private Button mCallApiButton;
+        private FloatingActionButton mCallApiButton;
         private Button backButton;
+        private Button addStudyButton;
         ProgressDialog mProgress;
 
         static final int REQUEST_ACCOUNT_PICKER = 1000;
@@ -73,9 +75,12 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_sesson_engineer);
 
-            mCallApiButton = (Button) findViewById(R.id.Sync_Google);
+            mCallApiButton = (FloatingActionButton) findViewById(R.id.googleActionButton);
+
 
             backButton = (Button) findViewById(R.id.Back_Menu);
+
+            addStudyButton = (Button) findViewById(R.id.AddStudyTiime);
 
             mOutputText = (TextView) findViewById(R.id.textviewAPIResult);
             mOutputText.setPadding(16, 16, 16, 16);
@@ -84,7 +89,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             mOutputText.setText(
                     "Click the \'" + BUTTON_TEXT +"\' button to test the API.");
 
-            mCallApiButton.setText(BUTTON_TEXT);
+           // mCallApiButton.setText(BUTTON_TEXT);
             mCallApiButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -104,6 +109,14 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                 }
             });
 
+
+            addStudyButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent i=new Intent(getApplicationContext(), AddStudyTime.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                }
+            });
 
 
             mProgress = new ProgressDialog(this);

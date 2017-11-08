@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sessionEngLayout"
     android:layout_width="match_parent"
@@ -9,53 +10,149 @@
     android:weightSum="1"
     tools:context="com.example.lambda.lambdaorganizer.SessionEngineer">
 
-    <TextView
-        android:id="@+id/textViewAPI"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_weight="0.00"
-        android:text="Session Creation"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textView5"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+        android:layout_weight="0.68"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/googleActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:clickable="true"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal" />
+
+            <EditText
+                android:id="@+id/banner1"
+                android:layout_width="197dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:background="@android:color/holo_green_dark"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="textPersonName"
+                android:text="Current Contents"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/contentList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.99" />
+
+        <TextView
+            android:id="@+id/textviewAPIResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No Item Found" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:layout_weight="0.05"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <EditText
+            android:id="@+id/banner2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:background="@android:color/holo_green_dark"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="10"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textColor="?attr/colorPrimary"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/contantFind"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:layout_column="1"
+                android:layout_row="0"
+                android:layout_weight="1"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:text="Find Study Time"
+                android:textAlignment="center"
+                app:layout_gravity="center_vertical" />
+
+            <Button
+                android:id="@+id/contentEdit"
+                android:layout_width="120dp"
+                android:layout_height="37dp"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_weight="1"
+                android:foregroundGravity="left"
+                android:text="Edit"
+                app:layout_gravity="left" />
+
+            <Button
+                android:id="@+id/ContentDelete"
+                android:layout_width="120dp"
+                android:layout_height="37dp"
+                android:layout_column="3"
+                android:layout_row="0"
+                android:layout_weight="1"
+                android:foregroundGravity="right"
+                android:text="Delete"
+                app:layout_gravity="right" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.02"
-        android:text="Results From Google Calendar"
-        android:textAlignment="viewStart"
-        android:textStyle="bold" />
+        android:layout_weight="0.18"
+        android:orientation="vertical"
+        android:weightSum="1">
 
-    <TextView
-        android:id="@+id/textviewAPIResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.81"
-        android:text="TextView" />
+        <Button
+            android:id="@+id/AddStudyTiime"
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:text="Add Study Tiime" />
 
-    <Button
-        android:id="@+id/Sync_Google"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.00"
-        android:text="Sync Google"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/add_study_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.00"
-        android:text="Add Study Session"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/Back_Menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.00"
-        android:text="Back To Menu"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/Back_Menu"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:text="Back To Menu"
+            android:layout_weight="0.17" />
+    </LinearLayout>
 </LinearLayout>
