@@ -204,8 +204,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
 
         mEvents.add(event);
 
-        // refresh week view. Not good if events added to a day other than today
-        mWeekView.goToToday();
+        mWeekView.notifyDatasetChanged();
     }
 
     /**
@@ -219,6 +218,6 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     public void deleteTask(WeekViewEvent event) {
         Toast.makeText(this, "TODO: remove event " + event.getName(), Toast.LENGTH_SHORT).show();
         mEvents.remove(mEvents.indexOf(event));
-        mWeekView.goToToday();
+        mWeekView.notifyDatasetChanged();
     }
 }
