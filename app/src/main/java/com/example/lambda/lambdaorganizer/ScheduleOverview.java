@@ -3,12 +3,13 @@ package com.example.lambda.lambdaorganizer;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.graphics.RectF;
@@ -24,6 +25,7 @@ import com.alamkanak.weekview.WeekViewEvent;
 
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
+
 
 public class ScheduleOverview extends AppCompatActivity implements WeekView.EventClickListener,
         MonthLoader.MonthChangeListener, WeekView.EmptyViewClickListener,
@@ -205,7 +207,15 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      * @param event
      */
     public void showTask(WeekViewEvent event) {
-        Toast.makeText(this, "TODO: Open event " + event.getName(), Toast.LENGTH_SHORT).show();
+        class ShowTaskListener implements DateTimePicker.DateTimeListener {
+            @Override
+            public void onDateTimePickerConfirm(Date d) {
+                Toast.makeText(ScheduleOverview.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
+            }
+        }
+        DateTimePicker datetimepicker = new DateTimePicker();
+        datetimepicker.setDateTimeListener(new ShowTaskListener());
+        datetimepicker.show(getSupportFragmentManager(), "date time picker");
     }
 
     public void deleteTask(WeekViewEvent event) {
