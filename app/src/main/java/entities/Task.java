@@ -28,31 +28,7 @@ public class Task implements DatabaseObject {
     /**
      * Android log tag:
      */
-    private static String TAG = "Task";
-
-    public Task(Cursor cur) {
-        if(cur.isClosed() || cur.isAfterLast() || cur.isBeforeFirst()) {
-            throw new RuntimeException("Cannot create Task from cursor out of position");
-        }
-        // Get database data:
-        this.setTitle(cur.getString(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_TITLE)));
-        String dateStr = cur.getString(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_DATE));
-        this.setDesc(cur.getString(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_DESC)));
-        String startStr = cur.getString(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_START));
-        String endStr = cur.getString(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_END));
-        this.setPriority(cur.getInt(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_PRIO)));
-        SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
-
-        // Parse dates and times:
-        try {
-            this.setDate(dateFmt.parse(dateStr));
-            this.setStart(timeFmt.parse(startStr));
-            this.setEnd(timeFmt.parse(endStr));
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
+    private static String TAG = "TaskTable";
 
     public Task(String title, String date, String start, String end, String desc, int priority) {
         this.title = title;
@@ -124,7 +100,7 @@ public class Task implements DatabaseObject {
     public String toString() {
         SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
-        return "Task: Title: " + this.title
+        return "TaskTable: Title: " + this.title
                 + "; Date: " + dateFmt.format(this.date)
                 + "; Start: " + timeFmt.format(this.start)
                 + "; End: " + timeFmt.format(this.end)
@@ -143,16 +119,7 @@ public class Task implements DatabaseObject {
      * Insert this task into the database
      */
     public ContentValues databaseObject() {
-        SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
-        ContentValues values = new ContentValues();
-        values.put(TaskContract.TaskEntry.COLUMN_NAME_TITLE, this.title);
-        values.put(TaskContract.TaskEntry.COLUMN_NAME_DATE, dateFmt.format(this.date));
-        values.put(TaskContract.TaskEntry.COLUMN_NAME_START, timeFmt.format(this.start));
-        values.put(TaskContract.TaskEntry.COLUMN_NAME_END, timeFmt.format(this.end));
-        values.put(TaskContract.TaskEntry.COLUMN_NAME_DESC, this.desc);
-        values.put(TaskContract.TaskEntry.COLUMN_NAME_PRIO, this.priority);
-        return values;
+        return null;
     }
 
 }
