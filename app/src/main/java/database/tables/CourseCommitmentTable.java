@@ -53,11 +53,6 @@ public class CourseCommitmentTable extends Table {
     }
 
     @Override
-    public ContentValues query(String q) {
-        return null;
-    }
-
-    @Override
     protected String removeQuery(DatabaseObject record) {
         CourseCommitment crsComm = (CourseCommitment)record;
         return "DELETE FROM " + CourseCommitmentContract.TABLE_NAME + " WHERE "

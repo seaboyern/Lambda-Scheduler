@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import database.DatabaseObject;
 import database.schema.CommitmentContract;
@@ -52,11 +53,6 @@ public class CommitmentTable extends Table {
             instance = new CommitmentTable(c);
         }
         return (Table)instance;
-    }
-
-    @Override
-    public ContentValues query(String q) {
-        return null;
     }
 
     @Override

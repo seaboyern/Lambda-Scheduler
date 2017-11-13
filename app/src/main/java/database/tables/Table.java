@@ -2,9 +2,9 @@ package database.tables;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.util.Log;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import database.DatabaseHelper;
 import database.DatabaseObject;
@@ -65,8 +65,6 @@ public abstract class Table {
             dbHelper.close();
         }
     }
-
-    public abstract ContentValues query(String q);
 
     protected abstract  String removeQuery(DatabaseObject record);
 

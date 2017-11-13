@@ -1,11 +1,7 @@
 package entities;
 
-import android.content.ContentValues;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import database.schema.TaskContract;
-import database.tables.TaskTable;
 
 /**
  * Created by mahmudfasihulazam on 2017-10-12.
@@ -58,7 +54,7 @@ public class Task extends Commitment {
     public String toString() {
         SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
-        return "TaskTable: Title: " + this.title
+        return "Task: Title: " + this.title
                 + "; Date: " + dateFmt.format(this.date)
                 + "; Start: " + timeFmt.format(this.start)
                 + "; End: " + timeFmt.format(this.end)

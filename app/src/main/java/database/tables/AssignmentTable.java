@@ -42,11 +42,6 @@ public class AssignmentTable extends Table {
     }
 
     @Override
-    public ContentValues query(String q) {
-        return null;
-    }
-
-    @Override
     protected String removeQuery(DatabaseObject record) {
         Assignment a = (Assignment)record;
         return "DELETE FROM " + AssignmentContract.TABLE_NAME + " WHERE "

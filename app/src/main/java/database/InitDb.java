@@ -2,6 +2,7 @@ package database;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -108,6 +109,17 @@ public final class InitDb {
         Log.v(TAG, CourseCommitmentTable.getInstance(c).toString());
         Log.v(TAG, AssignmentTable.getInstance(c).toString());
         Log.v(TAG, TaskTable.getInstance(c).toString());
+
+        // Task table queries:
+        LinkedList<Task> list = TaskTable.getInstance(c).selectByTitle("Task 1");
+        for(Task task : list) {
+            Log.v(TAG, task.toString());
+        }
+
+        list = TaskTable.getInstance(c).selectByDate("2017-11-21");
+        for(Task task : list) {
+            Log.v(TAG, task.toString());
+        }
 
     }
 }
