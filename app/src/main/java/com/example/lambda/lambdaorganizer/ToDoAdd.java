@@ -120,6 +120,10 @@ public class ToDoAdd extends AppCompatActivity {
                             new Task(name, date, start, end, description,
                                     Integer.parseInt(priority));
                     new Thread(new AsyncAddToDatabase(newTask)).start();
+                    Toast.makeText(getBaseContext(),
+                            "Task added!",
+                            Toast.LENGTH_SHORT).show();
+
                 } catch(NumberFormatException e) { // Error in priority format
                     Toast.makeText(getBaseContext(),
                             "Priority must be a number",
@@ -134,7 +138,6 @@ public class ToDoAdd extends AppCompatActivity {
                             "Unknown error",
                             Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
