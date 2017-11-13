@@ -7,5 +7,5 @@ import android.content.ContentValues;
  */
 
 public interface DatabaseObject {
-    public ContentValues databaseObject();
+    // Empty interface for now
 }
