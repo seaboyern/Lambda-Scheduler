@@ -207,6 +207,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      * @param event
      */
     public void showTask(WeekViewEvent event) {
+        // Example of how to use the date time picker
         class ShowTaskListener implements DateTimePicker.DateTimeListener {
             @Override
             public void onDateTimePickerConfirm(Date d) {
