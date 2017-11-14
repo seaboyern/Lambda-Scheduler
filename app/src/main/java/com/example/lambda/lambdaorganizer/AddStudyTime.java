@@ -1,17 +1,299 @@
 package com.example.lambda.lambdaorganizer;
 
+import android.content.Intent;
+import android.net.ParseException;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by priom on 11/8/2017.
  */
 
 public class AddStudyTime extends AppCompatActivity {
+
+    private Button submitButton;
+    private FloatingActionButton addEmailButton;
+    private EditText eventSummary;
+    private EditText eventDescription;
+    private EditText eventStartTime;
+    private EditText eventEndTime;
+    private Spinner recurrenceDropdown;
+    private TextView errorText;
+
+
+
+    private TextView attendeesEmail;
+    private ArrayList<String> attendees;
+
+    private String eventRecurrenceFrequency;
+    private TextView eventRecurrenceCount;
+
+    private SimpleDateFormat dateTimeFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+    private SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat timeFormat = new java.text.SimpleDateFormat("hh:mm:ss");
+    public static String TAG = "AddStudyTime";
+    private Intent getIntent;
+
+
+    private String message = new String();
+
     protected void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_study_time);
 
+
+        attendees = new ArrayList<String>();
+        submitButton = (Button) findViewById(R.id.eventSubmitButton);
+        addEmailButton = (FloatingActionButton) findViewById(R.id.addEmailButton);
+        eventSummary = (EditText) findViewById(R.id.eventDescription);
+        eventDescription = (EditText) findViewById(R.id.eventDescription);
+        eventStartTime = (EditText) findViewById(R.id.eventStartTime);
+        eventEndTime = (EditText) findViewById(R.id.eventEndTime);
+        attendeesEmail = (EditText) findViewById(R.id.attendeesEmail);
+        eventRecurrenceCount = (EditText) findViewById(R.id.eventRecurrenceCount);
+
+
+        eventRecurrenceFrequency = new String();
+
+
+        //get the spinner from the xml.
+        recurrenceDropdown = (Spinner)findViewById(R.id.spinner1);
+        //create a list of items for the spinner.
+        String[] items = new String[]{"DAILY", "WEEKLY"};
+        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
+        //There are multiple variations of this, but this is the basic variant.
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        //set the spinners adapter to the previously created one.
+        recurrenceDropdown.setAdapter(adapter);
+
+
+
+
+        recurrenceDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
+                // On selecting a spinner item
+                eventRecurrenceFrequency = adapter.getItemAtPosition(position).toString();
+                // Showing selected spinner item
+                Toast.makeText(getApplicationContext(),
+                        "Selected Recurrence Frequency : " + eventRecurrenceFrequency, Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+
+
+        errorText = (TextView) findViewById(R.id.inputError);
+        try {
+            if(getIntent()!=null){
+
+                Log.d(TAG, "Got Request from SessonEngineer.");
+
+            }
+        }catch (Exception e){
+            Log.d(TAG, e.getMessage());
+        }
+
+
+        addEmailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!attendeesEmail.getText().toString().isEmpty() && isValidEmail(attendeesEmail.getText().toString())){
+
+
+                    attendees.add(attendeesEmail.getText().toString());
+                    message = attendeesEmail.getText().toString()+" added to the attendees list";
+
+
+                }else {
+
+                    message = "Invalid Email Address.";
+                }
+
+
+                errorText.setText(message.toString());
+
+            }
+
+
+        });
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+
+                    if(eventDescription.getText().toString().isEmpty()){
+                        message = "Event Description not set.";
+
+                    }else if(eventStartTime.getText().toString().isEmpty() || !isTimeStampValid(eventStartTime.getText().toString())){
+
+                        message = "eventStartTime not set.";
+
+                    }else if (eventEndTime.getText().toString().isEmpty() || !isTimeStampValid(eventEndTime.getText().toString())){
+
+                        message = "eventEndTime not set.";
+                    }else {
+
+                        message = "Event Created";
+                        try {
+                            Intent sendIntent = new Intent(getApplicationContext(), SessionEngineer.class);
+                            //Intent sendIntent = new Intent();
+
+
+                            sendIntent.putExtra("eventSummary", eventSummary.getText().toString());
+                            sendIntent.putExtra("eventDescription", eventDescription.getText().toString());
+
+
+                            String eventDateTime = "2017-11-14T20:50:00-06:00";
+                            String eventDateEndTime1 = "2017-11-14T21:50:00-06:00";
+
+                            String startDate = formatDate(eventDateTime);
+                            String endDate = formatDate(eventDateEndTime1);
+//                            String startTime = formatTime(eventDateTime);
+//                            String endTime = formatTime(eventDateEndTime1);
+                            String startTime = java.text.DateFormat.getTimeInstance().format(eventDateTime);
+                            String endTime = java.text.DateFormat.getTimeInstance().format(eventDateEndTime1);
+                            //String startTime = "20:50:00";
+                            //String endTime = "21:50:00";
+
+
+
+
+                            //sendIntent.putExtra("eventStartTime", eventStartTime.getText().toString());
+                            //sendIntent.putExtra("eventEndTime", eventEndTime.getText().toString());
+
+
+                            sendIntent.putExtra("eventStartDate", startDate);
+                            sendIntent.putExtra("eventEndDate", endDate);
+                            sendIntent.putExtra("eventStartTime", startTime);
+                            sendIntent.putExtra("eventEndTime", endTime);
+
+
+                            if(attendees.size()>0) {
+                                sendIntent.putStringArrayListExtra("attendee", attendees);
+                                Log.d(TAG, "attendee"+attendees.size());
+                            }else{
+                                Log.d(TAG, "attendee is zero"+attendees.size());
+                            }
+
+
+
+
+
+                            sendIntent.putExtra("eventRecurrenceFrequency", eventRecurrenceFrequency);
+
+                            sendIntent.putExtra("eventRecurrenceCount", Integer.valueOf(eventRecurrenceCount.getText().toString()));
+
+
+
+
+
+                            setResult(RESULT_OK, sendIntent);
+                            Log.d(TAG, "Sending Result to SessonEngineer.");
+
+                            finish();
+                        }catch (Exception e){
+                            Log.d(TAG, "setOnClickListener :"+ e.getMessage());
+                        }
+                    }
+
+                errorText.setText(message.toString());
+
+            }
+        });
+
+
+
+
+
+
+
+
+
     }
+
+    public boolean isTimeStampValid(String inputString) {
+        //format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+        //format = new java.text.SimpleDateFormat("yyyy");
+        //dateTimeFormat = new java.text.SimpleDateFormat("yyyy-MM-ddTHH:mm:ss-");
+
+        try {
+            dateTimeFormat.parse(inputString);
+        } catch (Exception e) {
+            errorText.setText(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+
+
+    public String formatDate(String inputString) {
+        String out = "";
+        try {
+            Date date = dateFormat.parse(inputString);
+
+            out = dateFormat.format(date);
+            Log.d(TAG,"Date: "+ out);
+
+        }catch (java.text.ParseException e) {
+            e.printStackTrace();
+
+        }
+        return out;
+    }
+
+
+    public String formatTime(String inputString) {
+        String out = "";
+        try {
+            Time time = (Time) timeFormat.parse(inputString);
+
+            out = timeFormat.format(time);
+            Log.d(TAG,"Time: "+out);
+
+        }catch (java.text.ParseException e) {
+            e.printStackTrace();
+
+        }
+        return out;
+    }
+
+
+    public final static boolean isValidEmail(CharSequence target) {
+        if (target == null) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
+
+
+
+
+
 }
