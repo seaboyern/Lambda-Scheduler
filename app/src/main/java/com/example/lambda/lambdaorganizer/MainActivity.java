@@ -12,8 +12,6 @@ import com.example.lambda.lambdaorganizer.GradeCalculator.GradeCalculatorMain;
 import database.DatabaseHelper;
 
 import database.InitDb;
-import database.schema.PomodoroContract;
-import database.schema.TaskContract;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -85,9 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         // Create a database with dummy data:
                         // Helper for opening a database connection:
-                        DatabaseHelper dbOpener = new DatabaseHelper(getBaseContext());
-                        InitDb.initDb(dbOpener.getWritableDatabase());
-                        dbOpener.close();
+                        InitDb.initDb(getBaseContext());
                     }
                 }).start();
             }

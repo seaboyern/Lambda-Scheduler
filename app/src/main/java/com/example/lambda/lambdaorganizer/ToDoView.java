@@ -2,6 +2,8 @@ package com.example.lambda.lambdaorganizer;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
+
 /**
  * Created by ReedPosehn on 2017-10-12.
  */
@@ -10,5 +12,7 @@ public class ToDoView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.todoview);
+
+        final Button backButton = (Button) findViewById(R.id.btnBack);
     }
 }

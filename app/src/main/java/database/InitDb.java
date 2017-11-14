@@ -1,10 +1,21 @@
 package database;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.ContentValues;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import android.content.Context;
 import android.util.Log;
+
+import database.schema.AssignmentContract;
+import database.schema.CommitmentContract;
+import database.schema.CourseCommitmentContract;
 import database.schema.TaskContract;
-import entities.Task;
+import database.tables.AssignmentTable;
+import database.tables.CommitmentTable;
+import database.tables.CourseCommitmentTable;
+import database.tables.TaskTable;
 
 /**
  * Created by mahmudfasihulazam on 2017-10-12.
@@ -15,90 +26,148 @@ public final class InitDb {
     public static String TAG = "InitDb";
     private InitDb(){}
 
-    public static void initDb(SQLiteDatabase db_w) {
-
-        db_w.execSQL(TaskContract.DELETE_TABLE);
-        db_w.execSQL(TaskContract.CREATE_TABLE);
-        // Populate task table:
-        Task[] tasks = new Task[10];
-        try {
-            tasks[0] = new Task("Task1", "2017-10-28", "00:00:00", "00:00:30", "First task", 100);
-        } catch(Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-        try {
-            tasks[1] = new Task("Task2", "2017-10-28", "00:00:31", "00:00:59", "Second task", 90);
-        } catch(Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-        try {
-            tasks[2] = new Task("Task3", "2017-10-28", "00:01:00", "00:01:59", "Third task", 80);
-        } catch(Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-        try {
-            tasks[3] = new Task("Task4", "2017-10-28", "00:02:00", "00:02:59", "Fourth task", 70);
-        } catch(Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-        try {
-            tasks[4] = new Task("Task5", "2017-10-28", "00:03:00", "00:03:59", "Fifth tasks", 110);
-        } catch(Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-        try {
-            tasks[5] = new Task("Task6", "2017-10-29", "00:03:00", "00:03:59", "Sixth task", 60);
-        } catch(Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-        try {
-            tasks[6] = new Task("Task7", "2017-10-29", "00:04:00", "00:04:59", "Seventh task", 70);
-        } catch(Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-        try {
-            tasks[7] = new Task("Task8", "2017-10-30", "00:01:00", "00:01:59", "Eighth task", 80);
-        } catch(Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-        try {
-            tasks[8] = new Task("Task9", "2017-11-01", "00:01:00", "00:01:59", "Ninth task", 80);
-        } catch(Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-        try {
-            tasks[9] = new Task("Task10", "2017-11-01", "00:02:00", "00:02:59", "Tenth task", 100);
-        } catch(Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-
-        for(Task i : tasks) {
-            try {
-                Log.v(TAG, i.toString());
-                long newRowId =
-                        db_w.insert(TaskContract.TaskEntry.TABLE_NAME, null, i.databaseObject());
-                // Log table status:
-                if(0 <= newRowId) {
-                    Log.v(TAG, "Database command executed; row id: " + newRowId);
-                } else {
-                    Log.e(TAG, "Entry exists: " + i.getTitle());
-                }
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+    public static void initDb(Context c) {
+        // Insert an assignment:
+        // Insert commitment entry:
+        DatabaseObject obj = new DatabaseObject() {
+            @Override
+            public ContentValues databaseObject() {
+                ContentValues values = new ContentValues();
+                values.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE, "A1");
+                values.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_DESC, "First assignment");
+                values.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_PRIO, 10);
+                values.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_TYPE,
+                        CourseCommitmentContract.TABLE_NAME);
+                return values;
             }
-            // INSERT INTO task:
+        };
+        try {
+            CommitmentTable.getInstance(c).remove(obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            CommitmentTable.getInstance(c).insert(obj);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        Cursor cur = db_w.rawQuery("SELECT * FROM task", null);
-        int i = 0;
-        if(cur.moveToFirst()) {
-            do {
-                Task task = new Task(cur);
-                Log.v(TAG, task.toString());
-            } while(cur.moveToNext());
+        // Insert course commitment entry:
+        obj = new DatabaseObject() {
+            @Override
+            public ContentValues databaseObject() {
+                ContentValues values = new ContentValues();
+                values.put(CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_TITLE, "A1");
+                values.put(CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_CRID, "CMPT 370");
+                values.put(CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_TYPE,
+                        AssignmentContract.TABLE_NAME);
+                values.put(CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_WT, 5.0);
+                values.put(CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_REQ, 5.0);
+                values.put(CourseCommitmentContract.CourseCommitmentEntry.COLUMN_NAME_ACH, 5.0);
+                return values;
+            }
+        };
+        try {
+            CourseCommitmentTable.getInstance(c).remove(obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            CourseCommitmentTable.getInstance(c).insert(obj);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        cur.close();
+        // Insert assignment entry:
+        obj = new DatabaseObject() {
+            @Override
+            public ContentValues databaseObject() {
+                SimpleDateFormat fmt = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+                ContentValues values = new ContentValues();
+                values.put(AssignmentContract.AssignmentEntry.COLUMN_NAME_TITLE, "A1");
+                values.put(AssignmentContract.AssignmentEntry.COLUMN_NAME_CRID, "CMPT 370");
+                try {
+                    values.put(AssignmentContract.AssignmentEntry.COLUMN_NAME_DEADLINE,
+                            fmt.format(fmt.parse("2017-11-21 23:59:00")));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return values;
+            }
+        };
+        try {
+            AssignmentTable.getInstance(c).remove(obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            AssignmentTable.getInstance(c).insert(obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Insert a ToDo/Task:
+        // Insert a commitment:
+        obj = new DatabaseObject() {
+            @Override
+            public ContentValues databaseObject() {
+                ContentValues values = new ContentValues();
+                values.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE, "Task 1");
+                values.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_DESC, "First task");
+                values.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_PRIO, 5 );
+                values.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_TYPE,
+                        TaskContract.TABLE_NAME);
+                return values;
+            }
+        };
+        try {
+            CommitmentTable.getInstance(c).remove(obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            CommitmentTable.getInstance(c).insert(obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Insert a task:
+        obj = new DatabaseObject() {
+            @Override
+            public ContentValues databaseObject() {
+                ContentValues values = new ContentValues();
+                SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
+                values.put(TaskContract.TaskEntry.COLUMN_NAME_TITLE, "Task 1");
+                try {
+                    values.put(TaskContract.TaskEntry.COLUMN_NAME_DATE,
+                            dateFmt.format(dateFmt.parse("2017-11-10")));
+                    values.put(TaskContract.TaskEntry.COLUMN_NAME_START,
+                            timeFmt.format(timeFmt.parse("04:00:00")));
+                    values.put(TaskContract.TaskEntry.COLUMN_NAME_END,
+                            timeFmt.format(timeFmt.parse("04:30:00")));
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                return values;
+            }
+        };
+        try {
+            TaskTable.getInstance(c).remove(obj);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            TaskTable.getInstance(c).insert(obj);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        // Print tables changed:
+        Log.v(TAG, CommitmentTable.getInstance(c).toString());
+        Log.v(TAG, CourseCommitmentTable.getInstance(c).toString());
+        Log.v(TAG, AssignmentTable.getInstance(c).toString());
+        Log.v(TAG, TaskTable.getInstance(c).toString());
 
     }
 }

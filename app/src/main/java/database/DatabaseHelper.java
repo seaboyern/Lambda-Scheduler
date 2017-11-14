@@ -4,10 +4,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
+import database.schema.AssignmentContract;
+import database.schema.CommitmentContract;
+import database.schema.CourseCommitmentContract;
 import database.schema.CourseContract;
-import database.schema.PomodoroContract;
+import database.schema.ExamContract;
 import database.schema.TaskContract;
 
 /**
@@ -32,15 +34,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.v(TAG, TaskContract.CREATE_TABLE);
-        db.execSQL(TaskContract.DELETE_TABLE);
+        db.execSQL(CourseContract.CREATE_TABLE);
         db.execSQL(TaskContract.CREATE_TABLE);
-        // More tables should be created here:
+        db.execSQL(CommitmentContract.CREATE_TABLE);
+        db.execSQL(CourseCommitmentContract.CREATE_TABLE);
+        db.execSQL(AssignmentContract.CREATE_TABLE);
+        db.execSQL(ExamContract.CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL(PomodoroContract.CREATE_TABLE);
     }
 
     /**
