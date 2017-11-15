@@ -28,7 +28,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/eventSummary"
+            android:id="@+id/eventSummary1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -41,12 +41,12 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/eventDescription"
-            android:layout_width="192dp"
+            android:id="@+id/eventSummary"
+            android:layout_width="236dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center_horizontal"
-            android:hint="Event Description"
+            android:hint="Event Summary"
             android:inputType="text" />
 
     </LinearLayout>
@@ -72,7 +72,7 @@
 
         <EditText
             android:id="@+id/eventDescription"
-            android:layout_width="192dp"
+            android:layout_width="236dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center_horizontal"
@@ -87,7 +87,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/eventLocation"
+            android:id="@+id/eventLocation1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -100,12 +100,12 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/eventDescription"
-            android:layout_width="192dp"
+            android:id="@+id/eventLocation"
+            android:layout_width="236dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center_horizontal"
-            android:hint="Event Description"
+            android:hint="Event Location"
             android:inputType="text" />
 
     </LinearLayout>
@@ -130,12 +130,12 @@
 
         <EditText
             android:id="@+id/eventStartTime"
-            android:layout_width="match_parent"
+            android:layout_width="236dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:ems="10"
+            android:focusable="false"
             android:gravity="center"
-            android:hint="yyyy-MM-dd HH:mm:ss.S"
+            android:hint="yyyy-MM-dd HH:mm:ssXXX"
             android:inputType="numberDecimal|datetime|date|time"
             android:textSize="12sp" />
     </LinearLayout>
@@ -146,7 +146,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/textView16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -159,12 +159,12 @@
 
         <EditText
             android:id="@+id/eventEndTime"
-            android:layout_width="match_parent"
+            android:layout_width="236dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:ems="10"
+            android:focusable="false"
             android:gravity="center"
-            android:hint="yyyy-MM-dd HH:mm:ss"
+            android:hint="yyyy-MM-dd HH:mm:ssXXX"
             android:inputType="numberDecimal|datetime|date|time"
             android:textSize="12sp" />
     </LinearLayout>
@@ -177,7 +177,7 @@
         android:weightSum="1">
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/textView14"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -202,7 +202,7 @@
             android:layout_weight="0.01"
             android:ems="10"
             android:gravity="center"
-            android:hint="yyyy-MM-dd HH:mm:ss"
+            android:hint="Number Of Time to Recurrence"
             android:inputType="number"
             android:text="1"
             android:textSize="12sp" />
@@ -217,7 +217,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/textView13"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"

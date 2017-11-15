@@ -24,6 +24,7 @@ public class StudyEvent {
     private String eventEndDate;
     private String eventStarTime;
     private String eventEndTime;
+    private String eventTimeZone;
     private String eventRecurrenceFrequency;
     private int eventRecurrenceCount;
     private ArrayList<String> attendees;
@@ -120,5 +121,30 @@ public class StudyEvent {
 
     public void setEventEndTime(String eventEndTime) {
         this.eventEndTime = eventEndTime;
+    }
+
+    public String getEventTimeZone() {
+        return eventTimeZone;
+    }
+
+    public void setEventTimeZone(String eventTimeZone) {
+        this.eventTimeZone = eventTimeZone;
+    }
+
+    @Override
+    public String toString() {
+        return "StudyEvent{" +
+                "eventDescription='" + eventDescription + '\'' +
+                ", eventLocation='" + eventLocation + '\'' +
+                ", eventSummary='" + eventSummary + '\'' +
+                ", eventStartDate='" + eventStartDate + '\'' +
+                ", eventEndDate='" + eventEndDate + '\'' +
+                ", eventStarTime='" + eventStarTime + '\'' +
+                ", eventEndTime='" + eventEndTime + '\'' +
+                ", eventTimeZone='" + eventTimeZone + '\'' +
+                ", eventRecurrenceFrequency='" + eventRecurrenceFrequency + '\'' +
+                ", eventRecurrenceCount=" + eventRecurrenceCount +
+                ", attendees=" + attendees +
+                '}';
     }
 }

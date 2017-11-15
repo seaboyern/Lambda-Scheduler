@@ -1,9 +1,7 @@
 package com.example.lambda.lambdaorganizer;
 
 import android.content.Intent;
-import android.net.ParseException;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,18 +17,22 @@ import android.widget.Toast;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by priom on 11/8/2017.
  */
 
-public class AddStudyTime extends AppCompatActivity {
+public class AddStudyTime extends AppCompatActivity  {
 
     private Button submitButton;
     private FloatingActionButton addEmailButton;
     private EditText eventSummary;
     private EditText eventDescription;
+    private EditText eventLocation;
     private EditText eventStartTime;
     private EditText eventEndTime;
     private Spinner recurrenceDropdown;
@@ -51,6 +53,14 @@ public class AddStudyTime extends AppCompatActivity {
     private Intent getIntent;
 
 
+
+    String startDate = new String();
+    String endDate = new String();
+    String startTime = new String();
+    String endTime = new String();
+    String timeZone = new String();
+
+
     private String message = new String();
 
     protected void onCreate(Bundle savedInstanceState){
@@ -62,8 +72,9 @@ public class AddStudyTime extends AppCompatActivity {
         attendees = new ArrayList<String>();
         submitButton = (Button) findViewById(R.id.eventSubmitButton);
         addEmailButton = (FloatingActionButton) findViewById(R.id.addEmailButton);
-        eventSummary = (EditText) findViewById(R.id.eventDescription);
+        eventSummary = (EditText) findViewById(R.id.eventSummary);
         eventDescription = (EditText) findViewById(R.id.eventDescription);
+        eventLocation = (EditText) findViewById(R.id.eventLocation);
         eventStartTime = (EditText) findViewById(R.id.eventStartTime);
         eventEndTime = (EditText) findViewById(R.id.eventEndTime);
         attendeesEmail = (EditText) findViewById(R.id.attendeesEmail);
@@ -71,6 +82,35 @@ public class AddStudyTime extends AppCompatActivity {
 
 
         eventRecurrenceFrequency = new String();
+
+        eventStartTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+
+                dateTimePicker(v);
+
+
+
+            }
+
+
+        });
+
+        eventEndTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+
+                dateTimePicker(v);
+
+
+
+            }
+
+
+        });
+
+
+
 
 
         //get the spinner from the xml.
@@ -162,23 +202,26 @@ public class AddStudyTime extends AppCompatActivity {
                         try {
                             Intent sendIntent = new Intent(getApplicationContext(), SessionEngineer.class);
                             //Intent sendIntent = new Intent();
+                            //                            String eventDateTime = "2017-11-14T20:50:00-06:00";
+//                            String eventDateEndTime1 = "2017-11-14T21:50:00-06:00";
+
+//                            String eventDateTime = eventStartTime.getText().toString();
+//                            String eventDateEndTime1 = eventEndTime.getText().toString();;
+
+//                            String startDate = formatDate(eventDateTime);
+//                            String endDate = formatDate(eventDateEndTime1);
+//                            String startTime = "20:50:00";
+//                            String endTime = "21:50:00";
 
 
-                            sendIntent.putExtra("eventSummary", eventSummary.getText().toString());
-                            sendIntent.putExtra("eventDescription", eventDescription.getText().toString());
+                            //String startDate = formatDate(eventDateTime);
+                            //String endDate = formatDate(eventDateEndTime1);
 
-
-                            String eventDateTime = "2017-11-14T20:50:00-06:00";
-                            String eventDateEndTime1 = "2017-11-14T21:50:00-06:00";
-
-                            String startDate = formatDate(eventDateTime);
-                            String endDate = formatDate(eventDateEndTime1);
 //                            String startTime = formatTime(eventDateTime);
 //                            String endTime = formatTime(eventDateEndTime1);
-                            String startTime = java.text.DateFormat.getTimeInstance().format(eventDateTime);
-                            String endTime = java.text.DateFormat.getTimeInstance().format(eventDateEndTime1);
-                            //String startTime = "20:50:00";
-                            //String endTime = "21:50:00";
+                            //String startTime = java.text.DateFormat.getTimeInstance().format(eventDateTime);
+                            //String endTime = java.text.DateFormat.getTimeInstance().format(eventDateEndTime1);
+
 
 
 
@@ -187,10 +230,19 @@ public class AddStudyTime extends AppCompatActivity {
                             //sendIntent.putExtra("eventEndTime", eventEndTime.getText().toString());
 
 
+                            sendIntent.putExtra("eventSummary", eventSummary.getText().toString());
+                            sendIntent.putExtra("eventDescription", eventDescription.getText().toString());
+                            sendIntent.putExtra("eventLocation", eventLocation.getText().toString());
+
+
+
+
+
                             sendIntent.putExtra("eventStartDate", startDate);
                             sendIntent.putExtra("eventEndDate", endDate);
                             sendIntent.putExtra("eventStartTime", startTime);
                             sendIntent.putExtra("eventEndTime", endTime);
+                            sendIntent.putExtra("eventTimeZone", timeZone);
 
 
                             if(attendees.size()>0) {
@@ -293,7 +345,51 @@ public class AddStudyTime extends AppCompatActivity {
     }
 
 
+    public void dateTimePicker(final View v) {
+        // Example of how to use the date time picker
+        final Date newDate = new Date();
 
+        class dateTimePicker implements DateTimePicker.DateTimeListener {
+            @Override
+            public void onDateTimePickerConfirm(Date d) {
+
+               // String date =d.getYear()+"-"+(d.getMonth()+1)+"-"+d.getDay();
+                String date =d.getYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+                //String time =d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"0";
+                //String time =String.format("%02d:%02d:02%",d.getHours(),d.getMinutes(),d.getSeconds());
+                String time =String.format("%02d:%02d:%02d",d.getHours(),d.getMinutes(),d.getSeconds());
+                String curTimeZone =timeZone().toString();
+                if(v.getId()==eventStartTime.getId()){
+                    eventStartTime.setText(date+ "T" +time+ curTimeZone);
+                    startDate = date;
+                    startTime = time;
+                }else if(v.getId()==eventEndTime.getId()){
+
+                    eventEndTime.setText(date+ "T" +time+ curTimeZone);
+                    endDate = date;
+                    endTime = time;
+
+                }
+
+                timeZone = curTimeZone;
+
+                Toast.makeText(AddStudyTime.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
+
+            }
+        }
+        DateTimePicker datetimepicker = new DateTimePicker();
+        datetimepicker.setDateTimeListener(new dateTimePicker());
+        datetimepicker.show(getSupportFragmentManager(), "date time picker");
+
+    }
+
+
+    public static String timeZone()
+    {
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
+        String   timeZone = new SimpleDateFormat("Z").format(calendar.getTime());
+        return timeZone.substring(0, 3) + ":"+ timeZone.substring(3, 5);
+    }
 
 
 }

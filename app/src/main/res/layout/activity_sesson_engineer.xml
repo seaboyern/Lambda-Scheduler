@@ -67,13 +67,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.61"
                 android:ems="10"
+                android:focusable="false"
                 android:hint="Start Time"
                 android:inputType="datetime"
                 android:textAlignment="center"
                 android:textSize="12sp" />
 
             <Button
-                android:id="@+id/btnDateTimePicker"
+                android:id="@+id/btnDateTimePicker1"
                 android:layout_width="122dp"
                 android:layout_height="37dp"
                 android:text="set date"
@@ -93,13 +94,14 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="End Time"
+                android:focusable="false"
                 android:inputType="datetime"
                 android:textAlignment="center"
                 android:textSize="12sp"
                 android:layout_weight="0.61" />
 
             <Button
-                android:id="@+id/btnDateTimePicker"
+                android:id="@+id/btnDateTimePicker2"
                 android:layout_width="122dp"
                 android:layout_height="37dp"
                 android:text="set date"

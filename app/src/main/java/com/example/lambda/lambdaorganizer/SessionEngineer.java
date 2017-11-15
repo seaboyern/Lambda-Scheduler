@@ -19,8 +19,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -55,7 +57,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class SessionEngineer extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public class SessionEngineer extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
     GoogleAccountCredential mCredential;
     private ArrayList<String> mOutputText;
     private TextView googleResult;
@@ -64,9 +66,10 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
     private Button backButton;
     private Button addStudyButton;
 
+
     private ListView listView;
 
-    Button ShowListButton;
+    Button showListButton;
 
     ProgressDialog mProgress;
 
@@ -85,8 +88,6 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
 
 
     public static String TAG = "SessionEngineer";
-
-    SimpleDateFormat mySimpleDateFormat;
 
     private String eventDescription;
     private String eventStartTime;
@@ -113,14 +114,14 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
 
 
         listView = (ListView) findViewById(R.id.contentList1);
-        ShowListButton = (Button) findViewById(R.id.showList);
+        showListButton = (Button) findViewById(R.id.showList);
 
 
         eventDescription =new String();
         eventStartTime=new String();
         eventEndTime=new String();
 
-        newStudyEvent = new StudyEvent();
+        //newStudyEvent = new StudyEvent();
 
 
         //startTime = new DateTime(System.currentTimeMillis());
@@ -151,9 +152,8 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             public void onClick(View v) {
                 mCallApiButton.setEnabled(false);
                 googleResult.setText("");
-                getResult =true;
+                //mOutputText.clear();
                 sendRequestToGoogleApi();
-                getResult=false;
                 //googleResult.setText( mOutputText.toString());
                 mCallApiButton.setEnabled(true);
                 adapter.notifyDataSetChanged();
@@ -186,7 +186,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
 
 
 
-        ShowListButton.setOnClickListener(new View.OnClickListener() {
+        showListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -325,30 +325,20 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                 if (newBundle.containsKey("eventDescription")&& newBundle.containsKey("eventStartTime")&&newBundle.containsKey("eventEndTime")) {
 
 
-
+                    newStudyEvent = new StudyEvent();
 
                     try {
                         newStudyEvent.setEventDescription(newBundle.getString("eventDescription"));
                         newStudyEvent.setEventLocation(newBundle.getString("eventLocation"));
                         newStudyEvent.setEventSummary(newBundle.getString("eventSummary"));
+                        newStudyEvent.setEventLocation(newBundle.getString("eventLocation"));
 
 
                         newStudyEvent.setEventStartDate(newBundle.getString("eventStartDate").toString());
                         newStudyEvent.setEventEndDate(newBundle.getString("eventStartDate").toString());
                         newStudyEvent.setEventStarTime(newBundle.getString("eventStartTime").toString());
                         newStudyEvent.setEventEndTime(newBundle.getString("eventEndTime").toString());
-
-//                        DateTime dateStart = new DateTime(newBundle.getString("eventStartTime").toString());
-//                        newStudyEvent.setEventStartDate(dateStart);
-//                        Date dateStart = new DateTime(newBundle.getString("eventEndTime"));
-//                        newStudyEvent.setEventEndDateTime(dateTimeStartEnd);
-//
-//                        Time dateTimeStart = new DateTime(newBundle.getString("eventStartTime"));
-//                        newStudyEvent.setEventStartDateTime(dateTimeStart);
-//                        Time dateTimeStartEnd = new DateTime(newBundle.getString("eventEndTime"));
-//                        newStudyEvent.setEventEndDateTime(dateTimeStartEnd);
-
-
+                        newStudyEvent.setEventTimeZone(newBundle.getString("eventTimeZone").toString());
 
                         newStudyEvent.setEventRecurrenceFrequency(newBundle.getString("eventRecurrenceFrequency"));
                         newStudyEvent.setEventRecurrenceCount(newBundle.getInt("eventRecurrenceCount"));
@@ -361,7 +351,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                         Log.d(TAG, "Event Create Failed: "+e.getMessage());
                     }
 
-                    Log.d(TAG, "onActivityResult: All Ref found");
+                    Log.d(TAG, "onActivityResult: All Ref found :"+newStudyEvent.toString());
                     sendRequestToGoogleApi();
                 } else {
                     Log.d(TAG, "onActivityResult: No Ref. Found in newBundle.");
@@ -513,9 +503,6 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
 
 
 
-
-
-
     /**
      * An asynchronous task that handles the Google Calendar API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
@@ -523,14 +510,14 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
     private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
         private com.google.api.services.calendar.Calendar mService = null;
         private Exception mLastError = null;
-        StudyEvent studyEvent;
+        StudyEvent studyEvent= new StudyEvent();
         Boolean createNewEvent =false;
+        Boolean eventCreated = false;
 
         MakeRequestTask(GoogleAccountCredential credential, StudyEvent newStudyEvent) {
 
             if(newStudyEvent!=null) {
-                studyEvent = new StudyEvent();
-                studyEvent = newStudyEvent;
+                this.studyEvent = newStudyEvent;
                 createNewEvent = true;
 
             }
@@ -551,6 +538,18 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
         @Override
         protected List<String> doInBackground(Void... params) {
 
+            if(createNewEvent){
+                try {
+                    createGoogleEvent();
+                    return null;
+                }catch (Exception e) {
+                    mLastError = e;
+                    cancel(true);
+                    return null;
+                }
+
+            }else {
+
                 try {
                     return syncWithGoogleAPI();
                 } catch (Exception e) {
@@ -559,7 +558,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                     return null;
                 }
 
-
+            }
 
 
         }
@@ -572,10 +571,11 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
         private List<String> syncWithGoogleAPI() throws IOException {
             // List the next 10 events from the primary calendar.
 
-            if(createNewEvent == true){
-
-                createGoogleEvent();
-            }
+//            if(createNewEvent){
+//                createGoogleEvent();
+//                createNewEvent = false;
+//                eventCreated = true;
+//            }
 
 
             DateTime now = new DateTime(System.currentTimeMillis());
@@ -633,13 +633,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
     private void createGoogleEvent() {
 
 
-            String timezoneID = TimeZone.getDefault().getID();
-
-
-            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
-            String   timeZone = new SimpleDateFormat("Z").format(calendar.getTime());
-            String currentTimeZone = timeZone.substring(0, 3) + ":"+ timeZone.substring(3, 5); //(-06:00 formate)
-
+        String timezoneID = TimeZone.getDefault().getID();
 
 
         Event event = new Event()
@@ -650,7 +644,8 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
 
         //DateTime startDateTime = new DateTime(eventStartTime);
         //DateTime startDateTime = new DateTime("2017-11-11T07:50:00-06:00");
-        DateTime startDateTime = new DateTime(studyEvent.getEventStartDate().toString()+"T"+studyEvent.getEventStarTime()+currentTimeZone);
+        DateTime startDateTime = new DateTime(studyEvent.getEventStartDate().toString()+"T"+studyEvent.getEventStarTime()+studyEvent.getEventTimeZone().toString());
+        Log.d(TAG, "createGoogleEvent: startDateTime"+startDateTime.toString());
         EventDateTime start = new EventDateTime()
                 .setDateTime(startDateTime)
                 .setTimeZone(timezoneID);
@@ -658,7 +653,8 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
 
         //DateTime endDateTime = new DateTime(eventEndTime);
         //DateTime endDateTime = new DateTime("2017-11-13T20:55:00-06:00");
-        DateTime endDateTime = new DateTime(studyEvent.getEventEndDate().toString()+"T"+studyEvent.getEventEndTime()+currentTimeZone);
+        DateTime endDateTime = new DateTime(studyEvent.getEventEndDate().toString()+"T"+studyEvent.getEventEndTime()+studyEvent.getEventTimeZone().toString());
+        Log.d(TAG, "createGoogleEvent: endDateTime"+endDateTime.toString());
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime)
                 .setTimeZone(timezoneID);
@@ -709,6 +705,8 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
         }
         //System.out.printf("Event created: %s\n", event.getHtmlLink());
         Log.d(TAG, "Event created: %s\n"+ event.getHtmlLink());
+        eventCreated = true;
+
 
     }
 
@@ -733,9 +731,15 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             if (output == null || output.size() == 0) {
                 //mOutputText.setText("No results returned.");
                 mOutputText.clear();
-                mOutputText.add("No results returned.");
+                googleResult.setText("No results returned.");
+
+            } else if(eventCreated){
+                mOutputText.clear();
+                googleResult.setText("New Event Created. Please Click on google button to see the change.");
+                super.cancel(true);
+
             } else {
-                //output.add(0, "Data retrieved using the Google Calendar API:"+"\n");
+                googleResult.setText("Data retrieved using the Google Calendar API.");
                 //output.add(0, "Data retrieved using the Google Calendar API:");
                 //mOutputText.setText(TextUtils.join("\n", output));
                 mOutputText.clear();
@@ -762,263 +766,17 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                 } else {
                     //mOutputText.setText("The following error occurred:\n" + mLastError.getMessage());
                     mOutputText.clear();
-                    mOutputText.add("The following error occurred:\n" + mLastError.getMessage());
+                    googleResult.setText("The following error occurred:\n" + mLastError.getMessage());
                 }
             } else {
                 // mOutputText.setText("Request cancelled.");
                 mOutputText.clear();
-                mOutputText.add("Request cancelled.");
+                googleResult.setText("Request cancelled.");
             }
         }
+
+
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//         Refer to the Java quickstart on how to setup the environment:
-//         https://developers.google.com/google-apps/calendar/quickstart/java
-//         Change the scope to CalendarScopes.CALENDAR and delete any stored
-//         credentials.
-
-//    public void createEvent(GoogleAccountCredential mCredential) {
-//
-//        HttpTransport transport = AndroidHttp.newCompatibleTransport();
-//        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-//        com.google.api.services.calendar.Calendar service = new com.google.api.services.calendar.Calendar.Builder(
-//                transport, jsonFactory, mCredential)
-//                .setApplicationName("Lambda-Scheduler")
-//                .build();
-//
-//        String timezoneID = TimeZone.getDefault().getID();
-//        Event event = new Event()
-//                .setDescription("Event1")
-//                .setLocation("Saskatoon")
-//                .setSummary("Study");
-//
-//
-//        //DateTime startDateTime = new DateTime(eventStartTime);
-//        DateTime startDateTime = new DateTime("2017-11-11T07:50:00-06:00");
-//        EventDateTime start = new EventDateTime()
-//                .setDateTime(startDateTime)
-//                .setTimeZone(timezoneID);
-//        event.setStart(start);
-//
-//        //DateTime endDateTime = new DateTime(eventEndTime);
-//        DateTime endDateTime = new DateTime("2017-11-11T07:55:00-06:00");
-//        EventDateTime end = new EventDateTime()
-//                .setDateTime(endDateTime)
-//                .setTimeZone(timezoneID);
-//        event.setEnd(end);
-//
-//        String[] recurrence = new String[]{"RRULE:FREQ=DAILY;COUNT=2"};
-//        event.setRecurrence(Arrays.asList(recurrence));
-//
-//        EventAttendee[] attendees = new EventAttendee[]{
-//                new EventAttendee().setEmail("priomkhan@gmail.com"),
-//        };
-//        event.setAttendees(Arrays.asList(attendees));
-//
-//        EventReminder[] reminderOverrides = new EventReminder[]{
-//                new EventReminder().setMethod("email").setMinutes(24 * 60),
-//                new EventReminder().setMethod("popup").setMinutes(10),
-//        };
-//        Event.Reminders reminders = new Event.Reminders()
-//                .setUseDefault(false)
-//                .setOverrides(Arrays.asList(reminderOverrides));
-//        event.setReminders(reminders);
-//
-//        String calendarId = "primary";
-//        try {
-//            event = service.events().insert(calendarId, event).execute();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        //System.out.printf("Event created: %s\n", event.getHtmlLink());
-//        Log.d(TAG, "Event created: %s\n"+ event.getHtmlLink());
-//
-//    }
-
-
-
-
-
-
-
-
-
-
-//
-//    /**
-//     * An asynchronous task that handles the Google Calendar API call.
-//     * Placing the API calls in their own task ensures the UI stays responsive.
-//     */
-//    private class createEventUsingAPI extends AsyncTask<Void, Void, Void> {
-//        private  String TAG = "createEventUsingAPI";
-//        private com.google.api.services.calendar.Calendar mService = null;
-//        private Exception mLastError = null;
-//
-//        createEventUsingAPI(GoogleAccountCredential credential) {
-//            Log.d(TAG, "Executed: createEventUsingAPI.....................");
-//            HttpTransport transport = AndroidHttp.newCompatibleTransport();
-//            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-//            try {
-//                mService = new com.google.api.services.calendar.Calendar.Builder(
-//                        transport, jsonFactory, credential)
-//                        .setApplicationName("Lambda Organizer")
-//                        .build();
-//                Log.d(TAG, "Executed: mService Created.....................");
-//            }catch (Exception e){
-//                Log.d(TAG, "Executed: mService failed.....................");
-//            }
-//
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            Log.i(TAG, "doInBackground");
-//            //return true;
-//            return null;
-//
-//        }
-//
-////        @Override
-////        protected Boolean doInBackground(Void... params) {
-////            Log.i(TAG, "doInBackground");
-////            try {
-////                return createEvent();
-////
-////            } catch (Exception e) {
-////                Log.i(TAG, "Exception : " + e);
-////                mLastError = e;
-////                cancel(true);
-////                Log.i(TAG, "cancel(true)");
-////                return false;
-////            }
-////
-////        }
-//
-////        private boolean createEvent() throws IOException {
-////
-////            Log.d(TAG, "Executed: createEvent.....................");
-////            String timezoneID = TimeZone.getDefault().getID();
-////            Event event = new Event()
-////                    .setDescription("Event1")
-////                    .setLocation("Saskatoon")
-////                    .setSummary("Study");
-////
-////
-////            //DateTime startDateTime = new DateTime(eventStartTime);
-////            DateTime startDateTime = new DateTime("2017-11-11T07:50:00-06:00");
-////            EventDateTime start = new EventDateTime()
-////                    .setDateTime(startDateTime)
-////                    .setTimeZone(timezoneID);
-////            event.setStart(start);
-////
-////            //DateTime endDateTime = new DateTime(eventEndTime);
-////            DateTime endDateTime = new DateTime("2017-11-11T07:55:00-06:00");
-////            EventDateTime end = new EventDateTime()
-////                    .setDateTime(endDateTime)
-////                    .setTimeZone(timezoneID);
-////            event.setEnd(end);
-////
-////            String[] recurrence = new String[]{"RRULE:FREQ=DAILY;COUNT=2"};
-////            event.setRecurrence(Arrays.asList(recurrence));
-////
-////            EventAttendee[] attendees = new EventAttendee[]{
-////                    new EventAttendee().setEmail("priomkhan@gmail.com"),
-////            };
-////            event.setAttendees(Arrays.asList(attendees));
-////
-////            EventReminder[] reminderOverrides = new EventReminder[]{
-////                    new EventReminder().setMethod("email").setMinutes(24 * 60),
-////                    new EventReminder().setMethod("popup").setMinutes(10),
-////            };
-////            Event.Reminders reminders = new Event.Reminders()
-////                    .setUseDefault(false)
-////                    .setOverrides(Arrays.asList(reminderOverrides));
-////            event.setReminders(reminders);
-////
-////            String calendarId = "primary";
-////            try {
-////                event = mService.events().insert(calendarId, event).execute();
-////            } catch (IOException e) {
-////                e.printStackTrace();
-////                Log.d(TAG, "Error: %s\n"+ e.getMessage());
-////                return false;
-////            }
-////           // System.out.printf("Event created: %s\n", event.getHtmlLink());
-////            Log.d(TAG, "Event created: %s\n"+ event.getHtmlLink().toString());
-////            return true;
-////
-////        }
-//
-//
-//
-//        @Override
-//        protected void onPreExecute() {
-//            Log.d(TAG, "Executed: onPreExecute.....................");
-//            //mProgress.show();
-//        }
-//
-//
-//        @Override
-//        protected void onPostExecute(Void pr) {
-//            Log.d(TAG, "Executed: onPostExecute.....................");
-//            // mOutputText.add("Executed: onPostExecute ");
-////            mProgress.hide();
-////            if(result) {
-////                Log.d(TAG, "Event created:");
-////                googleResult.setText("New Event Created, Refresing List");
-////                //getResultsFromApi();
-////            }else{
-////                googleResult.setText("No Event Created.");
-////                googleResult.setText("No Event Created.");
-////            }
-//
-//        }
-//
-//
-//        @Override
-//        protected void onCancelled() {
-//            Log.d(TAG, "Executed: onCancelled.....................");
-//            mProgress.hide();
-//            if (mLastError != null) {
-//                if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
-//                    showGooglePlayServicesAvailabilityErrorDialog(
-//                            ((GooglePlayServicesAvailabilityIOException) mLastError)
-//                                    .getConnectionStatusCode());
-//                } else if (mLastError instanceof UserRecoverableAuthIOException) {
-//                    startActivityForResult(
-//                            ((UserRecoverableAuthIOException) mLastError).getIntent(),
-//                            REQUEST_AUTHORIZATION);
-//                } else {
-//                    //mOutputText.setText("The following error occurred:\n" + mLastError.getMessage());
-//                    //mOutputText.clear();
-//                    //mOutputText.add("The following error occurred:\n" + mLastError.getMessage());
-//                }
-//            } else {
-//                // mOutputText.setText("Request cancelled.");
-//                //mOutputText.clear();
-//                //mOutputText.add("Request cancelled.");
-//            }
-//        }
-//
-//
-//    }
-
 
 }

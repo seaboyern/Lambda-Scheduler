@@ -1,18 +1,14 @@
 package com.example.lambda.lambdaorganizer;
 
-import java.util.Calendar;
-import java.text.DateFormat;
-import java.util.Date;
-
-import android.app.TimePickerDialog;
-import android.support.v4.app.DialogFragment;
-import android.os.Bundle;
-import android.app.Dialog;
 import android.app.AlertDialog;
-import android.widget.TimePicker;
-import android.widget.DatePicker;
-import android.view.LayoutInflater;
+import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
+import java.util.Date;
 
 
 /**
