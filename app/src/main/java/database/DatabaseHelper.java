@@ -67,4 +67,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return tableString;
     }
+
+    public Cursor query(String q) {
+        return this.getReadableDatabase().rawQuery(q, null);
+    }
 }
