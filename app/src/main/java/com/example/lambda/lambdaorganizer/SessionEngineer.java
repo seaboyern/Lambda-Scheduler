@@ -19,10 +19,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -43,14 +41,9 @@ import com.google.api.services.calendar.model.EventReminder;
 import com.google.api.services.calendar.model.Events;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -255,13 +248,35 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             googleResult.setText("No network connection available.");
 
         } else {
-                new MakeRequestTask(mCredential, newStudyEvent).execute();
+                new MakeRequestTask(mCredential).execute();
 
         }
     }
 
 
+    /**
+     * Attempt to call the API, after verifying that all the preconditions are
+     * satisfied. The preconditions are: Google Play Services installed, an
+     * account was selected and the device currently has online access. If any
+     * of the preconditions are not satisfied, the app will prompt the user as
+     * appropriate.
+     */
+    private void sendRequestToGoogleApi(StudyEvent event) {
+        //mOutputText.add("Executed: getResultsFromApi ");
+        if (! isGooglePlayServicesAvailable()) {
+            acquireGooglePlayServices();
+        } else if (mCredential.getSelectedAccountName() == null) {
+            chooseAccount();
+        } else if ( !isDeviceOnline()) {
+            //mOutputText.setText("No network connection available.");
+            //mOutputText.clear();
+            googleResult.setText("No network connection available.");
 
+        } else {
+            new MakeRequestTask(mCredential, event).execute();
+
+        }
+    }
 
 
 
@@ -352,7 +367,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                     }
 
                     Log.d(TAG, "onActivityResult: All Ref found :"+newStudyEvent.toString());
-                    sendRequestToGoogleApi();
+                    sendRequestToGoogleApi(newStudyEvent);
                 } else {
                     Log.d(TAG, "onActivityResult: No Ref. Found in newBundle.");
 
@@ -510,7 +525,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
     private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
         private com.google.api.services.calendar.Calendar mService = null;
         private Exception mLastError = null;
-        StudyEvent studyEvent= new StudyEvent();
+        StudyEvent studyEvent;
         Boolean createNewEvent =false;
         Boolean eventCreated = false;
 
@@ -518,10 +533,19 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
 
             if(newStudyEvent!=null) {
                 this.studyEvent = newStudyEvent;
-                createNewEvent = true;
 
             }
 
+
+            HttpTransport transport = AndroidHttp.newCompatibleTransport();
+            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+            mService = new com.google.api.services.calendar.Calendar.Builder(
+                    transport, jsonFactory, credential)
+                    .setApplicationName("Lambda Organizer")
+                    .build();
+        }
+
+        MakeRequestTask(GoogleAccountCredential credential) {
 
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -538,17 +562,19 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
         @Override
         protected List<String> doInBackground(Void... params) {
 
-            if(createNewEvent){
+            if(studyEvent!=null){
                 try {
                     createGoogleEvent();
+                    studyEvent =null;
                     return null;
                 }catch (Exception e) {
                     mLastError = e;
                     cancel(true);
+                    studyEvent =null;
                     return null;
                 }
 
-            }else {
+            }else if(studyEvent==null){
 
                 try {
                     return syncWithGoogleAPI();
@@ -558,6 +584,8 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                     return null;
                 }
 
+            }else {
+                return null;
             }
 
 
@@ -607,8 +635,6 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                     DateTime endDT = DateTime.parseRfc3339(endTime.toString());
                     java.sql.Timestamp starTimeStamp = new java.sql.Timestamp(startDT.getValue());
                     java.sql.Timestamp endTimeStamp = new java.sql.Timestamp(endDT.getValue());
-//                java.sql.Date date = new java.sql.Date(dt.getValue());
-//                java.sql.Time time = new java.sql.Time(dt.getValue());
                     eventStrings.add(
                             String.format("%s (%s) (%s) %s", event.getSummary(), starTimeStamp,endTimeStamp , event.getId()));
                 }
@@ -626,9 +652,6 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
          Change the scope to CalendarScopes.CALENDAR and delete any stored
          credentials.
  **/
-
-
-
 
     private void createGoogleEvent() {
 
@@ -720,6 +743,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             //mOutputText.setText("");
             //mOutputText.clear();
             //mOutputText.add(" ");
+            googleResult.setText("");
             mProgress.show();
         }
 
