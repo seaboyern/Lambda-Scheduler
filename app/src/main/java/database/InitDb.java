@@ -3,6 +3,7 @@ package database;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
+import java.util.TreeMap;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -104,6 +105,28 @@ public final class InitDb {
             e.printStackTrace();
         }
 
+        Task task2 = new Task("Task 2", "Second task", 4);
+        try {
+            task2.setDate(dateFmt.parse("2017-11-11"));
+            task2.setStart(timeFmt.parse("04:00:00"));
+            task2.setEnd(timeFmt.parse("04:30:00"));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            CommitmentTable.getInstance(c).remove(task2);
+            TaskTable.getInstance(c).remove(task2);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            CommitmentTable.getInstance(c).insert(task2);
+            TaskTable.getInstance(c).insert(task2);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
         // Print tables changed:
         Log.v(TAG, CommitmentTable.getInstance(c).toString());
         Log.v(TAG, CourseCommitmentTable.getInstance(c).toString());
@@ -111,15 +134,27 @@ public final class InitDb {
         Log.v(TAG, TaskTable.getInstance(c).toString());
 
         // Task table queries:
+        Log.v(TAG, "Select task by title:");
         LinkedList<Task> list = TaskTable.getInstance(c).selectByTitle("Task 1");
         for(Task task : list) {
             Log.v(TAG, task.toString());
         }
 
-        list = TaskTable.getInstance(c).selectByDate("2017-11-21");
+        Log.v(TAG, "Select task by date:");
+        list = TaskTable.getInstance(c).selectByDate("2017-11-11");
         for(Task task : list) {
             Log.v(TAG, task.toString());
         }
 
+        Log.v(TAG, "Select all tasks sorted by priority:");
+        TreeMap<Integer, LinkedList<Task>> prioMap = TaskTable.getInstance(c).priorityMap();
+        for(Integer i : prioMap.keySet()) {
+            LinkedList<Task> l = prioMap.get(i);
+            for(Task j : l) {
+                Log.v(TAG, j.toString());
+            }
+        }
+
     }
+
 }
