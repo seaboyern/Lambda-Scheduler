@@ -14,6 +14,7 @@ import database.schema.CommitmentContract;
 import database.schema.CourseCommitmentContract;
 import database.schema.CourseContract;
 import database.schema.ExamContract;
+import database.schema.RecurringCommitmentContract;
 import database.schema.TaskContract;
 import database.tables.AssignmentTable;
 import database.tables.CommitmentTable;
@@ -40,6 +41,7 @@ public final class InitDb {
 //        db.execSQL(CourseCommitmentContract.DELETE_TABLE);
 //        db.execSQL(AssignmentContract.DELETE_TABLE);
 //        db.execSQL(ExamContract.DELETE_TABLE);
+//        db.execSQL(RecurringCommitmentContract.DELETE_TABLE);
 //
 //        db.execSQL(CourseContract.CREATE_TABLE);
 //        db.execSQL(TaskContract.CREATE_TABLE);
@@ -47,6 +49,7 @@ public final class InitDb {
 //        db.execSQL(CourseCommitmentContract.CREATE_TABLE);
 //        db.execSQL(AssignmentContract.CREATE_TABLE);
 //        db.execSQL(ExamContract.CREATE_TABLE);
+//        db.execSQL(RecurringCommitmentContract.CREATE_TABLE);
 //
 //        db_helper.close();
 

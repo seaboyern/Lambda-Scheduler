@@ -39,6 +39,8 @@ public class CommitmentTable extends Table {
         ContentValues commitmentValues = new ContentValues();
 
         commitmentValues.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE, comm.getTitle());
+        commitmentValues.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_GOOGLE_ID,
+                comm.getGoogleId());
         commitmentValues.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_DESC, comm.getDesc());
         commitmentValues.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_PRIO,
                 comm.getPrio());
