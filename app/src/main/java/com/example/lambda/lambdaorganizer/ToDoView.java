@@ -65,7 +65,7 @@ public class ToDoView extends AppCompatActivity {
         lv.setAdapter(adapter);
         lv2.setAdapter(adapter2);
         lv3.setAdapter(adapter3);
-
+        /*
         try{
             TreeMap<Integer, LinkedList<Task>> prioMap = TaskTable.getInstance(c).priorityMap();
             for(Integer i : prioMap.keySet()) {
@@ -112,7 +112,7 @@ public class ToDoView extends AppCompatActivity {
                     "Error receiving tasks from database; Cannot be found",
                     Toast.LENGTH_SHORT).show();
         }
-
+        */
         final Button backButton = (Button) findViewById(R.id.btnBack);
 
         backButton.setOnClickListener(new View.OnClickListener() {
