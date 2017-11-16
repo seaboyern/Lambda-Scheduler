@@ -13,7 +13,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="29dp"
-        android:layout_weight="0.19">
+        android:layout_weight="0.07">
 
         <EditText
             android:id="@+id/banner1"
@@ -51,75 +51,13 @@
     </RelativeLayout>
 
 
-    <LinearLayout
-        android:layout_width="385dp"
-        android:layout_height="81dp"
-        android:layout_gravity="center"
-        android:layout_weight="0.18"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:weightSum="1">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <EditText
-                android:id="@+id/dateTime1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.38"
-                android:ems="10"
-                android:focusable="false"
-                android:hint="Start Time"
-                android:inputType="datetime"
-                android:textAlignment="center"
-                android:textSize="10sp" />
-
-            <EditText
-                android:id="@+id/dateTime1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.43"
-                android:ems="10"
-                android:focusable="false"
-                android:hint="End Time"
-                android:inputType="datetime"
-                android:textAlignment="center"
-                android:textSize="10sp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <EditText
-        android:id="@+id/editText6"
-        android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_column="0"
-        android:layout_row="1"
-        android:background="@android:color/holo_green_dark"
-        android:clickable="false"
-        android:cursorVisible="false"
-        android:ems="10"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:inputType="textPersonName"
-        android:textAlignment="center"
-        android:textColor="?attr/colorPrimary"
-        android:textStyle="bold" />
-
     <ListView
         android:id="@+id/contentList1"
         android:layout_width="match_parent"
         android:layout_height="119dp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/banner1"
-        android:layout_weight="0.40" />
+        android:layout_weight="0.80" />
 
 
     <EditText
@@ -156,54 +94,10 @@
         android:text="Show List" />
 
     <Button
-        android:id="@+id/contantFind"
-        android:layout_width="match_parent"
-        android:layout_height="37dp"
-        android:layout_column="1"
-        android:layout_row="0"
-        android:layout_weight="0.04"
-        android:foregroundGravity="center"
-        android:gravity="center"
-        android:text="Find Study Time"
-        android:textAlignment="center"
-        app:layout_gravity="center_vertical" />
-
-    <Button
         android:id="@+id/AddStudyTiime"
         android:layout_width="match_parent"
         android:layout_height="37dp"
         android:text="Add Study Tiime" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:orientation="horizontal">
-
-
-        <Button
-            android:id="@+id/contentEdit"
-            android:layout_width="120dp"
-            android:layout_height="37dp"
-            android:layout_column="0"
-            android:layout_row="0"
-            android:layout_weight="1"
-            android:foregroundGravity="left"
-            android:text="Edit"
-            app:layout_gravity="left" />
-
-        <Button
-            android:id="@+id/ContentDelete"
-            android:layout_width="120dp"
-            android:layout_height="37dp"
-            android:layout_column="3"
-            android:layout_row="0"
-            android:layout_weight="1"
-            android:foregroundGravity="right"
-            android:text="Delete"
-            app:layout_gravity="right" />
-
-
-    </LinearLayout>
 
     <Button
         android:id="@+id/Back_Menu"
