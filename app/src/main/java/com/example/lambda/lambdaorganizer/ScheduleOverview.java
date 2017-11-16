@@ -86,6 +86,14 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
             public void onSelectDate(Date date, View view) {
                 Toast.makeText(getApplicationContext(), dateFormatter.format(date),
                         Toast.LENGTH_SHORT).show();
+                // Hide the caldroid calendar and show the week view
+                LinearLayout caldroid = (LinearLayout)ScheduleOverview.this.findViewById(R.id.caldroid);
+                caldroid.setVisibility(View.GONE);
+                mWeekView.setNumberOfVisibleDays(TYPE_DAY_VIEW);
+                mWeekView.setVisibility(View.VISIBLE);
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                mWeekView.goToDate(cal);
             }
         };
         caldroidFragment.setCaldroidListener(caldroidListener);
@@ -136,6 +144,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
             case R.id.weekview:
                 // Hide the caldroid calendar and show the week view
                 caldroid.setVisibility(View.GONE);
+                mWeekView.setNumberOfVisibleDays(mWeekViewType);
                 mWeekView.setVisibility(View.VISIBLE);
                 Toast.makeText(this, "Week view", Toast.LENGTH_SHORT).show();
                 return true;
