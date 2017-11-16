@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +30,8 @@ import com.alamkanak.weekview.WeekViewLoader;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
+import entities.Task;
+import com.example.lambda.lambdaorganizer.Scheduler.TaskInfoDialog;
 
 public class ScheduleOverview extends AppCompatActivity implements WeekView.EventClickListener,
         MonthLoader.MonthChangeListener, WeekView.EmptyViewClickListener,
@@ -38,8 +42,10 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     private static final int TYPE_THREE_DAY_VIEW = 3;
     private static final int TYPE_WEEK_VIEW = 7;
     private int mWeekViewType = TYPE_THREE_DAY_VIEW;
+    private int mEventIDCounter = 0;
     private WeekView mWeekView;
     private List<WeekViewEvent> mEvents;
+    private Map<WeekViewEvent, Task> mEventToTask;
     private static final String TAG = "ScheduleOverview";
     protected SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
 
@@ -49,6 +55,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         setContentView(R.layout.activity_schedule_overview);
 
         mEvents = new ArrayList<WeekViewEvent>();
+        mEventToTask = new HashMap<WeekViewEvent, Task>();
 
         //////////////////////
         // Set up Week view //
@@ -60,7 +67,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         // The week view has infinite scrolling horizontally. We have to provide the events of a
         // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(this);
-        mWeekView.setWeekViewLoader(this);
+        // mWeekView.setWeekViewLoader(this);
 
         // Handle events generated when user clicks on events and empty space
         mWeekView.setOnEventClickListener(this);
@@ -237,13 +244,20 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      * @param endTime
      */
     public void addTask(String title, Calendar startTime, Calendar endTime) {
-        WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
+        WeekViewEvent event = new WeekViewEvent(mEventIDCounter, getEventTitle(startTime), startTime, endTime);
+        mEventIDCounter++;
         event.setColor(getResources().getColor(R.color.event_color_01));
         Log.v(TAG, startTime.toString());
         Log.v(TAG, endTime.toString());
 
+        Task t = new Task(event.getName(), "Description of "+event.getName(), 1);
+        t.setDate(startTime.getTime());
+        t.setStart(startTime.getTime());
+        t.setEnd(endTime.getTime());
 
         mEvents.add(event);
+
+        mEventToTask.put(event, t);
 
         mWeekView.notifyDatasetChanged();
         for (WeekViewEvent e : mEvents) {
@@ -283,9 +297,15 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         //         // Toast.makeText(ScheduleOverview.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
         //     }
         // }
-        DateTimePicker datetimepicker = new DateTimePicker();
-        datetimepicker.setDateTimeListener(this);
-        datetimepicker.show(getSupportFragmentManager(), "date time picker");
+        // DateTimePicker datetimepicker = new DateTimePicker();
+        // datetimepicker.setDateTimeListener(this);
+        // datetimepicker.show(getSupportFragmentManager(), "date time picker");
+        Task t = (Task)mEventToTask.get(event);
+        TaskInfoDialog infoscreen = new TaskInfoDialog();
+        Bundle args = new Bundle();
+        args.putString("info", t.toString());
+        infoscreen.setArguments(args);
+        infoscreen.show(getSupportFragmentManager(), "Task info");
     }
 
     public void deleteTask(WeekViewEvent event) {
@@ -296,6 +316,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
             }
         }
         mEvents = UpdatedList;
+        mEventToTask.remove(event);
         mWeekView.notifyDatasetChanged();
     }
 }
