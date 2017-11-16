@@ -3,6 +3,7 @@ package database.tables;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -88,19 +89,6 @@ public class TaskTable extends Table {
                 + "';";
     }
 
-    private LinkedList<Task> getTasksFromQuery(String query) {
-        Cursor cur = new DatabaseHelper(this.context).query(query);
-        if(cur.moveToFirst()) {
-            LinkedList<Task> list = new LinkedList<Task>();
-            do {
-                list.add(getTaskFromCursor(cur));
-            } while (cur.moveToNext());
-            return list;
-        } else {
-            return null;
-        }
-    }
-
     private Task getTaskFromCursor(Cursor cur) {
         Task task = new Task(
                 cur.getString(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_TITLE)),
@@ -123,6 +111,21 @@ public class TaskTable extends Table {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private LinkedList<Task> getTasksFromQuery(String query) {
+        DatabaseHelper db = new DatabaseHelper(this.context);
+        Cursor cur = db.query(query);
+        LinkedList<Task> list = null;
+        if(cur.moveToFirst()) {
+            list = new LinkedList<Task>();
+            do {
+                list.add(getTaskFromCursor(cur));
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        db.close();
+        return list;
     }
 
     public LinkedList<Task> selectByTitle(String title) {
