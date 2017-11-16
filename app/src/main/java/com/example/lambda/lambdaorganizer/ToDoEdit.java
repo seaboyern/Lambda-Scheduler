@@ -3,6 +3,7 @@ package com.example.lambda.lambdaorganizer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ public class ToDoEdit extends AppCompatActivity {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
     SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
     Context c;
+    Task taskFound;
     public final String TAG = "ToDoEdit";
 
     public void sendNotification(final String notification) {
@@ -74,17 +76,21 @@ public class ToDoEdit extends AppCompatActivity {
 
     private class AsyncAddToDatabaseEdit implements Runnable {
         Task task;
-        AsyncAddToDatabaseEdit(Task task) {
+        Task newTask;
+        AsyncAddToDatabaseEdit(Task task, Task newTask) {
             this.task = task;
+            this.newTask = newTask;
         }
 
         @Override
         public void run() {
             try {
-                CommitmentTable.getInstance(getBaseContext()).insert(this.task);
-                TaskTable.getInstance(getBaseContext()).insert(this.task);
+                TaskTable.getInstance(getBaseContext()).remove(this.task);
+                CommitmentTable.getInstance(getBaseContext()).remove(this.task);
+                CommitmentTable.getInstance(getBaseContext()).insert(this.newTask);
+                TaskTable.getInstance(getBaseContext()).insert(this.newTask);
                 clearFields();
-                toast("Added " + this.task.getTitle());
+                toast("Edited " + this.newTask.getTitle());
             } catch(Exception e) {
                 toast(e.getMessage());
                 e.printStackTrace();
@@ -122,11 +128,13 @@ public class ToDoEdit extends AppCompatActivity {
               try {
                   String task = taskEdit.getText().toString();
                   LinkedList<Task> list = TaskTable.getInstance(c).selectByTitle(task);
+                  for(Task i : list) Log.v(TAG, i.toString());
                   Task t = list.getFirst();
+                  taskFound = t;
                   nameEdit.setText(t.getTitle());
                   String dateEd = simpleDateFormat.format(t.getDate());
-                  String startEd = simpleDateFormat.format(t.getStart());
-                  String endEd = simpleDateFormat.format(t.getEnd());
+                  String startEd = simpleTimeFormat.format(t.getStart());
+                  String endEd = simpleTimeFormat.format(t.getEnd());
                   dateEdit.setText(dateEd);
                   startEdit.setText(startEd);
                   endEdit.setText(endEd);
@@ -161,11 +169,11 @@ public class ToDoEdit extends AppCompatActivity {
                     newTask.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(date));
                     newTask.setStart(new SimpleDateFormat("HH:mm:ss").parse(start));
                     newTask.setEnd(new SimpleDateFormat("HH:mm:ss").parse(end));
-                    new Thread(new ToDoEdit.AsyncAddToDatabaseEdit(newTask)).start();
+                    new Thread(new ToDoEdit.AsyncAddToDatabaseEdit(taskFound, newTask)).start();
+                    taskFound = null;
                     Toast.makeText(getBaseContext(),
                             "Task added!",
                             Toast.LENGTH_SHORT).show();
-
                 } catch(NumberFormatException e) { // Error in priority format
                     Toast.makeText(getBaseContext(),
                             "Priority must be a number",

@@ -24,7 +24,7 @@ public abstract class Table {
     }
 
     @Override
-    public String toString() {
+    public synchronized String toString() {
         DatabaseHelper dbHelper = new DatabaseHelper(this.context);
         try {
             return dbHelper.getTableAsString(this.getTableName());
@@ -55,7 +55,7 @@ public abstract class Table {
 
     }
 
-    public void remove(DatabaseObject record) {
+    public synchronized void remove(DatabaseObject record) {
         DatabaseHelper dbHelper = new DatabaseHelper(this.context);
         try {
             dbHelper.getWritableDatabase().execSQL(this.removeQuery(record));
@@ -68,7 +68,7 @@ public abstract class Table {
 
     protected abstract  String removeQuery(DatabaseObject record);
 
-    public String getTableName() {
+    public synchronized String getTableName() {
         return this.tableName;
     }
 

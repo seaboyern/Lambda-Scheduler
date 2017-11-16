@@ -116,10 +116,11 @@ public final class InitDb {
             Log.v(TAG, task.toString());
         }
 
-        list = TaskTable.getInstance(c).selectByDate("2017-11-21");
+        list = TaskTable.getInstance(c).selectByDate("2017-11-10");
         for(Task task : list) {
             Log.v(TAG, task.toString());
         }
 
     }
+
 }

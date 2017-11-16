@@ -50,7 +50,7 @@ public class TaskTable extends Table {
         this.tableName = TaskContract.TABLE_NAME;
     }
 
-    public static TaskTable getInstance(Context c) {
+    public synchronized static TaskTable getInstance(Context c) {
         if(instance == null) {
             instance = new TaskTable(c);
         }
@@ -58,7 +58,7 @@ public class TaskTable extends Table {
     }
 
     @Override
-    public void insert(DatabaseObject record) {
+    public synchronized void insert(DatabaseObject record) {
         Task task = (Task)record;
         ContentValues taskValues = new ContentValues();
 
@@ -125,7 +125,7 @@ public class TaskTable extends Table {
         }
     }
 
-    public LinkedList<Task> selectByTitle(String title) {
+    public synchronized LinkedList<Task> selectByTitle(String title) {
         String titleQuery = String.format(uniDimQuery,
                 TaskContract.TaskEntry.COLUMN_NAME_TITLE, title
         );
@@ -134,7 +134,7 @@ public class TaskTable extends Table {
         return getTasksFromQuery(titleQuery);
     }
 
-    public LinkedList<Task> selectByDate(String date) {
+    public synchronized LinkedList<Task> selectByDate(String date) {
         String dateQuery = String.format(uniDimQuery,
                 TaskContract.TaskEntry.COLUMN_NAME_DATE, date
         );
