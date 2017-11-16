@@ -22,7 +22,7 @@ public class AssignmentTable extends Table {
     }
 
     @Override
-    public void insert(DatabaseObject record) {
+    public synchronized void insert(DatabaseObject record) {
         Assignment a = (Assignment)record;
         ContentValues aValues = new ContentValues();
 
@@ -34,7 +34,7 @@ public class AssignmentTable extends Table {
         super.rawInsert(aValues);
     }
 
-    public static Table getInstance(Context c) {
+    public synchronized static Table getInstance(Context c) {
         if(instance == null) {
             instance = new AssignmentTable(c);
         }

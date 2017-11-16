@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import database.DatabaseHelper;
 import database.DatabaseObject;
@@ -24,7 +23,7 @@ public abstract class Table {
     }
 
     @Override
-    public synchronized String toString() {
+    public String toString() {
         DatabaseHelper dbHelper = new DatabaseHelper(this.context);
         try {
             return dbHelper.getTableAsString(this.getTableName());
@@ -55,7 +54,7 @@ public abstract class Table {
 
     }
 
-    public synchronized void remove(DatabaseObject record) {
+    public void remove(DatabaseObject record) {
         DatabaseHelper dbHelper = new DatabaseHelper(this.context);
         try {
             dbHelper.getWritableDatabase().execSQL(this.removeQuery(record));
@@ -68,7 +67,7 @@ public abstract class Table {
 
     protected abstract  String removeQuery(DatabaseObject record);
 
-    public synchronized String getTableName() {
+    public String getTableName() {
         return this.tableName;
     }
 

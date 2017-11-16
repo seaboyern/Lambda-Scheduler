@@ -3,11 +3,13 @@ package database.tables;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
+import java.util.TreeMap;
 
 import database.DatabaseHelper;
 import database.DatabaseObject;
@@ -37,6 +39,16 @@ public class TaskTable extends Table {
                         CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE,
                     TaskContract.TABLE_NAME, "%s", "%s"
             );
+
+    private static String selectAllQuery =
+            String.format(
+                    "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s;",
+                    TaskContract.TABLE_NAME, CommitmentContract.TABLE_NAME,
+                    TaskContract.TABLE_NAME, TaskContract.TaskEntry.COLUMN_NAME_TITLE,
+                    CommitmentContract.TABLE_NAME,
+                    CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE,
+                    TaskContract.TABLE_NAME
+            );
     /*
     Example :
         SELECT * FROM task
@@ -50,7 +62,7 @@ public class TaskTable extends Table {
         this.tableName = TaskContract.TABLE_NAME;
     }
 
-    public synchronized static TaskTable getInstance(Context c) {
+    public static TaskTable getInstance(Context c) {
         if(instance == null) {
             instance = new TaskTable(c);
         }
@@ -58,7 +70,7 @@ public class TaskTable extends Table {
     }
 
     @Override
-    public synchronized void insert(DatabaseObject record) {
+    public void insert(DatabaseObject record) {
         Task task = (Task)record;
         ContentValues taskValues = new ContentValues();
 
@@ -88,19 +100,6 @@ public class TaskTable extends Table {
                 + "';";
     }
 
-    private LinkedList<Task> getTasksFromQuery(String query) {
-        Cursor cur = new DatabaseHelper(this.context).query(query);
-        if(cur.moveToFirst()) {
-            LinkedList<Task> list = new LinkedList<Task>();
-            do {
-                list.add(getTaskFromCursor(cur));
-            } while (cur.moveToNext());
-            return list;
-        } else {
-            return null;
-        }
-    }
-
     private Task getTaskFromCursor(Cursor cur) {
         Task task = new Task(
                 cur.getString(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_TITLE)),
@@ -125,7 +124,22 @@ public class TaskTable extends Table {
         }
     }
 
-    public synchronized LinkedList<Task> selectByTitle(String title) {
+    private LinkedList<Task> getTasksFromQuery(String query) {
+        DatabaseHelper db = new DatabaseHelper(this.context);
+        Cursor cur = db.query(query);
+        LinkedList<Task> list = null;
+        if(cur.moveToFirst()) {
+            list = new LinkedList<Task>();
+            do {
+                list.add(getTaskFromCursor(cur));
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        db.close();
+        return list;
+    }
+
+    public LinkedList<Task> selectByTitle(String title) {
         String titleQuery = String.format(uniDimQuery,
                 TaskContract.TaskEntry.COLUMN_NAME_TITLE, title
         );
@@ -134,13 +148,30 @@ public class TaskTable extends Table {
         return getTasksFromQuery(titleQuery);
     }
 
-    public synchronized LinkedList<Task> selectByDate(String date) {
+    public LinkedList<Task> selectByDate(String date) {
         String dateQuery = String.format(uniDimQuery,
                 TaskContract.TaskEntry.COLUMN_NAME_DATE, date
         );
         // Log.v(this.getTableName(), titleQuery);
 
         return getTasksFromQuery(dateQuery);
+    }
+
+    public synchronized LinkedList<Task> selectAll() {
+        return getTasksFromQuery(selectAllQuery);
+    }
+
+
+    public TreeMap<Integer, LinkedList<Task>> priorityMap() {
+        LinkedList<Task> allTasks = this.selectAll();
+        TreeMap<Integer, LinkedList<Task>> map = new TreeMap<Integer, LinkedList<Task>>();
+        for(Task i : allTasks) {
+            if(!map.containsKey(i.getPrio())) {
+                map.put(i.getPrio(), new LinkedList<Task>());
+            }
+            map.get(i.getPrio()).addLast(i);
+        }
+        return map;
     }
 
 }
