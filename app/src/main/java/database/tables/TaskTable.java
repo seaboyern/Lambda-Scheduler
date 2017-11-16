@@ -9,6 +9,7 @@ import android.util.Log;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
+import java.util.TreeMap;
 
 import database.DatabaseHelper;
 import database.DatabaseObject;
@@ -37,6 +38,16 @@ public class TaskTable extends Table {
                     CommitmentContract.TABLE_NAME,
                         CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE,
                     TaskContract.TABLE_NAME, "%s", "%s"
+            );
+
+    private static String selectAllQuery =
+            String.format(
+                    "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s;",
+                    TaskContract.TABLE_NAME, CommitmentContract.TABLE_NAME,
+                    TaskContract.TABLE_NAME, TaskContract.TaskEntry.COLUMN_NAME_TITLE,
+                    CommitmentContract.TABLE_NAME,
+                    CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE,
+                    TaskContract.TABLE_NAME
             );
     /*
     Example :
@@ -144,6 +155,23 @@ public class TaskTable extends Table {
         // Log.v(this.getTableName(), titleQuery);
 
         return getTasksFromQuery(dateQuery);
+    }
+
+    public synchronized LinkedList<Task> selectAll() {
+        return getTasksFromQuery(selectAllQuery);
+    }
+
+
+    public TreeMap<Integer, LinkedList<Task>> priorityMap() {
+        LinkedList<Task> allTasks = this.selectAll();
+        TreeMap<Integer, LinkedList<Task>> map = new TreeMap<Integer, LinkedList<Task>>();
+        for(Task i : allTasks) {
+            if(!map.containsKey(i.getPrio())) {
+                map.put(i.getPrio(), new LinkedList<Task>());
+            }
+            map.get(i.getPrio()).addLast(i);
+        }
+        return map;
     }
 
 }
