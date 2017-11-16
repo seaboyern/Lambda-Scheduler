@@ -29,8 +29,7 @@ public class ToDoView extends AppCompatActivity {
     String timePattern = "HH:mm:ss";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
     SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
-    Context c;
-
+    
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.todoview);
@@ -65,7 +64,7 @@ public class ToDoView extends AppCompatActivity {
         lv.setAdapter(adapter);
         lv2.setAdapter(adapter2);
         lv3.setAdapter(adapter3);
-        /*
+        /* Commented out for rework
         try{
             TreeMap<Integer, LinkedList<Task>> prioMap = TaskTable.getInstance(c).priorityMap();
             for(Integer i : prioMap.keySet()) {
