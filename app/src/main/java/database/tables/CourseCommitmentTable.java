@@ -25,7 +25,7 @@ public class CourseCommitmentTable extends Table {
     }
 
     @Override
-    public void insert(DatabaseObject record) {
+    public synchronized void insert(DatabaseObject record) {
         CourseCommitment comm = (CourseCommitment)record;
         ContentValues crsCommValues = new ContentValues();
 
@@ -45,7 +45,7 @@ public class CourseCommitmentTable extends Table {
         super.rawInsert(crsCommValues);
     }
 
-    public static Table getInstance(Context c) {
+    public synchronized static Table getInstance(Context c) {
         if(instance == null) {
             instance = new CourseCommitmentTable(c);
         }
