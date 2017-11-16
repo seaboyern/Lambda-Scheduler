@@ -23,6 +23,7 @@ import android.util.Log;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.alamkanak.weekview.WeekViewLoader;
 
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
@@ -30,6 +31,7 @@ import com.roomorama.caldroid.CaldroidListener;
 
 public class ScheduleOverview extends AppCompatActivity implements WeekView.EventClickListener,
         MonthLoader.MonthChangeListener, WeekView.EmptyViewClickListener,
+        WeekViewLoader, DateTimePicker.DateTimeListener,
         WeekView.EventLongPressListener{
 
     private static final int TYPE_DAY_VIEW = 1;
@@ -58,6 +60,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         // The week view has infinite scrolling horizontally. We have to provide the events of a
         // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(this);
+        mWeekView.setWeekViewLoader(this);
 
         // Handle events generated when user clicks on events and empty space
         mWeekView.setOnEventClickListener(this);
@@ -193,7 +196,25 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
                 eventsMonth.add(mEvents.get(i));
             }
         }
+        Log.v(TAG, "onMonthChange");
         return eventsMonth;
+    }
+
+    @Override
+    public List<? extends WeekViewEvent> onLoad(int periodIndex) {
+        ArrayList<WeekViewEvent> eventsMonth = new ArrayList<WeekViewEvent>();
+        for (int i = 0; i < mEvents.size(); i++) {
+            if (mEvents.get(i).getStartTime().get(Calendar.DAY_OF_MONTH) == periodIndex) {
+                eventsMonth.add(mEvents.get(i));
+            }
+        }
+        Log.v(TAG, "onLoad");
+        return eventsMonth;
+    }
+
+    @Override
+    public double toWeekViewPeriodIndex(Calendar instance) {
+        return instance.get(Calendar.DAY_OF_MONTH);
     }
 
     /**
@@ -218,26 +239,52 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     public void addTask(String title, Calendar startTime, Calendar endTime) {
         WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
         event.setColor(getResources().getColor(R.color.event_color_01));
+        Log.v(TAG, startTime.toString());
+        Log.v(TAG, endTime.toString());
+
 
         mEvents.add(event);
 
         mWeekView.notifyDatasetChanged();
+        for (WeekViewEvent e : mEvents) {
+            Log.v(TAG, e.getName());
+        }
     }
 
+    @Override
+    public void onDateTimePickerConfirm(Date d) {
+        Calendar startTime = Calendar.getInstance();
+        startTime.setTime(d);
+        Calendar endTime = (Calendar)startTime.clone();
+        endTime.add(Calendar.HOUR, 1);
+        Log.v(TAG, startTime.toString());
+        Log.v(TAG, endTime.toString());
+        WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
+        mEvents.add(event);
+
+        mWeekView.notifyDatasetChanged();
+        for (WeekViewEvent e : mEvents) {
+            Log.v(TAG, e.getName());
+        }
+        Toast.makeText(ScheduleOverview.this, "TODO: Open event " + event.getName(), Toast.LENGTH_SHORT).show();
+    }
     /**
      * Display the details of the task clicked.
      * @param event
      */
-    public void showTask(WeekViewEvent event) {
+    public void showTask(final WeekViewEvent event) {
         // Example of how to use the date time picker
-        class ShowTaskListener implements DateTimePicker.DateTimeListener {
-            @Override
-            public void onDateTimePickerConfirm(Date d) {
-                Toast.makeText(ScheduleOverview.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
-            }
-        }
+        // class ShowTaskListener implements DateTimePicker.DateTimeListener {
+        //     @Override
+        //     public void onDateTimePickerConfirm(Date d) {
+        //         Calendar newStart = Calendar.getInstance();
+        //         newStart.setTime(d);
+        //         event.setStartTime(newStart);
+        //         // Toast.makeText(ScheduleOverview.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
+        //     }
+        // }
         DateTimePicker datetimepicker = new DateTimePicker();
-        datetimepicker.setDateTimeListener(new ShowTaskListener());
+        datetimepicker.setDateTimeListener(this);
         datetimepicker.show(getSupportFragmentManager(), "date time picker");
     }
 
