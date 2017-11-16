@@ -46,7 +46,7 @@ public class AddStudyTime extends AppCompatActivity  {
     private String eventRecurrenceFrequency;
     private TextView eventRecurrenceCount;
 
-    private SimpleDateFormat dateTimeFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+    private SimpleDateFormat dateTimeFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
     private SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat timeFormat = new java.text.SimpleDateFormat("hh:mm:ss");
     public static String TAG = "AddStudyTime";

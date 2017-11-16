@@ -12,7 +12,8 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="29dp">
+        android:layout_height="29dp"
+        android:layout_weight="0.19">
 
         <EditText
             android:id="@+id/banner1"
@@ -29,31 +30,35 @@
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignBottom="@+id/googleActionButton" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/googleActionButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
+            android:layout_height="26dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="12dp"
             android:clickable="true"
+            app:backgroundTint="@android:color/holo_blue_bright"
             app:fabSize="mini"
-            app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal" />
+            app:srcCompat="@drawable/googleg_standard_color_18"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true" />
 
 
     </RelativeLayout>
 
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="385dp"
         android:layout_height="81dp"
         android:layout_gravity="center"
+        android:layout_weight="0.18"
         android:orientation="vertical"
         android:padding="16dp"
-        android:weightSum="1"
-        android:layout_weight="0.32">
+        android:weightSum="1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,49 +68,27 @@
 
             <EditText
                 android:id="@+id/dateTime1"
-                android:layout_width="154dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.61"
+                android:layout_weight="0.38"
                 android:ems="10"
                 android:focusable="false"
                 android:hint="Start Time"
                 android:inputType="datetime"
                 android:textAlignment="center"
-                android:textSize="12sp" />
-
-            <Button
-                android:id="@+id/btnDateTimePicker1"
-                android:layout_width="122dp"
-                android:layout_height="37dp"
-                android:text="set date"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
+                android:textSize="10sp" />
 
             <EditText
                 android:id="@+id/dateTime1"
-                android:layout_width="154dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.43"
                 android:ems="10"
-                android:hint="End Time"
                 android:focusable="false"
+                android:hint="End Time"
                 android:inputType="datetime"
                 android:textAlignment="center"
-                android:textSize="12sp"
-                android:layout_weight="0.61" />
-
-            <Button
-                android:id="@+id/btnDateTimePicker2"
-                android:layout_width="122dp"
-                android:layout_height="37dp"
-                android:text="set date"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
         </LinearLayout>
 
