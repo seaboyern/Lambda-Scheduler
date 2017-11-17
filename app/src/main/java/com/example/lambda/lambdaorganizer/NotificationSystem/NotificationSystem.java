@@ -1,6 +1,7 @@
-package com.example.lambda.lambdaorganizer;
+package com.example.lambda.lambdaorganizer.NotificationSystem;
 
 
+import android.app.AlarmManager;
 import android.app.Notification;
 //import android.support.v4.app.TaskStackBuilder;
 import android.app.PendingIntent;
@@ -13,7 +14,12 @@ import android.app.NotificationManager;
 //import android.app.PendingIntent;
 import android.content.Context;
 
+import com.example.lambda.lambdaorganizer.R;
+
+import java.util.Calendar;
 import java.util.List;
+
+import static android.content.Context.ALARM_SERVICE;
 //import android.content.Intent;
 
 
@@ -30,13 +36,17 @@ public class NotificationSystem {
         String sTitle = "Lambda Organizer";
 //        String body = "Lambda Scheduler notification";
 //        String subject = "Lambda Subject";
-        NotificationManager notif=(NotificationManager)activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notify=new Notification.Builder
-                (activity.getApplicationContext()).setContentTitle(sTitle).setContentText(body).
-                setContentTitle(subject).setSmallIcon(R.drawable.lambda_icon).build();
+        NotificationManager mNM =
+                (NotificationManager)activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notif = new Notification.Builder(activity.getApplicationContext())
+                .setContentTitle(sTitle)
+                .setContentText(body)
+                .setContentTitle(subject)
+                .setSmallIcon(R.drawable.lambda_icon)
+                .build();
 
-        notify.flags |= Notification.FLAG_AUTO_CANCEL;
-        notif.notify(0, notify);
+        notif.flags |= Notification.FLAG_AUTO_CANCEL;
+        mNM.notify(0, notif);
 
     }
 
@@ -64,13 +74,15 @@ public class NotificationSystem {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        //NotificationManager mNotificationManager =
+        //        (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mBuilder.build();
 
         // mNotificationId is a unique integer your app uses to identify the
         // notification. For example, to cancel the notification, you can pass its ID
         // number to NotificationManager.cancel().
-        mNotificationManager.notify(notifID, mBuilder.build());
+        //mNotificationManager.notify(notifID, mBuilder.build());
     }
 
 
@@ -79,6 +91,26 @@ public class NotificationSystem {
         NotificationManager mNotificationManager =
                 (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(notifID);
+    }
+
+
+    public static void createAlarmNotif(AppCompatActivity activity,
+                                        int minute, int hour, int day, int month, String AM_PM){
+        Intent intent = new Intent(this, NotifService.class);
+        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getService(activity.this, 0, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.HOUR, hour);
+        if(AM_PM.equals("AM"))
+            calendar.set(Calendar.AM_PM, Calendar.AM);
+        else
+            calendar.set(Calendar.AM_PM, Calendar.PM);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.MONTH, month);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
 }

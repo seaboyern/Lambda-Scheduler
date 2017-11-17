@@ -8,12 +8,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.GradeCalculator.GradeCalculatorMain;
+import com.example.lambda.lambdaorganizer.NotificationSystem.NotificationSystem;
 
 import database.DatabaseHelper;
 
 import database.InitDb;
-import database.schema.PomodoroContract;
-import database.schema.TaskContract;
 
 public class MainActivity extends AppCompatActivity {
 
