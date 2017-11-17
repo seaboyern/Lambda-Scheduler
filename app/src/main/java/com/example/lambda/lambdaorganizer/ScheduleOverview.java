@@ -7,6 +7,7 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.lang.Runnable ;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -282,7 +283,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         endTime.add(Calendar.HOUR, 1);
         Log.v(TAG, startTime.toString());
         Log.v(TAG, endTime.toString());
-        WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
+        WeekViewEvent event = new WeekViewEvent(mEventIDCounter, getEventTitle(startTime), startTime, endTime);
         mEvents.add(event);
 
         mWeekView.notifyDatasetChanged();
@@ -306,15 +307,15 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         //         // Toast.makeText(ScheduleOverview.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
         //     }
         // }
-        // DateTimePicker datetimepicker = new DateTimePicker();
-        // datetimepicker.setDateTimeListener(this);
-        // datetimepicker.show(getSupportFragmentManager(), "date time picker");
-        Task t = (Task)mEventToTask.get(event);
-        TaskInfoDialog infoscreen = new TaskInfoDialog();
-        Bundle args = new Bundle();
-        args.putString("info", t.toString());
-        infoscreen.setArguments(args);
-        infoscreen.show(getSupportFragmentManager(), "Task info");
+        DateTimePicker datetimepicker = new DateTimePicker();
+        datetimepicker.setDateTimeListener(this);
+        datetimepicker.show(getSupportFragmentManager(), "date time picker");
+        // Task t = (Task)mEventToTask.get(event);
+        // TaskInfoDialog infoscreen = new TaskInfoDialog();
+        // Bundle args = new Bundle();
+        // args.putString("info", t.toString());
+        // infoscreen.setArguments(args);
+        // infoscreen.show(getSupportFragmentManager(), "Task info");
     }
 
     public void deleteTask(WeekViewEvent event) {
