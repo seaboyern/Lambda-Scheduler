@@ -123,7 +123,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
 
         mOutputText = new ArrayList<String>();
 
-        mOutputText.add("Press Google Button To see the content.");
+        //mOutputText.add("Press Google Button To see the content.");
 
 
         adapter = new ArrayAdapter<String>
@@ -599,13 +599,6 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
         private List<String> syncWithGoogleAPI() throws IOException {
             // List the next 10 events from the primary calendar.
 
-//            if(createNewEvent){
-//                createGoogleEvent();
-//                createNewEvent = false;
-//                eventCreated = true;
-//            }
-
-
             DateTime now = new DateTime(System.currentTimeMillis());
             List<String> eventStrings = new ArrayList<String>();
             Events events = mService.events().list("primary")
@@ -726,8 +719,9 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //System.out.printf("Event created: %s\n", event.getHtmlLink());
-        Log.d(TAG, "Event created: %s\n"+ event.getHtmlLink());
+        studyEvent.setGoogleEventID(event.getId());
+        Log.d(TAG, "Event created: "+studyEvent.getGoogleEventID()+"\n"+ event.getHtmlLink());
+
         eventCreated = true;
 
 
@@ -739,10 +733,6 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
         @Override
         protected void onPreExecute() {
             Log.d(TAG, "Executed: onPreExecute.....................");
-            //mOutputText.add("Executed: onPreExecute ");
-            //mOutputText.setText("");
-            //mOutputText.clear();
-            //mOutputText.add(" ");
             googleResult.setText("");
             mProgress.show();
         }

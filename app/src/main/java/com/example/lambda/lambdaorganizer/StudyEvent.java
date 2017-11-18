@@ -28,6 +28,7 @@ public class StudyEvent {
     private String eventRecurrenceFrequency;
     private int eventRecurrenceCount;
     private ArrayList<String> attendees;
+    private String googleEventID;
 
     public static String TAG = "StudyEvent";
 
@@ -131,6 +132,14 @@ public class StudyEvent {
         this.eventTimeZone = eventTimeZone;
     }
 
+    public String getGoogleEventID() {
+        return googleEventID;
+    }
+
+    public void setGoogleEventID(String googleEventID) {
+        this.googleEventID = googleEventID;
+    }
+
     @Override
     public String toString() {
         return "StudyEvent{" +
@@ -145,6 +154,9 @@ public class StudyEvent {
                 ", eventRecurrenceFrequency='" + eventRecurrenceFrequency + '\'' +
                 ", eventRecurrenceCount=" + eventRecurrenceCount +
                 ", attendees=" + attendees +
+                ", googleEventID=" + googleEventID +
                 '}';
     }
+
+
 }

@@ -110,9 +110,6 @@ public class AddStudyTime extends AppCompatActivity  {
         });
 
 
-
-
-
         //get the spinner from the xml.
         recurrenceDropdown = (Spinner)findViewById(R.id.spinner1);
         //create a list of items for the spinner.
@@ -183,9 +180,6 @@ public class AddStudyTime extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
 
-
-
-
                     if(eventDescription.getText().toString().isEmpty()){
                         message = "Event Description not set.";
 
@@ -201,42 +195,10 @@ public class AddStudyTime extends AppCompatActivity  {
                         message = "Event Created";
                         try {
                             Intent sendIntent = new Intent(getApplicationContext(), SessionEngineer.class);
-                            //Intent sendIntent = new Intent();
-                            //                            String eventDateTime = "2017-11-14T20:50:00-06:00";
-//                            String eventDateEndTime1 = "2017-11-14T21:50:00-06:00";
-
-//                            String eventDateTime = eventStartTime.getText().toString();
-//                            String eventDateEndTime1 = eventEndTime.getText().toString();;
-
-//                            String startDate = formatDate(eventDateTime);
-//                            String endDate = formatDate(eventDateEndTime1);
-//                            String startTime = "20:50:00";
-//                            String endTime = "21:50:00";
-
-
-                            //String startDate = formatDate(eventDateTime);
-                            //String endDate = formatDate(eventDateEndTime1);
-
-//                            String startTime = formatTime(eventDateTime);
-//                            String endTime = formatTime(eventDateEndTime1);
-                            //String startTime = java.text.DateFormat.getTimeInstance().format(eventDateTime);
-                            //String endTime = java.text.DateFormat.getTimeInstance().format(eventDateEndTime1);
-
-
-
-
-
-                            //sendIntent.putExtra("eventStartTime", eventStartTime.getText().toString());
-                            //sendIntent.putExtra("eventEndTime", eventEndTime.getText().toString());
-
 
                             sendIntent.putExtra("eventSummary", eventSummary.getText().toString());
                             sendIntent.putExtra("eventDescription", eventDescription.getText().toString());
                             sendIntent.putExtra("eventLocation", eventLocation.getText().toString());
-
-
-
-
 
                             sendIntent.putExtra("eventStartDate", startDate);
                             sendIntent.putExtra("eventEndDate", endDate);
@@ -252,17 +214,9 @@ public class AddStudyTime extends AppCompatActivity  {
                                 Log.d(TAG, "attendee is zero"+attendees.size());
                             }
 
-
-
-
-
                             sendIntent.putExtra("eventRecurrenceFrequency", eventRecurrenceFrequency);
 
                             sendIntent.putExtra("eventRecurrenceCount", Integer.valueOf(eventRecurrenceCount.getText().toString()));
-
-
-
-
 
                             setResult(RESULT_OK, sendIntent);
                             Log.d(TAG, "Sending Result to SessonEngineer.");
@@ -279,14 +233,9 @@ public class AddStudyTime extends AppCompatActivity  {
         });
 
 
-
-
-
-
-
-
-
     }
+
+
 
     public boolean isTimeStampValid(String inputString) {
         //format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
