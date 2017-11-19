@@ -3,6 +3,8 @@ package database.tables;
 import android.content.ContentValues;
 import android.content.Context;
 
+import java.util.HashMap;
+
 import database.DatabaseHelper;
 import database.DatabaseObject;
 
@@ -11,17 +13,20 @@ import database.DatabaseObject;
  */
 
 public abstract class Table {
-    protected Context myContext;
+    protected Context context;
     protected String tableName;
+    protected HashMap<String, String> typeMap;
 
     protected Table(Context c) {
-        this.myContext = c;
+        this.context = c;
+        this.typeMap = new HashMap<String, String>();
     }
 
+    @Override
     public String toString() {
-        DatabaseHelper dbHelper = new DatabaseHelper(this.myContext);
+        DatabaseHelper dbHelper = new DatabaseHelper(this.context);
         try {
-            return dbHelper.getTableAsString(this.tableName);
+            return dbHelper.getTableAsString(this.getTableName());
         } catch(Exception e) {
             throw new RuntimeException(e.getMessage());
         } finally {
@@ -29,24 +34,30 @@ public abstract class Table {
         }
     }
 
-    public void insert(DatabaseObject record) {
-        DatabaseHelper dbHelper = new DatabaseHelper(this.myContext);
+    public String getTypeName(DatabaseObject obj) {
+        return typeMap.get(obj.getClass().getName());
+    }
+
+    public abstract void insert(DatabaseObject record);
+
+    protected void rawInsert(ContentValues values) {
+        DatabaseHelper dbHelper = new DatabaseHelper(this.context);
         long status = -1;
         try {
-            status = dbHelper.getWritableDatabase().insert(this.tableName, null,
-                    record.databaseObject());
+            status = dbHelper.getWritableDatabase().insert(this.tableName, null, values);
         } catch(Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw e;
         } finally {
             dbHelper.close();
             if(-1 == status) throw new RuntimeException("Insertion failed");
         }
+
     }
 
     public void remove(DatabaseObject record) {
-        DatabaseHelper dbHelper = new DatabaseHelper(this.myContext);
+        DatabaseHelper dbHelper = new DatabaseHelper(this.context);
         try {
-            dbHelper.getWritableDatabase().execSQL(this.removeQuery(record.databaseObject()));
+            dbHelper.getWritableDatabase().execSQL(this.removeQuery(record));
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
@@ -54,7 +65,10 @@ public abstract class Table {
         }
     }
 
-    public abstract ContentValues query(String q);
-    protected abstract  String removeQuery(ContentValues values);
+    protected abstract  String removeQuery(DatabaseObject record);
+
+    public String getTableName() {
+        return this.tableName;
+    }
 
 }

@@ -1,21 +1,17 @@
 package com.example.lambda.lambdaorganizer;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteConstraintException;
-import android.database.sqlite.SQLiteDatabase;
+import java.text.SimpleDateFormat;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.util.Log;
 import android.widget.Toast;
+import android.content.Context;
 
-import database.DatabaseHelper;
-import database.schema.TaskContract;
+import database.tables.CommitmentTable;
+import database.tables.TaskTable;
 import entities.Task;
 
 /**
@@ -23,6 +19,7 @@ import entities.Task;
  */
 
 public class ToDoAdd extends AppCompatActivity {
+
     public final String TAG = "ToDoAdd";
 
     public void sendNotification(final String notification) {
@@ -74,12 +71,14 @@ public class ToDoAdd extends AppCompatActivity {
 
         @Override
         public void run() {
-            DatabaseHelper dbOpener = new DatabaseHelper(getBaseContext());
-            SQLiteDatabase db_w = dbOpener.getWritableDatabase();
             try {
+                CommitmentTable.getInstance(getBaseContext()).insert(this.task);
+                TaskTable.getInstance(getBaseContext()).insert(this.task);
+                clearFields();
+                toast("Added " + this.task.getTitle());
             } catch(Exception e) {
-            } finally {
-                dbOpener.close();
+                toast(e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -116,9 +115,10 @@ public class ToDoAdd extends AppCompatActivity {
                 String description = descEdit.getText().toString();
                 String priority = priorEdit.getText().toString();
                 try {
-                    Task newTask =
-                            new Task(name, date, start, end, description,
-                                    Integer.parseInt(priority));
+                    Task newTask = new Task(name, description, Integer.parseInt(priority));
+                    newTask.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(date));
+                    newTask.setStart(new SimpleDateFormat("HH:mm:ss").parse(start));
+                    newTask.setEnd(new SimpleDateFormat("HH:mm:ss").parse(end));
                     new Thread(new AsyncAddToDatabase(newTask)).start();
                     Toast.makeText(getBaseContext(),
                             "Task added!",

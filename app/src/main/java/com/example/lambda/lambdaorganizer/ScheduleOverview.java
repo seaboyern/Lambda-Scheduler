@@ -3,12 +3,13 @@ package com.example.lambda.lambdaorganizer;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.graphics.RectF;
@@ -17,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.util.Log;
 
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
@@ -25,16 +27,18 @@ import com.alamkanak.weekview.WeekViewEvent;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
+
 public class ScheduleOverview extends AppCompatActivity implements WeekView.EventClickListener,
         MonthLoader.MonthChangeListener, WeekView.EmptyViewClickListener,
         WeekView.EventLongPressListener{
 
     private static final int TYPE_DAY_VIEW = 1;
-    private static final int TYPE_THREE_DAY_VIEW = 2;
-    private static final int TYPE_WEEK_VIEW = 3;
-    private int mWeekViewType = TYPE_WEEK_VIEW;
+    private static final int TYPE_THREE_DAY_VIEW = 3;
+    private static final int TYPE_WEEK_VIEW = 7;
+    private int mWeekViewType = TYPE_THREE_DAY_VIEW;
     private WeekView mWeekView;
     private List<WeekViewEvent> mEvents;
+    private static final String TAG = "ScheduleOverview";
     protected SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
 
     @Override
@@ -59,6 +63,8 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         mWeekView.setOnEventClickListener(this);
         mWeekView.setEmptyViewClickListener(this);
         mWeekView.setEventLongPressListener(this);
+
+        mWeekView.setNumberOfVisibleDays(mWeekViewType);
 
         ///////////////////////
         // Set up Month View //
@@ -180,8 +186,27 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         // Populate the week view with some events.
+        // Work around Week view library adding the events 3 times
+        ArrayList<WeekViewEvent> eventsMonth = new ArrayList<WeekViewEvent>();
+        for (int i = 0; i < mEvents.size(); i++) {
+            if (mEvents.get(i).getStartTime().get(Calendar.MONTH) == newMonth) {
+                eventsMonth.add(mEvents.get(i));
+            }
+        }
+        return eventsMonth;
+    }
 
-        return mEvents;
+    /**
+     * Checks if two WeekViewEvent objects are equal.
+     * @param event1 The first WeekViewEvent.
+     * @param event2 The second WeekViewEvent.
+     * @return True if the objects represent the same event.
+     */
+    private boolean eventsEqual(WeekViewEvent event1, WeekViewEvent event2) {
+        return (event1.getStartTime() == event2.getStartTime())
+            && (event1.getEndTime() == event2.getEndTime())
+            && (event1.getName() == event2.getName())
+            && (event1.getId() == event2.getId());
     }
 
     /**
@@ -196,8 +221,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
 
         mEvents.add(event);
 
-        // refresh week view. Not good if events added to a day other than today
-        mWeekView.goToToday();
+        mWeekView.notifyDatasetChanged();
     }
 
     /**
@@ -205,12 +229,26 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      * @param event
      */
     public void showTask(WeekViewEvent event) {
-        Toast.makeText(this, "TODO: Open event " + event.getName(), Toast.LENGTH_SHORT).show();
+        // Example of how to use the date time picker
+        class ShowTaskListener implements DateTimePicker.DateTimeListener {
+            @Override
+            public void onDateTimePickerConfirm(Date d) {
+                Toast.makeText(ScheduleOverview.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
+            }
+        }
+        DateTimePicker datetimepicker = new DateTimePicker();
+        datetimepicker.setDateTimeListener(new ShowTaskListener());
+        datetimepicker.show(getSupportFragmentManager(), "date time picker");
     }
 
     public void deleteTask(WeekViewEvent event) {
-        Toast.makeText(this, "TODO: remove event " + event.getName(), Toast.LENGTH_SHORT).show();
-        mEvents.remove(mEvents.indexOf(event));
-        mWeekView.goToToday();
+        ArrayList<WeekViewEvent> UpdatedList = new ArrayList<WeekViewEvent>();
+        for(WeekViewEvent e: mEvents) {
+            if(!eventsEqual(e, event)) {
+                UpdatedList.add(e);
+            }
+        }
+        mEvents = UpdatedList;
+        mWeekView.notifyDatasetChanged();
     }
 }
