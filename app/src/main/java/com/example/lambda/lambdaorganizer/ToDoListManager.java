@@ -41,14 +41,12 @@ public class ToDoListManager extends AppCompatActivity {
         });
         viewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ToDoListManager.this, ToDoView.class);
-                startActivity(intent);
+                startActivity(new Intent(ToDoListManager.this, ToDoView.class));
             }
         });
-        viewButton.setOnClickListener(new View.OnClickListener() {
+        menButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ToDoListManager.this, MainActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(ToDoListManager.this, MainActivity.class));
             }
         });
     }

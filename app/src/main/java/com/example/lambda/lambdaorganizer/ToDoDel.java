@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.util.LinkedList;
 
+import database.tables.CommitmentTable;
 import database.tables.TaskTable;
 import entities.Task;
 
@@ -43,6 +44,10 @@ public class ToDoDel extends AppCompatActivity {
                     String task = tEdit.getText().toString();
                     LinkedList<Task> list = TaskTable.getInstance(getBaseContext()).selectByTitle(task);
                     TaskTable.getInstance(getBaseContext()).remove(list.getFirst());
+                    CommitmentTable.getInstance(getBaseContext()).remove(list.getFirst());
+                    Toast.makeText(getBaseContext(),
+                            "Task deleted!",
+                            Toast.LENGTH_SHORT).show();
                 }
                 catch (Exception e)
                 {
