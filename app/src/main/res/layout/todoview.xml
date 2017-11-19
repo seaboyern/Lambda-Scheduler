@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.08"
         android:fontFamily="serif"
-        android:text="Priority 1"
+        android:layout_marginLeft="10dp"
+        android:text="Priority 1 - Urgent"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -28,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.08"
         android:fontFamily="serif"
-        android:text="Priority 2"
+        android:layout_marginLeft="10dp"
+        android:text="Priority 2 - Moderate"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -44,7 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.08"
         android:fontFamily="serif"
-        android:text="Priority 3"
+        android:layout_marginLeft="10dp"
+        android:text="Priority 3 - Passive"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -53,5 +56,13 @@
         android:layout_weight="0.15"
         android:layout_width="match_parent"
         android:layout_height="0dp"></ListView>
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="144dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:text="Back"
+        android:layout_weight="0.11" />
 
 </LinearLayout>

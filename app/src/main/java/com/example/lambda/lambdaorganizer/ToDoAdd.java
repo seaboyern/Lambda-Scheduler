@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.content.Context;
 
 import database.tables.CommitmentTable;
 import database.tables.TaskTable;
@@ -18,6 +19,7 @@ import entities.Task;
  */
 
 public class ToDoAdd extends AppCompatActivity {
+
     public final String TAG = "ToDoAdd";
 
     public void sendNotification(final String notification) {
@@ -118,6 +120,10 @@ public class ToDoAdd extends AppCompatActivity {
                     newTask.setStart(new SimpleDateFormat("HH:mm:ss").parse(start));
                     newTask.setEnd(new SimpleDateFormat("HH:mm:ss").parse(end));
                     new Thread(new AsyncAddToDatabase(newTask)).start();
+                    Toast.makeText(getBaseContext(),
+                            "Task added!",
+                            Toast.LENGTH_SHORT).show();
+
                 } catch(NumberFormatException e) { // Error in priority format
                     Toast.makeText(getBaseContext(),
                             "Priority must be a number",
@@ -132,7 +138,6 @@ public class ToDoAdd extends AppCompatActivity {
                             "Unknown error",
                             Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 

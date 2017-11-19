@@ -5,7 +5,7 @@
     android:weightSum="1">
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/AddHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.03"
@@ -30,6 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
                 android:text="Name" />
 
             <EditText
@@ -49,6 +50,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
                 android:text="Date" />
 
             <EditText
@@ -68,6 +70,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
                 android:text="Start" />
 
             <EditText
@@ -88,6 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
                 android:text="End" />
 
             <LinearLayout
@@ -98,7 +102,7 @@
 
                 <EditText
                     android:id="@+id/txtEnd"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="5" />
             </LinearLayout>
@@ -114,6 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
                 android:text="Description" />
 
             <LinearLayout
@@ -124,7 +129,7 @@
 
                 <EditText
                     android:id="@+id/txtDesc"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="5" />
             </LinearLayout>
@@ -140,6 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
                 android:text="Priority" />
 
             <LinearLayout

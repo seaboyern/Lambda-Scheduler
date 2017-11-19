@@ -5,13 +5,56 @@
     android:weightSum="1">
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/Delhead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.09"
         android:fontFamily="sans-serif"
-        android:text="Delete Task"
         android:gravity="center"
+        android:text="Delete Task"
         android:textSize="30sp"
         android:textStyle="bold" />
-</LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
+                android:text="Task Name" />
+
+            <EditText
+                android:id="@+id/txtdTaskName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:ems="10"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.75"
+        android:orientation="horizontal" >
+
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:ems="5"
+            android:text="Submit" />
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="82dp"
+            android:ems="5"
+            android:text="Back" />
+        </LinearLayout>
+    </LinearLayout>

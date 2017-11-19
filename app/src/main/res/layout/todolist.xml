@@ -38,4 +38,17 @@
         android:layout_height="80dp"
         android:text="view" />
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnMain"
+            android:layout_width="wrap_content"
+            android:layout_height="88dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:text="Main Menu"/>
+    </LinearLayout>
 </LinearLayout>

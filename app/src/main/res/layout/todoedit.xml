@@ -5,14 +5,230 @@
     android:weightSum="1">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/EditHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.08"
+        android:layout_weight="0.03"
         android:fontFamily="sans-serif"
-        android:text="Edit a Task"
-        android:gravity="center"
+        android:text="Edit Task"
         android:textSize="30sp"
+        android:gravity="center"
         android:textStyle="bold"
         android:typeface="serif" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.25"
+                android:text="Task Name" />
+
+            <EditText
+                android:id="@+id/txtTaskName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:ems="10" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Get task info"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
+                android:text="Name" />
+
+            <EditText
+                android:id="@+id/txtName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:ems="10" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
+                android:text="Date" />
+
+            <EditText
+                android:id="@+id/txtDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:ems="10" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
+                android:text="Start" />
+
+            <EditText
+                android:id="@+id/txtStart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:ems="10" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
+                android:text="End" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="53dp"
+                android:layout_weight="0.75"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/txtEnd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="5" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
+                android:text="Description" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.75"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/txtDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="5" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
+                android:text="Priority" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.75"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/txtPrior"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="5" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:orientation="horizontal" >
+
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:ems="5"
+                    android:text="Submit" />
+
+                <Button
+                    android:id="@+id/btnBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="98dp"
+                    android:ems="5"
+                    android:text="Back" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>
