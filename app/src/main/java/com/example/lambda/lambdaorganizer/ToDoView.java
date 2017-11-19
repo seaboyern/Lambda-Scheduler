@@ -29,6 +29,9 @@ public class ToDoView extends AppCompatActivity {
     String timePattern = "HH:mm:ss";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
     SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
+    int Task1num = 1;
+    int Task2num = 1;
+    int Task3num = 1;
     
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,36 +75,45 @@ public class ToDoView extends AppCompatActivity {
                 for(Task j : l) {
                         if (i == 1)
                         {
-                            lsArr.add(j.getTitle());
+                            lsArr.add(" ~ Task Number " + String.valueOf(Task1num) + " ~ ");
+                            lsArr.add(j.getTitle() + " -- Name");
                             String dateLs = simpleDateFormat.format(j.getDate());
                             String startLs = simpleTimeFormat.format(j.getStart());
                             String endLs = simpleTimeFormat.format(j.getEnd());
-                            lsArr.add(dateLs);
-                            lsArr.add(startLs);
-                            lsArr.add(endLs);
-                            lsArr.add(j.getDesc());
+                            lsArr.add(dateLs + " -- Date - yyyy-MM-dd");
+                            lsArr.add(startLs + " -- Start Time - HH:mm:ss");
+                            lsArr.add(endLs + " -- End Time - HH:mm:ss");
+                            lsArr.add(j.getDesc() + " -- Description");
+                            lsArr.add(" ");
+                            Task1num++;
                         }
                         else if(i == 2)
                         {
-                            lsArr2.add(j.getTitle());
+                            lsArr2.add(" ~ Task Number " + String.valueOf(Task2num) + " ~ ");
+                            lsArr2.add(j.getTitle() + " -- Name");
                             String dateLs = simpleDateFormat.format(j.getDate());
                             String startLs = simpleTimeFormat.format(j.getStart());
                             String endLs = simpleTimeFormat.format(j.getEnd());
-                            lsArr2.add(dateLs);
-                            lsArr2.add(startLs);
-                            lsArr2.add(endLs);
-                            lsArr2.add(j.getDesc());
+                            lsArr2.add(dateLs + " -- Date - yyyy-MM-dd");
+                            lsArr2.add(startLs + " -- Start Time - HH:mm:ss");
+                            lsArr2.add(endLs + " -- End Time - HH:mm:ss");
+                            lsArr2.add(j.getDesc() + " -- Description");
+                            lsArr2.add(" ");
+                            Task2num++;
                         }
                         else if(i == 3)
                         {
-                            lsArr3.add(j.getTitle());
+                            lsArr3.add(" ~ Task Number " + String.valueOf(Task3num) + " ~ ");
+                            lsArr3.add(j.getTitle() + " -- Name");
                             String dateLs = simpleDateFormat.format(j.getDate());
                             String startLs = simpleDateFormat.format(j.getStart());
                             String endLs = simpleDateFormat.format(j.getEnd());
-                            lsArr3.add(dateLs);
-                            lsArr3.add(startLs);
-                            lsArr3.add(endLs);
-                            lsArr3.add(j.getDesc());
+                            lsArr3.add(dateLs + " -- Date - yyyy-MM-dd");
+                            lsArr3.add(startLs + " -- Start Time - HH:mm:ss");
+                            lsArr3.add(endLs + " -- End Time - HH:mm:ss");
+                            lsArr3.add(j.getDesc() + " -- Description");
+                            lsArr3.add(" ");
+                            Task3num++;
                         }
                 }
             }
