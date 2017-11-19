@@ -29,8 +29,7 @@ public class ToDoView extends AppCompatActivity {
     String timePattern = "HH:mm:ss";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
     SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
-    Context c;
-
+    
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.todoview);
@@ -67,7 +66,7 @@ public class ToDoView extends AppCompatActivity {
         lv3.setAdapter(adapter3);
 
         try{
-            TreeMap<Integer, LinkedList<Task>> prioMap = TaskTable.getInstance(c).priorityMap();
+            TreeMap<Integer, LinkedList<Task>> prioMap = TaskTable.getInstance(getBaseContext()).priorityMap();
             for(Integer i : prioMap.keySet()) {
                 LinkedList<Task> l = prioMap.get(i);
                 for(Task j : l) {
@@ -75,8 +74,8 @@ public class ToDoView extends AppCompatActivity {
                         {
                             lsArr.add(j.getTitle());
                             String dateLs = simpleDateFormat.format(j.getDate());
-                            String startLs = simpleDateFormat.format(j.getStart());
-                            String endLs = simpleDateFormat.format(j.getEnd());
+                            String startLs = simpleTimeFormat.format(j.getStart());
+                            String endLs = simpleTimeFormat.format(j.getEnd());
                             lsArr.add(dateLs);
                             lsArr.add(startLs);
                             lsArr.add(endLs);
@@ -86,8 +85,8 @@ public class ToDoView extends AppCompatActivity {
                         {
                             lsArr2.add(j.getTitle());
                             String dateLs = simpleDateFormat.format(j.getDate());
-                            String startLs = simpleDateFormat.format(j.getStart());
-                            String endLs = simpleDateFormat.format(j.getEnd());
+                            String startLs = simpleTimeFormat.format(j.getStart());
+                            String endLs = simpleTimeFormat.format(j.getEnd());
                             lsArr2.add(dateLs);
                             lsArr2.add(startLs);
                             lsArr2.add(endLs);
@@ -112,7 +111,6 @@ public class ToDoView extends AppCompatActivity {
                     "Error receiving tasks from database; Cannot be found",
                     Toast.LENGTH_SHORT).show();
         }
-
         final Button backButton = (Button) findViewById(R.id.btnBack);
 
         backButton.setOnClickListener(new View.OnClickListener() {
