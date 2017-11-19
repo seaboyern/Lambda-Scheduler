@@ -1,6 +1,5 @@
 package GradeCalculatorObjects;
 
-import java.util.*;
 /**
  * Grade Calculator System Prototype
  */
@@ -44,4 +43,6 @@ public class CourseWork {
     public float getFinalGrade() {
         return finalGrade;
     }
+
+
 }
