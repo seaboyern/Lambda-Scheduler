@@ -1,39 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    android:orientation="vertical"
     android:baselineAligned="false"
     android:weightSum="1">
 
 
-    <EditText
-        android:id="@+id/editText3"
+    <TextView
+        android:id="@+id/Time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number" />
+        android:ellipsize="none"
+        android:fontFamily="sans-serif-thin"
+        android:gravity="center_vertical|center_horizontal"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:text="25:00"
+        android:textSize="80sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="189dp" />
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="match_parent"
+        android:id="@+id/button11"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start" />
+        android:text="Start"
+        android:layout_marginStart="105dp"
+        android:layout_below="@+id/Time"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="32dp" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
+        android:id="@+id/button12"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Stop"
-        android:layout_weight="0.02" />
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/button14"
+        android:layout_alignStart="@+id/button11"
+        android:layout_marginStart="7dp" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/button13"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Seconds" />
+        android:text="Resume"
+        android:layout_marginStart="25dp"
+        android:layout_alignTop="@+id/button12"
+        android:layout_toEndOf="@+id/button12"
+        android:layout_marginTop="10dp" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/button14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pause"
+        android:layout_alignBaseline="@+id/button11"
+        android:layout_alignBottom="@+id/button11"
+        android:layout_alignStart="@+id/button13" />
+</RelativeLayout>
