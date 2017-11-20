@@ -89,7 +89,7 @@ private boolean boolp = false;
                         else{
                             String format = String.format("%02d:%02d", java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(l),
                                     java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(l));
-                            text.setText(format);
+                            text.setText(format);gi
                             timeRemaing = l;
                         }
                     }
