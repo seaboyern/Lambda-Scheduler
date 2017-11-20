@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.content.Context;
 
 import database.tables.CommitmentTable;
 import database.tables.TaskTable;
@@ -18,6 +19,7 @@ import entities.Task;
  */
 
 public class ToDoAdd extends AppCompatActivity {
+
     public final String TAG = "ToDoAdd";
 
     public void sendNotification(final String notification) {
