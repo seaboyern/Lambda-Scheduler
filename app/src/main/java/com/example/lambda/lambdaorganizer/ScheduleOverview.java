@@ -32,11 +32,13 @@ import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
 import entities.Task;
+import entities.Assignment;
 import com.example.lambda.lambdaorganizer.Scheduler.TaskInfoDialog;
+import database.tables.TaskTable;
 
 public class ScheduleOverview extends AppCompatActivity implements WeekView.EventClickListener,
         MonthLoader.MonthChangeListener, WeekView.EmptyViewClickListener,
-        WeekViewLoader, DateTimePicker.DateTimeListener,
+        DateTimePicker.DateTimeListener,
         WeekView.EventLongPressListener{
 
     private static final int TYPE_DAY_VIEW = 1;
@@ -46,7 +48,15 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     private int mEventIDCounter = 0;
     private WeekView mWeekView;
     private List<WeekViewEvent> mEvents;
+    private List<WeekViewEvent> mTaskEvents;
+    private List<WeekViewEvent> mAssignmentEvents;
+    private List<Task> mTasks;
+    private List<Assignment> mAssignments;
     private Map<WeekViewEvent, Task> mEventToTask;
+    private Map<WeekViewEvent, Assignment> mEventToAssignment;
+    private boolean viewAssignments = true;
+    private boolean viewTasks = true;
+    private boolean viewEvents = true;
     private static final String TAG = "ScheduleOverview";
     protected SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
 
@@ -56,7 +66,12 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         setContentView(R.layout.activity_schedule_overview);
 
         mEvents = new ArrayList<WeekViewEvent>();
+        mAssignmentEvents = new ArrayList<WeekViewEvent>();
+        mTaskEvents = new ArrayList<WeekViewEvent>();
+        mTasks = new ArrayList<Task>();
+        mAssignments = new ArrayList<Assignment>();
         mEventToTask = new HashMap<WeekViewEvent, Task>();
+        mEventToAssignment = new HashMap<WeekViewEvent, Assignment>();
 
         //////////////////////
         // Set up Week view //
@@ -68,7 +83,6 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         // The week view has infinite scrolling horizontally. We have to provide the events of a
         // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(this);
-        // mWeekView.setWeekViewLoader(this);
 
         // Handle events generated when user clicks on events and empty space
         mWeekView.setOnEventClickListener(this);
@@ -113,10 +127,71 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         // layout into a Caldroid calendar
         t.replace(R.id.caldroid, caldroidFragment);
         t.commit();
+
+        Assignment a = new Assignment("Assignment", "desc", 1);
+        Date d = new Date();
+        d.setHours(0);
+        a.setDeadline(d);
+        addAssignment(a);
+
+        Task tsk = new Task("Task1", "desc", 1);
+        Date start = new Date();
+        start.setHours(2);
+        Date end = new Date();
+        end.setHours(3);
+        tsk.setStart(start);
+        tsk.setEnd(end);
+        addTask(tsk);
     }
 
-    public WeekView getWeekView() {
-        return mWeekView;
+    /**
+     * Create a week view event from a Task.
+     * @param t a task with start and end times set.
+     * @return A new week view event.
+     */
+    private WeekViewEvent taskToEvent(Task t) {
+        Calendar startTime = Calendar.getInstance();
+        startTime.setTime(t.getStart());
+        Calendar endTime = Calendar.getInstance();
+        endTime.setTime(t.getEnd());
+        WeekViewEvent event = new WeekViewEvent(
+                mEventIDCounter, t.getTitle(), startTime, endTime);
+        mEventIDCounter++;
+        event.setColor(getResources().getColor(R.color.task_color));
+        return event;
+    }
+
+    /**
+     * Create a week view event from an Assignment.
+     * @param a an Assignment with the deadline set.
+     * @return A new week view event.
+     */
+    private WeekViewEvent assignmentToEvent(Assignment a) {
+        Calendar deadline = Calendar.getInstance();
+        deadline.setTime(a.getDeadline());
+        Calendar endTime = (Calendar)deadline.clone();
+        endTime.add(Calendar.HOUR, 1);
+        WeekViewEvent event = new WeekViewEvent(
+                mEventIDCounter, a.getTitle(), deadline, endTime);
+        mEventIDCounter++;
+        // event.setAllDay(true);
+        event.setColor(getResources().getColor(R.color.assignment_color));
+        return event;
+
+    }
+
+    public void addAssignment(Assignment a) {
+        WeekViewEvent e = assignmentToEvent(a);
+        mEventToAssignment.put(e, a);
+        mAssignmentEvents.add(e);
+        mAssignments.add(a);
+    }
+
+    public void addTask(Task t) {
+        WeekViewEvent e = taskToEvent(t);
+        mEventToTask.put(e, t);
+        mTaskEvents.add(e);
+        mTasks.add(t);
     }
 
     /**
@@ -167,7 +242,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      */
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        showTask(event);
+        showEvent(event);
     }
 
     /**
@@ -177,7 +252,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      */
     @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-        deleteTask(event);
+        deleteEvent(event);
     }
 
     /**
@@ -189,7 +264,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         Calendar endTime = (Calendar) time.clone();
         endTime.add(Calendar.HOUR, 1);
 
-        addTask("Test", time, endTime);
+        addEvent("Test", time, endTime);
     }
 
     /**
@@ -202,36 +277,39 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
                 time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
     }
 
+    private boolean eventMatchesMonth(WeekViewEvent e, int month) {
+        return e.getStartTime().get(Calendar.MONTH) == month;
+    }
+
 
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         // Populate the week view with some events.
         // Work around Week view library adding the events 3 times
         ArrayList<WeekViewEvent> eventsMonth = new ArrayList<WeekViewEvent>();
-        for (int i = 0; i < mEvents.size(); i++) {
-            if (mEvents.get(i).getStartTime().get(Calendar.MONTH) == newMonth) {
-                eventsMonth.add(mEvents.get(i));
+        if(viewEvents) {
+            for (WeekViewEvent e : mEvents) {
+                if (eventMatchesMonth(e, newMonth)) {
+                    eventsMonth.add(e);
+                }
+            }
+        }
+        if(viewAssignments) {
+            for (WeekViewEvent e : mAssignmentEvents) {
+                if (eventMatchesMonth(e, newMonth)) {
+                    eventsMonth.add(e);
+                }
+            }
+        }
+        if(viewTasks) {
+            for (WeekViewEvent e : mTaskEvents) {
+                if (eventMatchesMonth(e, newMonth)) {
+                    eventsMonth.add(e);
+                }
             }
         }
         Log.v(TAG, "onMonthChange");
         return eventsMonth;
-    }
-
-    @Override
-    public List<? extends WeekViewEvent> onLoad(int periodIndex) {
-        ArrayList<WeekViewEvent> eventsMonth = new ArrayList<WeekViewEvent>();
-        for (int i = 0; i < mEvents.size(); i++) {
-            if (mEvents.get(i).getStartTime().get(Calendar.DAY_OF_MONTH) == periodIndex) {
-                eventsMonth.add(mEvents.get(i));
-            }
-        }
-        Log.v(TAG, "onLoad");
-        return eventsMonth;
-    }
-
-    @Override
-    public double toWeekViewPeriodIndex(Calendar instance) {
-        return instance.get(Calendar.DAY_OF_MONTH);
     }
 
     /**
@@ -253,21 +331,14 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      * @param startTime
      * @param endTime
      */
-    public void addTask(String title, Calendar startTime, Calendar endTime) {
+    public void addEvent(String title, Calendar startTime, Calendar endTime) {
         WeekViewEvent event = new WeekViewEvent(mEventIDCounter, getEventTitle(startTime), startTime, endTime);
         mEventIDCounter++;
-        event.setColor(getResources().getColor(R.color.event_color_01));
+        event.setColor(getResources().getColor(R.color.event_color));
         Log.v(TAG, startTime.toString());
         Log.v(TAG, endTime.toString());
 
-        Task t = new Task(event.getName(), "Description of "+event.getName(), 1);
-        t.setDate(startTime.getTime());
-        t.setStart(startTime.getTime());
-        t.setEnd(endTime.getTime());
-
         mEvents.add(event);
-
-        mEventToTask.put(event, t);
 
         mWeekView.notifyDatasetChanged();
         for (WeekViewEvent e : mEvents) {
@@ -296,7 +367,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      * Display the details of the task clicked.
      * @param event
      */
-    public void showTask(final WeekViewEvent event) {
+    public void showEvent(final WeekViewEvent event) {
         // Example of how to use the date time picker
         // class ShowTaskListener implements DateTimePicker.DateTimeListener {
         //     @Override
@@ -318,7 +389,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         // infoscreen.show(getSupportFragmentManager(), "Task info");
     }
 
-    public void deleteTask(WeekViewEvent event) {
+    public void deleteEvent(WeekViewEvent event) {
         ArrayList<WeekViewEvent> UpdatedList = new ArrayList<WeekViewEvent>();
         for(WeekViewEvent e: mEvents) {
             if(!eventsEqual(e, event)) {
