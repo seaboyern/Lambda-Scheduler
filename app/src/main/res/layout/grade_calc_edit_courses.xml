@@ -114,7 +114,7 @@
                     android:layout_width="134dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="textPersonName"
+                    android:inputType="number"
                     android:layout_weight="0.06" />
 
             </LinearLayout>
@@ -164,7 +164,7 @@
                     android:layout_width="139dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="textPersonName"
+                    android:inputType="number"
                     android:layout_weight="0.03" />
 
             </LinearLayout>

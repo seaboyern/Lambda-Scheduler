@@ -74,7 +74,7 @@ public class GradeCalculatorMain extends AppCompatActivity {
             case R.id.edit_terms:
                 Intent editTermsIntent = new Intent(getApplicationContext(), EditTerms.class);
                 editTermsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityForResult(editTermsIntent, 1);
+                startActivityForResult(editTermsIntent, 0);
                 //setContentView(R.layout.grade_calc_edit_terms);
                 return true;
             case R.id.Grades:

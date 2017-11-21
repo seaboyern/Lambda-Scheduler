@@ -162,7 +162,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/Submit_terms"
+                android:id="@+id/Submit_course_work"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
