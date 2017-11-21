@@ -13,7 +13,7 @@
         android:layout_weight="0.08"
         android:fontFamily="serif"
         android:layout_marginLeft="10dp"
-        android:text="Priority 1"
+        android:text="Priority 1 - Urgent"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -30,7 +30,7 @@
         android:layout_weight="0.08"
         android:fontFamily="serif"
         android:layout_marginLeft="10dp"
-        android:text="Priority 2"
+        android:text="Priority 2 - Moderate"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -47,7 +47,7 @@
         android:layout_weight="0.08"
         android:fontFamily="serif"
         android:layout_marginLeft="10dp"
-        android:text="Priority 3"
+        android:text="Priority 3 - Passive"
         android:textSize="24sp"
         android:textStyle="bold" />
 

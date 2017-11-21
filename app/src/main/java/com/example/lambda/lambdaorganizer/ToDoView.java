@@ -29,7 +29,10 @@ public class ToDoView extends AppCompatActivity {
     String timePattern = "HH:mm:ss";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
     SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
-    
+
+    private static final int NUM_PRIO = 3;
+    private static final String taskDisplayFormat = "%s\n  on %s,\n  from %s to %s";
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.todoview);
@@ -37,78 +40,50 @@ public class ToDoView extends AppCompatActivity {
         /**
          * ListViews
          */
-        final ListView lv = (ListView) findViewById(R.id.listView);
-        final ListView lv2 = (ListView) findViewById(R.id.listView2);
-        final ListView lv3 = (ListView) findViewById(R.id.listView3);
+        ListView[] lv = new ListView[NUM_PRIO];
+        lv[0] = (ListView) findViewById(R.id.listView);
+        lv[1] = (ListView) findViewById(R.id.listView2);
+        lv[2] = (ListView) findViewById(R.id.listView3);
 
         /**
          * Arraylists for the listviews
          */
-        ArrayList<String> lsArr = new ArrayList<String>();
-        ArrayList<String> lsArr2 = new ArrayList<String>();
-        ArrayList<String> lsArr3 = new ArrayList<String>();
+        ArrayList<String>[] lsArr = new ArrayList[NUM_PRIO];
 
         /**
          * ArrayAdapters for each of the arraylists
          */
-        ArrayAdapter<String> adapter  = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1, lsArr);
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>
-            (this, android.R.layout.simple_list_item_1, lsArr2);
-        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1, lsArr3);
+        ArrayAdapter<String>[] adapter  = new ArrayAdapter[NUM_PRIO];
 
-        /**
-         * Setting the array adapters for the list views
-         */
-        lv.setAdapter(adapter);
-        lv2.setAdapter(adapter2);
-        lv3.setAdapter(adapter3);
+        for(int i = 0; i < NUM_PRIO; i++) {
+            lsArr[i] = new ArrayList<String>();
+            adapter[i] = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+                    lsArr[i]);
+            lv[i].setAdapter(adapter[i]);
+        }
 
         try{
             TreeMap<Integer, LinkedList<Task>> prioMap = TaskTable.getInstance(getBaseContext()).priorityMap();
             for(Integer i : prioMap.keySet()) {
                 LinkedList<Task> l = prioMap.get(i);
                 for(Task j : l) {
-                        if (i == 1)
-                        {
-                            lsArr.add(j.getTitle());
-                            String dateLs = simpleDateFormat.format(j.getDate());
-                            String startLs = simpleTimeFormat.format(j.getStart());
-                            String endLs = simpleTimeFormat.format(j.getEnd());
-                            lsArr.add(dateLs);
-                            lsArr.add(startLs);
-                            lsArr.add(endLs);
-                            lsArr.add(j.getDesc());
-                        }
-                        else if(i == 2)
-                        {
-                            lsArr2.add(j.getTitle());
-                            String dateLs = simpleDateFormat.format(j.getDate());
-                            String startLs = simpleTimeFormat.format(j.getStart());
-                            String endLs = simpleTimeFormat.format(j.getEnd());
-                            lsArr2.add(dateLs);
-                            lsArr2.add(startLs);
-                            lsArr2.add(endLs);
-                            lsArr2.add(j.getDesc());
-                        }
-                        else if(i == 3)
-                        {
-                            lsArr3.add(j.getTitle());
-                            String dateLs = simpleDateFormat.format(j.getDate());
-                            String startLs = simpleDateFormat.format(j.getStart());
-                            String endLs = simpleDateFormat.format(j.getEnd());
-                            lsArr3.add(dateLs);
-                            lsArr3.add(startLs);
-                            lsArr3.add(endLs);
-                            lsArr3.add(j.getDesc());
-                        }
+                    // Parse dates and times:
+                    String dateLs = simpleDateFormat.format(j.getDate());
+                    String startLs = simpleTimeFormat.format(j.getStart());
+                    String endLs = simpleTimeFormat.format(j.getEnd());
+                    // Build string to display:
+                    String display = String.format(ToDoView.taskDisplayFormat,
+                            j.getTitle(),
+                            dateLs,
+                            startLs,
+                            endLs);
+                    lsArr[i-1].add(display);
                 }
             }
         }
         catch(Exception e){
             Toast.makeText(getBaseContext(),
-                    "Error receiving tasks from database; Cannot be found",
+                    "No tasks at the moment",
                     Toast.LENGTH_SHORT).show();
         }
         final Button backButton = (Button) findViewById(R.id.btnBack);
