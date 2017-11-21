@@ -24,6 +24,8 @@ import android.widget.LinearLayout;
 import android.util.Log;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
@@ -59,6 +61,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     private boolean viewAssignments = true;
     private boolean viewTasks = true;
     private boolean viewEvents = true;
+    private CaldroidFragment caldroidFragment;
     private static final String TAG = "ScheduleOverview";
     protected SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
 
@@ -97,7 +100,30 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         // Set up Month View //
         ///////////////////////
 
-        CaldroidFragment caldroidFragment = new CaldroidFragment();
+        initializeMonthView();
+
+        Assignment a = new Assignment("Assignment", "desc", 1);
+        Date d = new Date();
+        d.setHours(0);
+        a.setDeadline(d);
+        addAssignment(a);
+
+        Task tsk = new Task("Task1", "desc", 1);
+        Date start = new Date();
+        start.setHours(2);
+        Date end = new Date();
+        end.setHours(3);
+        tsk.setStart(start);
+        tsk.setEnd(end);
+        addTask(tsk);
+    }
+
+    /**
+     * Set up the caldroid based month view.
+     * Also usefull to clear the colors on the month view.
+     */
+    private void initializeMonthView() {
+        caldroidFragment = new CaldroidFragment();
         CaldroidListener caldroidListener = new CaldroidListener() {
             @Override
             public void onSelectDate(Date date, View view) {
@@ -124,26 +150,11 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
         caldroidFragment.setArguments(args);
 
-        android.support.v4.app.FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+        android.support.v4.app.FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
         // Turn the Linear layout in the activity_schedule_overview
         // layout into a Caldroid calendar
-        t.replace(R.id.caldroid, caldroidFragment);
-        t.commit();
-
-        Assignment a = new Assignment("Assignment", "desc", 1);
-        Date d = new Date();
-        d.setHours(0);
-        a.setDeadline(d);
-        addAssignment(a);
-
-        Task tsk = new Task("Task1", "desc", 1);
-        Date start = new Date();
-        start.setHours(2);
-        Date end = new Date();
-        end.setHours(3);
-        tsk.setStart(start);
-        tsk.setEnd(end);
-        addTask(tsk);
+        tr.replace(R.id.caldroid, caldroidFragment);
+        tr.commit();
     }
 
     /**
@@ -227,32 +238,68 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
                 caldroid.setVisibility(View.GONE);
                 mWeekView.setNumberOfVisibleDays(mWeekViewType);
                 mWeekView.setVisibility(View.VISIBLE);
-                Toast.makeText(this, "Week view", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.monthview:
                 // Hide the week view and show the caldroid calendar
+                refreshMonthView();
                 mWeekView.setVisibility(View.GONE);
                 caldroid.setVisibility(View.VISIBLE);
-                Toast.makeText(this, "Month view", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.showAssignments:
                 viewAssignments = !item.isChecked();
                 item.setChecked(!item.isChecked());
+                refreshMonthView();
                 mWeekView.notifyDatasetChanged();
                 return true;
             case R.id.showTasks:
                 viewTasks = !item.isChecked();
                 item.setChecked(!item.isChecked());
+                refreshMonthView();
                 mWeekView.notifyDatasetChanged();
                 return true;
             case R.id.showEvents:
                 viewEvents = !item.isChecked();
                 item.setChecked(!item.isChecked());
+                refreshMonthView();
                 mWeekView.notifyDatasetChanged();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Add colors to the month view based on the type of event.
+     */
+    private void refreshMonthView() {
+        initializeMonthView(); // Clear colors
+        ColorDrawable event_color = new ColorDrawable(getResources().getColor(R.color.event_color));
+        ColorDrawable task_color = new ColorDrawable(getResources().getColor(R.color.task_color));
+        ColorDrawable assign_color = new ColorDrawable(getResources().getColor(R.color.assignment_color));
+        HashMap<Date, Drawable> colorMap = new HashMap<Date, Drawable>();
+        if(viewTasks){
+            for (Task t : mTasks) {
+                if(!colorMap.containsKey(t.getStart())) {
+                    colorMap.put(t.getStart(), task_color);
+                }
+            }
+        }
+        if(viewEvents) {
+            for (WeekViewEvent e : mEvents) {
+                if(!colorMap.containsKey(e.getStartTime().getTime())) {
+                    colorMap.put(e.getStartTime().getTime(), event_color);
+                }
+            }
+        }
+        if(viewAssignments){
+            for (Assignment a : mAssignments) {
+                if(!colorMap.containsKey(a.getDeadline())) {
+                    colorMap.put(a.getDeadline(), assign_color);
+                }
+            }
+        }
+        caldroidFragment.setBackgroundDrawableForDates(colorMap);
+        caldroidFragment.refreshView();
     }
 
     /**
