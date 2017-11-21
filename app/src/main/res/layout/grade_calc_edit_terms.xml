@@ -33,13 +33,11 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/spinner3"
+                android:id="@+id/editTerms_spin"
                 android:layout_width="match_parent"
-                android:layout_height="37dp"
-                android:textColor="#ffffff"
-                android:spinnerMode="dropdown"
-                android:clickable="true"
-                android:focusable="true"/>
+                android:layout_height="match_parent"
+                android:spinnerMode="dialog"
+                android:visibility="visible" />
         </LinearLayout>
 
         <LinearLayout

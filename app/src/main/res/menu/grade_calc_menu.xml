@@ -3,6 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/Grades"
+        android:title="Grades" />
+    <item
         android:id="@+id/edit_courses"
         android:title="Edit Courses" />
     <item
@@ -11,8 +14,4 @@
     <item
         android:id="@+id/edit_terms"
         android:title="Edit Terms" />
-    <item
-        android:id="@+id/change_term"
-        android:title="Change Term"
-        app:actionLayout="@layout/grade_calc_switch_terms" />
 </menu>

@@ -1,17 +1,12 @@
 package com.example.lambda.lambdaorganizer;
 
 
-import android.icu.util.TimeUnit;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.sql.Time;
 
 public class PomodoroTimer extends AppCompatActivity {
 
@@ -89,7 +84,7 @@ private boolean boolp = false;
                         else{
                             String format = String.format("%02d:%02d", java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(l),
                                     java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(l));
-                            text.setText(format);gi
+                            text.setText(format);
                             timeRemaing = l;
                         }
                     }

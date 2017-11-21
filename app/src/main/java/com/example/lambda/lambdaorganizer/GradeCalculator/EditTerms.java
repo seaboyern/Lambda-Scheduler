@@ -4,8 +4,8 @@ package com.example.lambda.lambdaorganizer.GradeCalculator;
  * Created by Nicholas on 2017-10-15.
  */
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,24 +15,26 @@ import android.widget.Toast;
 import com.example.lambda.lambdaorganizer.R;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
+import GradeCalculatorObjects.Storage;
 import GradeCalculatorObjects.Term;
 
 import static com.example.lambda.lambdaorganizer.R.id.Submit_terms;
 import static com.example.lambda.lambdaorganizer.R.id.editText;
 
 
-public class EditTerms extends Activity {
+public class EditTerms extends AppCompatActivity {
 
     private Spinner spinnerterm;
     private Button submitBtn;
-    protected final LinkedList<Term> terms = new LinkedList<>();
+    ArrayAdapter<String> dataAdapter;
+    Storage storage;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.grade_calc_edit_terms);
+
+        storage = Storage.getInstance();
 
         addSpinnerItems();
         addListenerOnBtn();
@@ -41,23 +43,24 @@ public class EditTerms extends Activity {
 
     public void addSpinnerItems(){
 
-        spinnerterm = (Spinner)findViewById(R.id.spinner3);
 
-        List<String> spinnerItems = new ArrayList<>();
+        spinnerterm = (Spinner)findViewById(R.id.editTerms_spin);
+        ArrayList<String> spinnerItems = new ArrayList<>();
         spinnerItems.add("<Please Select Term>");
-
-        for(int i = 0; i < terms.size() - 1; i++){
-            spinnerItems.add(terms.get(i).getName());
-        }
-
         spinnerItems.add("<New Term>");
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, spinnerItems);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        for(int i = 0; i < storage.numOfTerms(); i++){
+            spinnerItems.add(storage.terms.get(i).getName());
+        }
+
+        //String[] items = spinnerItems.toArray(new String[spinnerItems.size()]);
+        String[] items = new String[]{"a","b","c"};
+
+        dataAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, items);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerterm.setAdapter(dataAdapter);
 
-        dataAdapter.notifyDataSetChanged();
 
     }
 
@@ -73,8 +76,7 @@ public class EditTerms extends Activity {
 
                 if(valueChosen.compareTo("<New Term>") == 0){
                     Term newTerm = new Term(findViewById(editText).toString());
-                    terms.add(newTerm);
-
+                    storage.insert(newTerm);
                 }
                 else if(valueChosen.compareTo("<Please Select Term>") == 0){
                     toast("Select a Term");

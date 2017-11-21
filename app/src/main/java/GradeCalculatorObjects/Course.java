@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Course {
 
-    protected LinkedList<CourseWork> allWork;
+    public LinkedList<CourseWork> allWork;
     private String professorName;
     private String courseType;
     private int courseNumber;
@@ -98,6 +98,12 @@ public class Course {
         gradeNeeded = ( goalFinalGrade - currentFinalGrade ) / focus.getWeight();
 
         return gradeNeeded * 100;
+    }
+
+
+    @Override
+    public String toString(){
+        return courseType + " " + courseNumber;
     }
 
 }

@@ -43,11 +43,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="43dp"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <Spinner
-                    android:id="@+id/spinner_CourseSelect"
+                    android:id="@+id/spinner_TermSelect"
                     android:layout_width="match_parent"
                     android:layout_height="37dp"
                     android:layout_weight="1" />
@@ -56,11 +56,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="43dp"
                 android:orientation="horizontal">
 
                 <Spinner
-                    android:id="@+id/spinner_TermSelect"
+                    android:id="@+id/spinner_CourseSelect"
                     android:layout_width="match_parent"
                     android:layout_height="37dp"
                     android:layout_weight="1" />
@@ -172,7 +172,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/Submit_terms"
+            android:id="@+id/Submit_courses"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

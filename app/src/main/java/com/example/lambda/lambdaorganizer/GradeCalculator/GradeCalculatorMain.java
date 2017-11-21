@@ -39,8 +39,8 @@ public class GradeCalculatorMain extends AppCompatActivity {
             case R.id.edit_terms:
                 setContentView(R.layout.grade_calc_edit_terms);
                 return true;
-            case R.id.change_term:
-                setContentView(R.layout.grade_calc_switch_terms);
+            case R.id.Grades:
+                setContentView(R.layout.grade_calc_main);
                 return true;
 
             default:
