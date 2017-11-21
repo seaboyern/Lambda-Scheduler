@@ -22,6 +22,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.util.Log;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
@@ -269,8 +271,17 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      * @param eventRect
      */
     @Override
-    public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-        deleteEvent(event);
+    public void onEventLongPress(final WeekViewEvent event, RectF eventRect) {
+        new AlertDialog.Builder(this)
+            .setTitle("Confirm")
+            .setMessage("Are you sure you want to delete this task?")
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int button) {
+                    deleteEvent(event);
+                }
+            })
+            .setNegativeButton("No", null).show();
     }
 
     /**
@@ -409,13 +420,30 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
 
     public void deleteEvent(WeekViewEvent event) {
         ArrayList<WeekViewEvent> UpdatedList = new ArrayList<WeekViewEvent>();
-        for(WeekViewEvent e: mEvents) {
-            if(!eventsEqual(e, event)) {
-                UpdatedList.add(e);
+        if(mEvents.contains(event)) {
+            for(WeekViewEvent e: mEvents) {
+                if(!eventsEqual(e, event)) {
+                    UpdatedList.add(e);
+                }
             }
+            mEvents = UpdatedList;
+        } else if(mAssignmentEvents.contains(event)) {
+            for(WeekViewEvent e: mAssignmentEvents) {
+                if(!eventsEqual(e, event)) {
+                    UpdatedList.add(e);
+                }
+            }
+            mEventToAssignment.remove(event);
+            mAssignmentEvents = UpdatedList;
+        } else if(mTaskEvents.contains(event)) {
+            for(WeekViewEvent e: mTaskEvents) {
+                if(!eventsEqual(e, event)) {
+                    UpdatedList.add(e);
+                }
+            }
+            mEventToTask.remove(event);
+            mTaskEvents = UpdatedList;
         }
-        mEvents = UpdatedList;
-        mEventToTask.remove(event);
         mWeekView.notifyDatasetChanged();
     }
 }
