@@ -248,7 +248,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             googleResult.setText("No network connection available.");
 
         } else {
-                new MakeRequestTask(mCredential).execute();
+                new syncWithGoogleAPI(mCredential).execute();
 
         }
     }
@@ -273,7 +273,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             googleResult.setText("No network connection available.");
 
         } else {
-            new MakeRequestTask(mCredential, event).execute();
+            new syncWithGoogleAPI(mCredential, event).execute();
 
         }
     }
@@ -522,14 +522,14 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
      * An asynchronous task that handles the Google Calendar API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
-    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
+    private class syncWithGoogleAPI extends AsyncTask<Void, Void, List<String>> {
         private com.google.api.services.calendar.Calendar mService = null;
         private Exception mLastError = null;
         StudyEvent studyEvent;
         Boolean createNewEvent =false;
         Boolean eventCreated = false;
 
-        MakeRequestTask(GoogleAccountCredential credential, StudyEvent newStudyEvent) {
+        syncWithGoogleAPI(GoogleAccountCredential credential, StudyEvent newStudyEvent) {
 
             if(newStudyEvent!=null) {
                 this.studyEvent = newStudyEvent;
@@ -545,7 +545,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                     .build();
         }
 
-        MakeRequestTask(GoogleAccountCredential credential) {
+        syncWithGoogleAPI(GoogleAccountCredential credential) {
 
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -577,7 +577,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             }else if(studyEvent==null){
 
                 try {
-                    return syncWithGoogleAPI();
+                    return getEventList();
                 } catch (Exception e) {
                     mLastError = e;
                     cancel(true);
@@ -596,7 +596,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
          * @return List of Strings describing returned events.
          * @throws IOException
          */
-        private List<String> syncWithGoogleAPI() throws IOException {
+        private List<String> getEventList() throws IOException {
             // List the next 10 events from the primary calendar.
 
             DateTime now = new DateTime(System.currentTimeMillis());
