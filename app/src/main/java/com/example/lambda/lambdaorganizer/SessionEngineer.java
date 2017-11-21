@@ -273,7 +273,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             googleResult.setText("No network connection available.");
 
         } else {
-            new MakeRequestTask(mCredential, event).execute();
+            new syncWithGoogleAP(mCredential, event).execute();
 
         }
     }
