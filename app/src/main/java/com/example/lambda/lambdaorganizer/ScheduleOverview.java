@@ -203,6 +203,9 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.scheduler_settings, menu);
+        menu.findItem(R.id.showAssignments).setChecked(viewAssignments);
+        menu.findItem(R.id.showTasks).setChecked(viewTasks);
+        menu.findItem(R.id.showEvents).setChecked(viewEvents);
         return true;
     }
 
@@ -229,6 +232,21 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
                 mWeekView.setVisibility(View.GONE);
                 caldroid.setVisibility(View.VISIBLE);
                 Toast.makeText(this, "Month view", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.showAssignments:
+                viewAssignments = !item.isChecked();
+                item.setChecked(!item.isChecked());
+                mWeekView.notifyDatasetChanged();
+                return true;
+            case R.id.showTasks:
+                viewTasks = !item.isChecked();
+                item.setChecked(!item.isChecked());
+                mWeekView.notifyDatasetChanged();
+                return true;
+            case R.id.showEvents:
+                viewEvents = !item.isChecked();
+                item.setChecked(!item.isChecked());
+                mWeekView.notifyDatasetChanged();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
