@@ -52,7 +52,7 @@ public final class InitDb {
 
         // Insert an assignment:
         // Insert commitment entry:
-        Assignment a1 = new Assignment("A1", "First assignment", 10);
+        Assignment a1 = new Assignment("A1", "First assignment", 1);
         a1.setCourseId("CMPT 370");
         a1.setWeight((float) 5.5);
         a1.setRequired((float) 5.5);
@@ -81,7 +81,7 @@ public final class InitDb {
 
         // Insert a Task:
         // Insert a commitment:
-        Task task1 = new Task("Task 1", "First task", 5);
+        Task task1 = new Task("Task 1", "First task", 1);
         SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
         try {
@@ -105,7 +105,7 @@ public final class InitDb {
             e.printStackTrace();
         }
 
-        Task task2 = new Task("Task 2", "Second task", 4);
+        Task task2 = new Task("Task 2", "Second task", 2);
         try {
             task2.setDate(dateFmt.parse("2017-11-11"));
             task2.setStart(timeFmt.parse("04:00:00"));
