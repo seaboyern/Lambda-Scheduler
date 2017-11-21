@@ -2,6 +2,7 @@ package com.example.lambda.lambdaorganizer;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -70,11 +71,11 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_overview);
 
-        mEvents = new ArrayList<WeekViewEvent>();
-        mAssignmentEvents = new ArrayList<WeekViewEvent>();
-        mTaskEvents = new ArrayList<WeekViewEvent>();
-        mTasks = new ArrayList<Task>();
-        mAssignments = new ArrayList<Assignment>();
+        mEvents = new LinkedList<WeekViewEvent>();
+        mAssignmentEvents = new LinkedList<WeekViewEvent>();
+        mTaskEvents = new LinkedList<WeekViewEvent>();
+        mTasks = new LinkedList<Task>();
+        mAssignments = new LinkedList<Assignment>();
         mEventToTask = new HashMap<WeekViewEvent, Task>();
         mEventToAssignment = new HashMap<WeekViewEvent, Assignment>();
 
@@ -111,17 +112,38 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         Date d = new Date();
         d.setHours(0);
         a.setDeadline(d);
-        addAssignment(a);
+        // addAssignment(a);
 
-        Task tsk = new Task("Task1", "desc", 1);
-        Date start = new Date();
-        start.setHours(2);
-        Date end = new Date();
-        end.setHours(3);
-        tsk.setStart(start);
-        tsk.setEnd(end);
-        tsk.setDate(start);
-        addTask(tsk);
+        // Task tsk = new Task("Task1", "desc", 1);
+        // Date start = new Date();
+        // start.setHours(2);
+        // Date end = new Date();
+        // end.setHours(3);
+        // tsk.setStart(start);
+        // tsk.setEnd(end);
+        // tsk.setDate(start);
+        // addTask(tsk);
+
+        getTasksDB();
+    }
+
+    private void getAssignmentDB() {
+
+    }
+
+    private void getTasksDB() {
+        new Thread(new Runnable() {
+            public void run() {
+                TaskTable table = TaskTable.getInstance(getBaseContext());
+                LinkedList<Task> tasks = table.selectAll();
+                // LinkedList<Task> tasks = new LinkedList<Task>();
+                for(Task t : tasks) {
+                    addTask(t);
+                    Log.v(TAG, t.getStart().toString());
+                }
+                mWeekView.postInvalidate();
+            }
+        }).start();
     }
 
     /**
@@ -170,9 +192,11 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      */
     private WeekViewEvent taskToEvent(Task t) {
         Calendar startTime = Calendar.getInstance();
-        startTime.setTime(t.getStart());
+        startTime.setTime(t.getDate());
+        startTime.set(Calendar.HOUR, t.getStart().getHours());
         Calendar endTime = Calendar.getInstance();
-        endTime.setTime(t.getEnd());
+        endTime.setTime(t.getDate());
+        endTime.set(Calendar.HOUR, t.getEnd().getHours());
         WeekViewEvent event = new WeekViewEvent(
                 mEventIDCounter, t.getTitle(), startTime, endTime);
         mEventIDCounter++;
@@ -404,7 +428,10 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
                 }
             }
         }
-        Log.v(TAG, "onMonthChange");
+        Log.v(TAG, "Month load");
+        for (WeekViewEvent e : mTaskEvents) {
+            Log.v(TAG, e.getName());
+        }
         return eventsMonth;
     }
 
@@ -465,26 +492,26 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      */
     public void showEvent(final WeekViewEvent event) {
         // Example of how to use the date time picker
-        // class ShowTaskListener implements DateTimePicker.DateTimeListener {
-        //     @Override
-        //     public void onDateTimePickerConfirm(Date d) {
-        //         Calendar newStart = Calendar.getInstance();
-        //         newStart.setTime(d);
-        //         event.setStartTime(newStart);
-        //         // Toast.makeText(ScheduleOverview.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
-        //     }
-        // }
-        // DateTimePicker datetimepicker = new DateTimePicker();
-        // datetimepicker.setDateTimeListener(this);
-        // datetimepicker.show(getSupportFragmentManager(), "date time picker");
-        if(mEventToTask.containsKey(event)) {
-            Task t = (Task)mEventToTask.get(event);
-            TaskInfoDialog infoscreen = new TaskInfoDialog();
-            Bundle args = new Bundle();
-            args.putString("info", t.toString());
-            infoscreen.setArguments(args);
-            infoscreen.show(getSupportFragmentManager(), "Task info");
-        } //TODO: add support for assignments, events, etc.
+        class ShowTaskListener implements DateTimePicker.DateTimeListener {
+            @Override
+            public void onDateTimePickerConfirm(Date d) {
+                Calendar newStart = Calendar.getInstance();
+                newStart.setTime(d);
+                event.setStartTime(newStart);
+                Toast.makeText(ScheduleOverview.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
+            }
+        }
+        DateTimePicker datetimepicker = new DateTimePicker();
+        datetimepicker.setDateTimeListener(new ShowTaskListener());
+        datetimepicker.show(getSupportFragmentManager(), "date time picker");
+        // if(mEventToTask.containsKey(event)) {
+        //     Task t = (Task)mEventToTask.get(event);
+        //     TaskInfoDialog infoscreen = new TaskInfoDialog();
+        //     Bundle args = new Bundle();
+        //     args.putString("info", t.toString());
+        //     infoscreen.setArguments(args);
+        //     infoscreen.show(getSupportFragmentManager(), "Task info");
+        // } //TODO: add support for assignments, events, etc.
     }
 
     public void deleteEvent(WeekViewEvent event) {
