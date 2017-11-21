@@ -102,6 +102,11 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
 
         initializeMonthView();
 
+
+        ///////////////////////////////
+        // Set up some example tasks //
+        ///////////////////////////////
+
         Assignment a = new Assignment("Assignment", "desc", 1);
         Date d = new Date();
         d.setHours(0);
@@ -115,6 +120,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         end.setHours(3);
         tsk.setStart(start);
         tsk.setEnd(end);
+        tsk.setDate(start);
         addTask(tsk);
     }
 
@@ -193,6 +199,10 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
 
     }
 
+    /**
+     * Adds an Assignment to the internal data structures for the week view.
+     * @param a An Assignment with the dealine set.
+     */
     public void addAssignment(Assignment a) {
         WeekViewEvent e = assignmentToEvent(a);
         mEventToAssignment.put(e, a);
@@ -200,6 +210,10 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         mAssignments.add(a);
     }
 
+    /**
+     * Add a Task to the internal data structures for the week view.
+     * @param t A task with the start end end times set.
+     */
     public void addTask(Task t) {
         WeekViewEvent e = taskToEvent(t);
         mEventToTask.put(e, t);
@@ -353,6 +367,12 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
                 time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
     }
 
+    /**
+     * Checks if a WeekView Event matches the integer month
+     * @param e a WeekViewEvent with a start time set.
+     * @param month the month of the year as an integer
+     * @return true if the WeekViewEvent is in the compared month.
+     */
     private boolean eventMatchesMonth(WeekViewEvent e, int month) {
         return e.getStartTime().get(Calendar.MONTH) == month;
     }
@@ -454,15 +474,17 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         //         // Toast.makeText(ScheduleOverview.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
         //     }
         // }
-        DateTimePicker datetimepicker = new DateTimePicker();
-        datetimepicker.setDateTimeListener(this);
-        datetimepicker.show(getSupportFragmentManager(), "date time picker");
-        // Task t = (Task)mEventToTask.get(event);
-        // TaskInfoDialog infoscreen = new TaskInfoDialog();
-        // Bundle args = new Bundle();
-        // args.putString("info", t.toString());
-        // infoscreen.setArguments(args);
-        // infoscreen.show(getSupportFragmentManager(), "Task info");
+        // DateTimePicker datetimepicker = new DateTimePicker();
+        // datetimepicker.setDateTimeListener(this);
+        // datetimepicker.show(getSupportFragmentManager(), "date time picker");
+        if(mEventToTask.containsKey(event)) {
+            Task t = (Task)mEventToTask.get(event);
+            TaskInfoDialog infoscreen = new TaskInfoDialog();
+            Bundle args = new Bundle();
+            args.putString("info", t.toString());
+            infoscreen.setArguments(args);
+            infoscreen.show(getSupportFragmentManager(), "Task info");
+        } //TODO: add support for assignments, events, etc.
     }
 
     public void deleteEvent(WeekViewEvent event) {
