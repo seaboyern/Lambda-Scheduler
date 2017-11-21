@@ -14,7 +14,9 @@ import android.widget.TextView;
 import java.sql.Time;
 
 public class PomodoroTimer extends AppCompatActivity {
+/* Created boolean values to check for
 
+ */
 private boolean boolp = false;
     private boolean boolc = false;
     long timeRemaing = 0;
@@ -27,6 +29,10 @@ private boolean boolp = false;
     @Override
     protected void onCreate( Bundle savedInstanceState) {
 
+
+        /* Setting the values for ui
+
+         */
 
 
         super.onCreate(savedInstanceState);
@@ -44,7 +50,9 @@ private boolean boolp = false;
 
                 boolp = false;
                 boolc = false;
-                CountDownTimer timer = new CountDownTimer(30000,1000) {
+                int minutes = 15000000;
+                int min = 10000;
+                CountDownTimer timer = new CountDownTimer(min,1000) {
                     @Override
                     public void onTick(long l) {
                         if(boolc || boolp){
@@ -61,6 +69,8 @@ private boolean boolp = false;
                     @Override
                     public void onFinish() {
                         text.setText("25:00");
+
+
 
                     }
                 }.start();
@@ -111,4 +121,5 @@ private boolean boolp = false;
 
 
     }
+
 }
