@@ -248,7 +248,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             googleResult.setText("No network connection available.");
 
         } else {
-                new syncWithGoogleAP(mCredential).execute();
+                new MakeRequestTask(mCredential).execute();
 
         }
     }
@@ -522,14 +522,14 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
      * An asynchronous task that handles the Google Calendar API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
-    private class syncWithGoogleAP extends AsyncTask<Void, Void, List<String>> {
+    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
         private com.google.api.services.calendar.Calendar mService = null;
         private Exception mLastError = null;
         StudyEvent studyEvent;
         Boolean createNewEvent =false;
         Boolean eventCreated = false;
 
-        syncWithGoogleAP(GoogleAccountCredential credential, StudyEvent newStudyEvent) {
+        MakeRequestTask(GoogleAccountCredential credential, StudyEvent newStudyEvent) {
 
             if(newStudyEvent!=null) {
                 this.studyEvent = newStudyEvent;
@@ -545,7 +545,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                     .build();
         }
 
-        syncWithGoogleAP(GoogleAccountCredential credential) {
+        MakeRequestTask(GoogleAccountCredential credential) {
 
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
