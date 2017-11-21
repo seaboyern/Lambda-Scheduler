@@ -21,10 +21,12 @@
         </activity>
         <activity android:name=".ScheduleOverview"></activity>
         <activity android:name=".SessionEngineer"></activity>
-        <activity android:name=".GoogleCalAPI"></activity>
         <activity android:name=".PomodoroTimer"></activity>
         <activity android:name=".ToDoListManager"></activity>
         <activity android:name=".GradeCalculator.GradeCalculatorMain"></activity>
+        <activity android:name=".GradeCalculator.EditTerms"></activity>
+        <activity android:name=".GradeCalculator.EditCourses"></activity>
+        <activity android:name=".GradeCalculator.EditCourseWork"></activity>
         <activity android:name=".ToDoAdd"></activity>
         <activity android:name=".ToDoDel"></activity>
         <activity android:name=".ToDoEdit"></activity>

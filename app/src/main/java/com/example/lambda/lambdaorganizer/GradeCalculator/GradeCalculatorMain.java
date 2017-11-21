@@ -4,8 +4,9 @@ package com.example.lambda.lambdaorganizer.GradeCalculator;
  * Created by Nicholas on 2017-10-15.
  */
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -59,16 +60,28 @@ public class GradeCalculatorMain extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.edit_course_work:
-                setContentView(R.layout.grade_calc_edit_course_work);
+                Intent editCourseWorkIntent = new Intent(getApplicationContext(), EditCourseWork.class);
+                editCourseWorkIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(editCourseWorkIntent, 0);
+                //setContentView(R.layout.grade_calc_edit_course_work);
                 return true;
             case R.id.edit_courses:
-                setContentView(R.layout.grade_calc_edit_courses);
+                Intent editCoursesIntent = new Intent(getApplicationContext(), EditCourses.class);
+                editCoursesIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(editCoursesIntent, 0);
+                //setContentView(R.layout.grade_calc_edit_courses);
                 return true;
             case R.id.edit_terms:
-                setContentView(R.layout.grade_calc_edit_terms);
+                Intent editTermsIntent = new Intent(getApplicationContext(), EditTerms.class);
+                editTermsIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(editTermsIntent, 1);
+                //setContentView(R.layout.grade_calc_edit_terms);
                 return true;
             case R.id.Grades:
-                setContentView(R.layout.grade_calc_main);
+                Intent gradesIntent = new Intent(getApplicationContext(), GradeCalculatorMain.class);
+                gradesIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(gradesIntent, 0);
+                //setContentView(R.layout.grade_calc_main);
                 return true;
 
             default:
