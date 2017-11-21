@@ -31,6 +31,41 @@ public class NotificationSystem {
 
     private static List<Integer> notifIDs;
 
+    public static void sendNotification(AppCompatActivity activity, AppCompatActivity resultActivity, int notifID, String msg){
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(activity)
+                        .setSmallIcon(R.drawable.lambda_icon)
+                        .setContentTitle("Lambda Organizer")
+                        .setContentText(msg);
+        // Creates an explicit intent for an Activity in your app
+        Intent resultIntent = new Intent(activity, resultActivity.getClass()); /*this, ResultActivity.class*/
+
+        // The stack builder object will contain an artificial back stack for the
+        // started Activity.
+        // This ensures that navigating backward from the Activity leads out of
+        // your app to the Home screen.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(activity);
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(resultActivity);
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mBuilder.build();
+
+        // mNotificationId is a unique integer your app uses to identify the
+        // notification. For example, to cancel the notification, you can pass its ID
+        // number to NotificationManager.cancel().
+        mNotificationManager.notify(notifID, mBuilder.build());
+    }
+
     public static void sendNotification(AppCompatActivity activity, String subject, String body){
 
         String sTitle = "Lambda Organizer";
@@ -39,9 +74,9 @@ public class NotificationSystem {
         NotificationManager mNM =
                 (NotificationManager)activity.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notif = new Notification.Builder(activity.getApplicationContext())
-                .setContentTitle(sTitle)
+                .setContentTitle(sTitle)  // duplicate
                 .setContentText(body)
-                .setContentTitle(subject)
+                .setContentTitle(subject) // duplicate
                 .setSmallIcon(R.drawable.lambda_icon)
                 .build();
 
@@ -96,9 +131,9 @@ public class NotificationSystem {
 
     public static void createAlarmNotif(AppCompatActivity activity,
                                         int minute, int hour, int day, int month, String AM_PM){
-        Intent intent = new Intent(this, NotifService.class);
+        //Intent intent = new Intent(this, NotifService.class);
         AlarmManager alarmManager = (AlarmManager) activity.getSystemService(ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getService(activity.this, 0, intent, 0);
+        //PendingIntent pendingIntent = PendingIntent.getService(activity.this, 0, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MINUTE, minute);
@@ -110,7 +145,7 @@ public class NotificationSystem {
         calendar.set(Calendar.DAY_OF_MONTH, day);
         calendar.set(Calendar.MONTH, month);
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
 }
