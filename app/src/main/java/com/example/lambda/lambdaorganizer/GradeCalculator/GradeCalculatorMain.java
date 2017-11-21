@@ -9,14 +9,42 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.example.lambda.lambdaorganizer.R;
 
 public class GradeCalculatorMain extends AppCompatActivity {
+    private Spinner spinnerterm;
+    String termSelected;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.grade_calc_main);
+
+        spinnerterm = (Spinner)findViewById(R.id.spinner_TermSelect);
+        String[] items = new String[]{"grade_calc_edit_course_work","b","c"};
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, items);
+
+        spinnerterm.setAdapter(dataAdapter);
+
+        spinnerterm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> dataAdapter, View v, int position, long id) {
+                termSelected = dataAdapter.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+            }
+        });
+
     }
 
     @Override
