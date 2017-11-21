@@ -67,9 +67,11 @@ public class ToDoView extends AppCompatActivity {
             for(Integer i : prioMap.keySet()) {
                 LinkedList<Task> l = prioMap.get(i);
                 for(Task j : l) {
+                    // Parse dates and times:
                     String dateLs = simpleDateFormat.format(j.getDate());
                     String startLs = simpleTimeFormat.format(j.getStart());
                     String endLs = simpleTimeFormat.format(j.getEnd());
+                    // Build string to display:
                     String display = String.format(ToDoView.taskDisplayFormat,
                             j.getTitle(),
                             dateLs,
@@ -81,7 +83,7 @@ public class ToDoView extends AppCompatActivity {
         }
         catch(Exception e){
             Toast.makeText(getBaseContext(),
-                    "Error receiving tasks from database; Cannot be found",
+                    "No tasks at the moment",
                     Toast.LENGTH_SHORT).show();
         }
         final Button backButton = (Button) findViewById(R.id.btnBack);
