@@ -7,6 +7,7 @@ package com.example.lambda.lambdaorganizer.GradeCalculator;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -27,8 +28,8 @@ public class EditTerms extends AppCompatActivity {
 
     private Spinner spinnerterm;
     private Button submitBtn;
-    ArrayAdapter<String> dataAdapter;
     Storage storage;
+    String termSelected;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -36,12 +37,44 @@ public class EditTerms extends AppCompatActivity {
 
         storage = Storage.getInstance();
 
-        addSpinnerItems();
+        spinnerterm = (Spinner)findViewById(R.id.editTerms_spin);
+        ArrayList<String> spinnerItems = new ArrayList<>();
+        spinnerItems.add("<Please Select Term>");
+        spinnerItems.add("<New Term>");
+
+        for(int i = 0; i < storage.numOfTerms(); i++){
+            spinnerItems.add(storage.terms.get(i).getName());
+        }
+
+        //String[] items = spinnerItems.toArray(new String[spinnerItems.size()]);
+        String[] items = new String[]{"a","b","c"};
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, items);
+        //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerterm.setAdapter(dataAdapter);
+
+        spinnerterm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> dataAdapter, View v, int position, long id) {
+                termSelected = dataAdapter.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+            }
+        });
+
+
+
+
         addListenerOnBtn();
 
     }
 
-    public void addSpinnerItems(){
+    /*public void addSpinnerItems(){
 
 
         spinnerterm = (Spinner)findViewById(R.id.editTerms_spin);
@@ -56,13 +89,24 @@ public class EditTerms extends AppCompatActivity {
         //String[] items = spinnerItems.toArray(new String[spinnerItems.size()]);
         String[] items = new String[]{"a","b","c"};
 
-        dataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, items);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, items);
+        //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerterm.setAdapter(dataAdapter);
 
+        spinnerterm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> dataAdapter, View v, int position, long id) {
+                termSelected = dataAdapter.getItemAtPosition(position).toString();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
 
-    }
+            }
+        });
+
+
+    }*/
 
     public void addListenerOnBtn(){
 

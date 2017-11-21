@@ -48,7 +48,7 @@ public class EditCourses extends AppCompatActivity{
         List<String> spinnerItems = new ArrayList<>();
         spinnerItems.add("<Please Select Term>");
 
-        for(int i = 0; i < storage.numOfTerms() - 1; i++){
+        for(int i = 0; i < storage.numOfTerms(); i++){
             spinnerItems.add(storage.terms.get(i).getName());
         }
 
@@ -63,7 +63,7 @@ public class EditCourses extends AppCompatActivity{
         List<String> spinnerItems = new ArrayList<>();
         spinnerItems.add("<Please Select Course>");
 
-        for(int i = 0; i < storage.terms.element().courses.size() - 1; i++){
+        for(int i = 0; i < storage.terms.element().courses.size(); i++){
             spinnerItems.add(storage.terms.element().courses.get(i).toString());
         }
 
