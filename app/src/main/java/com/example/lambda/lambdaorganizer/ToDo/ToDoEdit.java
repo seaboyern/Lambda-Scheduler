@@ -1,4 +1,4 @@
-package com.example.lambda.lambdaorganizer;
+package com.example.lambda.lambdaorganizer.ToDo;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,8 @@ import java.util.LinkedList;
 import database.tables.CommitmentTable;
 import database.tables.TaskTable;
 import entities.Task;
-import com.example.lambda.lambdaorganizer.ToDoAdd;
+
+import com.example.lambda.lambdaorganizer.R;
 
 
 /**
