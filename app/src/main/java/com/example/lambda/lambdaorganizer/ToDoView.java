@@ -86,12 +86,5 @@ public class ToDoView extends AppCompatActivity {
                     "No tasks at the moment",
                     Toast.LENGTH_SHORT).show();
         }
-        final Button backButton = (Button) findViewById(R.id.btnBack);
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(ToDoView.this, ToDoListManager.class));
-            }
-        });
     }
 }
