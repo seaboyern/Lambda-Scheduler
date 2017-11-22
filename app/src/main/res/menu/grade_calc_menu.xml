@@ -4,14 +4,14 @@
 
     <item
         android:id="@+id/Grades"
-        android:title="Grades" />
+        android:title="Refresh" />
+    <item
+        android:id="@+id/edit_terms"
+        android:title="Edit Terms" />
     <item
         android:id="@+id/edit_courses"
         android:title="Edit Courses" />
     <item
         android:id="@+id/edit_course_work"
         android:title="Edit Course Work" />
-    <item
-        android:id="@+id/edit_terms"
-        android:title="Edit Terms" />
 </menu>

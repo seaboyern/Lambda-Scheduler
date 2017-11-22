@@ -20,6 +20,12 @@ public class CourseWork {
         weight = newWeight;
     }
 
+    public CourseWork(String newName, float newWeight, float newGrade){
+        name = newName;
+        weight = newWeight;
+        finalGrade = newGrade;
+    }
+
     public void setName(String newName){
         name = newName;
     }

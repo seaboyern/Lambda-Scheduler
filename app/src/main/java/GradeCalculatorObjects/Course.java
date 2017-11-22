@@ -79,6 +79,13 @@ public class Course {
         return toAdd;
     }
 
+    public CourseWork newCourseWorkWithgrade( String initName, int initWeight, int initGrade){
+        CourseWork toAdd = new CourseWork(initName, initWeight, initGrade);
+        allWork.addLast(toAdd);
+
+        return toAdd;
+    }
+
     public void calcFinalGrade(){
         float finalGrade = 0;
         CourseWork cur = new CourseWork();
@@ -98,6 +105,17 @@ public class Course {
         gradeNeeded = ( goalFinalGrade - currentFinalGrade ) / focus.getWeight();
 
         return gradeNeeded * 100;
+    }
+
+    public CourseWork findCourseWork(String name){
+
+        for(int i = 0; i < allWork.size(); i++){
+            if(allWork.get(i).getName().compareTo(name) == 0){
+                return allWork.get(i);
+            }
+        }
+
+        return null;
     }
 
 

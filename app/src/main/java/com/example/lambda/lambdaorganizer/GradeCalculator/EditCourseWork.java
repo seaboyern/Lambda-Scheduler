@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import GradeCalculatorObjects.Course;
+import GradeCalculatorObjects.CourseWork;
 import GradeCalculatorObjects.Storage;
 import GradeCalculatorObjects.Term;
 
@@ -45,9 +46,14 @@ public class EditCourseWork extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.grade_calc_edit_course_work);
 
+        name = (EditText)findViewById(R.id.editText_name);
+        weight = (EditText)findViewById(R.id.editText_weight);
+        grade = (EditText)findViewById(R.id.editText_grade);
+
         storage = Storage.getInstance();
 
         addSelectTermItems();
+        addListenerOnBtn();
     }
 
     public void addSelectTermItems(){
@@ -55,7 +61,7 @@ public class EditCourseWork extends AppCompatActivity{
         List<String> spinnerItems = new ArrayList<>();
         spinnerItems.add("<Please Select Term>");
 
-        for(int i = 0; i < storage.numOfTerms()-1; i++){
+        for(int i = 0; i < storage.numOfTerms(); i++){
             spinnerItems.add(storage.terms.get(i).getName());
         }
 
@@ -67,8 +73,10 @@ public class EditCourseWork extends AppCompatActivity{
         selectTerm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> dataAdapter, View v, int position, long id) {
-                termSelected = dataAdapter.getItemAtPosition(position).toString();
-                addSelectCourseItems();
+                if(dataAdapter.getItemAtPosition(position).toString().compareTo("<Please Select Term>") != 0) {
+                    termSelected = dataAdapter.getItemAtPosition(position).toString();
+                    addSelectCourseItems();
+                }
 
             }
             @Override
@@ -84,7 +92,7 @@ public class EditCourseWork extends AppCompatActivity{
         spinnerItems.add("<Please Select Course>");
 
         try {
-            for (int i = 0; i < storage.findTerm(termSelected).courses.size() - 1; i++) {
+            for (int i = 0; i < storage.findTerm(termSelected).courses.size() ; i++) {
                 spinnerItems.add(storage.findTerm(termSelected).courses.get(i).toString());
             }
         }
@@ -100,8 +108,10 @@ public class EditCourseWork extends AppCompatActivity{
         selectCourse.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> dataAdapter, View v, int position, long id) {
-                courseSelected = dataAdapter.getItemAtPosition(position).toString();
-                addSelectCourseWorkItems();
+                if(dataAdapter.getItemAtPosition(position).toString().compareTo("<Please Select Course>") != 0) {
+                    courseSelected = dataAdapter.getItemAtPosition(position).toString();
+                    addSelectCourseWorkItems();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -115,23 +125,28 @@ public class EditCourseWork extends AppCompatActivity{
 
         spinnerItems.add("<Please Select Course Work>");
 
-        try {
+        if(!storage.findTerm(termSelected).findCourse(courseSelected).allWork.isEmpty())
             for (int i = 0; i <
-                    storage.findTerm(termSelected).findCourse(courseSelected).allWork.size() - 1;
+                    storage.findTerm(termSelected).findCourse(courseSelected).allWork.size() ;
                     i++) {
-                spinnerItems.add(storage.findTerm(termSelected).findCourse(courseSelected).allWork.get(i).toString());
+                spinnerItems.add(storage.findTerm(termSelected).findCourse(courseSelected).allWork.get(i).getName());
             }
-        }
-        catch(NullPointerException e){
-            toast("Please add course work.");
-        }
+
+
 
         spinnerItems.add("<New Course Work>");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, spinnerItems);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectCourseWork.setAdapter(dataAdapter);
 
         selectCourseWork.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> dataAdapter, View v, int position, long id) {
-                courseWorkSelected = dataAdapter.getItemAtPosition(position).toString();
+                if(dataAdapter.getItemAtPosition(position).toString().compareTo("<Please Select Course Work>") != 0) {
+                    courseWorkSelected = dataAdapter.getItemAtPosition(position).toString();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -153,6 +168,7 @@ public class EditCourseWork extends AppCompatActivity{
 
                 Term termChosen = storage.findTerm(termSelected);
                 Course courseChosen = termChosen.findCourse(courseSelected);
+                CourseWork courseWorkChosen = courseChosen.findCourseWork(courseWorkSelected);
 
                 if (termSelected.compareTo("<Please Select Term>") == 0) {
                     toast("Select a Term");
@@ -165,36 +181,54 @@ public class EditCourseWork extends AppCompatActivity{
                 }
 
                 if (    name.getText().toString().compareTo("") == 0 &&
-                        weight.getText().toString().compareTo("") == 0 ) {
+                        weight.getText().toString().compareTo("") == 0 &&
+                        grade.getText().toString().compareTo("") == 0)
+                {
                     toast("Please input data to edit");
                     }
 
                 else {
-                    if (courseWorkSelected.compareTo("<New Course>") == 0) {
-                        grade.setVisibility(View.GONE);
-                        findViewById(R.id.textView_grade).setVisibility(View.GONE);
+                    if (courseWorkSelected.compareTo("<New Course Work>") == 0) {
+                        if(grade.getText().toString().compareTo("") == 0){
+                            try {
+                                nameStr = name.getText().toString();
+                                weightInt = Integer.parseInt(weight.getText().toString());
 
-                        try {
-                            nameStr = name.getText().toString();
-                            weightInt = Integer.parseInt(weight.getText().toString());
+                                courseChosen.newCourseWork(nameStr, weightInt);
+                                toast("Course Work " + nameStr + " was added!");
 
-                            courseChosen.newCourseWork(nameStr, weightInt);
-
-                        } catch (NullPointerException e) {
-                            toast("Must enter a name and weight for new work.");
+                            } catch (NullPointerException e) {
+                                toast("Must enter a name and weight for new work.");
+                            }
                         }
-                    } else if (courseSelected.compareTo("<New Course>") != 0) {
-                        courseChosen = termChosen.findCourse(courseSelected);
+                        else{
+                            try {
+                                nameStr = name.getText().toString();
+                                weightInt = Integer.parseInt(weight.getText().toString());
+                                gradeInt = Integer.parseInt(grade.getText().toString());
+
+                                courseChosen.newCourseWorkWithgrade(nameStr, weightInt, gradeInt);
+                                toast("Course Work " + nameStr + " was added!");
+
+                            } catch (NullPointerException e) {
+                                toast("Must enter a name and weight for new work.");
+                            }
+                        }
+
+
+                    } else if (courseWorkSelected.compareTo("<New Course Work>") != 0) {
+                        courseWorkChosen = courseChosen.findCourseWork(courseWorkSelected);
 
                         if (name.getText().toString().compareTo("") != 0) {
-                            courseChosen.setCourseType(name.getText().toString());
+                            courseWorkChosen.setName(name.getText().toString());
                         }
                         if (weight.getText().toString().compareTo("") != 0) {
-                            courseChosen.setCourseNumber(Integer.parseInt(weight.getText().toString()));
+                            courseWorkChosen.setWeight(Integer.parseInt(weight.getText().toString()));
                         }
                         if (grade.getText().toString().compareTo("") != 0) {
-                            courseChosen.setProfessorName(grade.getText().toString());
+                            courseWorkChosen.setFinalGrade(Integer.parseInt(grade.getText().toString()));
                         }
+
                         toast(courseSelected + " was updated.");
                     }
                 }

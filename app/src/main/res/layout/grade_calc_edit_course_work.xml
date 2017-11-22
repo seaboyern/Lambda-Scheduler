@@ -101,7 +101,7 @@
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/editText_type"
+                        android:id="@+id/editText_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -126,12 +126,12 @@
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/editText_number"
+                        android:id="@+id/editText_weight"
                         android:layout_width="134dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.06"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:inputType="number" />
 
                 </LinearLayout>
 
@@ -151,11 +151,11 @@
                         android:textSize="20sp" />
 
                     <EditText
-                        android:id="@+id/editText_prof"
+                        android:id="@+id/editText_grade"
                         android:layout_width="143dp"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:inputType="number" />
 
                 </LinearLayout>
 

@@ -90,7 +90,6 @@ public class EditTerms extends AppCompatActivity {
 
                 if(termSelected.compareTo("<New Term>") == 0){
                     Term newTerm = new Term(nameInput.getText().toString());
-                    storage.insert(newTerm);
                     toast("Term " + newTerm.getName() + " was added.");
                 }
                 else if(termSelected.compareTo("<Please Select Term>") == 0){
@@ -98,6 +97,10 @@ public class EditTerms extends AppCompatActivity {
                 }
                 else if(findViewById(editText).toString().compareTo("") == 0){
                     toast("Input name");
+                }
+                else if(termSelected.compareTo("<New Term>") != 0){
+                    storage.findTerm(termSelected).setName(nameInput.getText().toString());
+                    toast("Term was updated");
                 }
                 dataAdapter.notifyDataSetChanged();
             }

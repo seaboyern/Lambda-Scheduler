@@ -29,7 +29,7 @@ public class Storage {
 
     public Term findTerm(String termName){
         for(int i = 0; i < terms.size(); i++){
-            if(terms.get(i).toString().compareTo(termName) == 0){
+            if(terms.get(i).getName().compareTo(termName) == 0){
                 return terms.get(i);
             }
     }

@@ -60,7 +60,7 @@ public class EditCourses extends AppCompatActivity{
         List<String> spinnerItems = new ArrayList<>();
         spinnerItems.add("<Please Select Term>");
 
-        for(int i = 0; i < storage.numOfTerms()-1; i++){
+        for(int i = 0; i < storage.numOfTerms(); i++){
             spinnerItems.add(storage.terms.get(i).getName());
         }
 
@@ -72,8 +72,11 @@ public class EditCourses extends AppCompatActivity{
         selectTerm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> dataAdapter, View v, int position, long id) {
-                termSelected = dataAdapter.getItemAtPosition(position).toString();
-                addSelectCourseItems();
+                if(dataAdapter.getItemAtPosition(position).toString().compareTo("<Please Select Term>") != 0){
+                    termSelected = dataAdapter.getItemAtPosition(position).toString();
+                    addSelectCourseItems();
+                }
+
 
             }
             @Override
@@ -89,7 +92,7 @@ public class EditCourses extends AppCompatActivity{
         spinnerItems.add("<Please Select Course>");
 
         try {
-            for (int i = 0; i < storage.findTerm(termSelected).courses.size() - 1; i++) {
+            for (int i = 0; i < storage.findTerm(termSelected).courses.size(); i++) {
                 spinnerItems.add(storage.findTerm(termSelected).courses.get(i).toString());
             }
         }
@@ -107,7 +110,9 @@ public class EditCourses extends AppCompatActivity{
         selectCourse.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
                 @Override
                 public void onItemSelected(AdapterView<?> dataAdapter, View v, int position, long id) {
-                    courseSelected = dataAdapter.getItemAtPosition(position).toString();
+                    if(dataAdapter.getItemAtPosition(position).toString().compareTo("<Please Select Course>") != 0){
+                        courseSelected = dataAdapter.getItemAtPosition(position).toString();
+                    }
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> arg0) {
