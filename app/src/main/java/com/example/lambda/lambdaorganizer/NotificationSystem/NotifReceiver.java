@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.MainActivity;
 import com.example.lambda.lambdaorganizer.R;
-import com.example.lambda.lambdaorganizer.ToDoListManager;
+import com.example.lambda.lambdaorganizer.ToDo.ToDoListManager;
 
 /**
  * Created by jadenball on 2017-11-11.
