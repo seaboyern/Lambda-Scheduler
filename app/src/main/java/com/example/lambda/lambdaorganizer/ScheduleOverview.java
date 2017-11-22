@@ -346,8 +346,8 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      */
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        showEvent(event);
-        // editEvent(event);
+        // showEvent(event);
+        editEvent(event);
     }
 
     /**
@@ -462,6 +462,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         Log.v(TAG, endTime.toString());
 
         mEvents.add(event);
+        editEvent(event);
 
         mWeekView.notifyDatasetChanged();
         for (WeekViewEvent e : mEvents) {
@@ -512,7 +513,14 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
                 Calendar newEnd = (Calendar)newStart.clone();
                 newEnd.add(Calendar.HOUR, 1);
                 event.setEndTime(newEnd);
-                Toast.makeText(ScheduleOverview.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
+                if (mEventToTask.containsKey(event)) {
+                    // Update task, and update database
+                    Task t = mEventToTask.get(event);
+                    TaskTable.getInstance(getBaseContext()).remove(t);
+                    t.setStart(newStart.getTime());
+                    t.setEnd(newEnd.getTime());
+                    TaskTable.getInstance(getBaseContext()).insert(t);
+                }
                 mWeekView.notifyDatasetChanged();
             }
         }
