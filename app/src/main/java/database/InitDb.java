@@ -33,25 +33,25 @@ public final class InitDb {
 
     public static void initDb(Context c) {
         // Clear and recreate Tables:
-//        DatabaseHelper db_helper = new DatabaseHelper(c);
-//        SQLiteDatabase db = db_helper.getWritableDatabase();
-//        db.execSQL(CourseContract.DELETE_TABLE);
-//        db.execSQL(TaskContract.DELETE_TABLE);
-//        db.execSQL(CommitmentContract.DELETE_TABLE);
-//        db.execSQL(CourseCommitmentContract.DELETE_TABLE);
-//        db.execSQL(AssignmentContract.DELETE_TABLE);
-//        db.execSQL(ExamContract.DELETE_TABLE);
-//        db.execSQL(RecurringCommitmentContract.DELETE_TABLE);
-//
-//        db.execSQL(CourseContract.CREATE_TABLE);
-//        db.execSQL(TaskContract.CREATE_TABLE);
-//        db.execSQL(CommitmentContract.CREATE_TABLE);
-//        db.execSQL(CourseCommitmentContract.CREATE_TABLE);
-//        db.execSQL(AssignmentContract.CREATE_TABLE);
-//        db.execSQL(ExamContract.CREATE_TABLE);
-//        db.execSQL(RecurringCommitmentContract.CREATE_TABLE);
-//
-//        db_helper.close();
+        DatabaseHelper db_helper = new DatabaseHelper(c);
+        SQLiteDatabase db = db_helper.getWritableDatabase();
+        db.execSQL(CourseContract.DELETE_TABLE);
+        db.execSQL(TaskContract.DELETE_TABLE);
+        db.execSQL(CommitmentContract.DELETE_TABLE);
+        db.execSQL(CourseCommitmentContract.DELETE_TABLE);
+        db.execSQL(AssignmentContract.DELETE_TABLE);
+        db.execSQL(ExamContract.DELETE_TABLE);
+        db.execSQL(RecurringCommitmentContract.DELETE_TABLE);
+
+        db.execSQL(CourseContract.CREATE_TABLE);
+        db.execSQL(TaskContract.CREATE_TABLE);
+        db.execSQL(CommitmentContract.CREATE_TABLE);
+        db.execSQL(CourseCommitmentContract.CREATE_TABLE);
+        db.execSQL(AssignmentContract.CREATE_TABLE);
+        db.execSQL(ExamContract.CREATE_TABLE);
+        db.execSQL(RecurringCommitmentContract.CREATE_TABLE);
+
+        db_helper.close();
 
         // Insert an assignment:
         // Insert commitment entry:
