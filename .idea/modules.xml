@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Lambda-Scheduler.iml" filepath="$PROJECT_DIR$/Lambda-Scheduler.iml" />
-      <module fileurl="file://$PROJECT_DIR$/LambdaOrganizer.iml" filepath="$PROJECT_DIR$/LambdaOrganizer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

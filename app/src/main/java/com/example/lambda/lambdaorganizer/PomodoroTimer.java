@@ -4,12 +4,10 @@ package com.example.lambda.lambdaorganizer;
 import android.app.Notification;
 import android.icu.util.TimeUnit;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.lambda.lambdaorganizer.NotificationSystem.NotificationSystem;
