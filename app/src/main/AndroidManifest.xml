@@ -29,6 +29,7 @@
         <activity android:name=".ToDoEdit"></activity>
         <activity android:name=".ToDoView"></activity>
 
+        <receiver android:name=".NotificationSystem.NotifReceiver" />
     </application>
 
 </manifest>
