@@ -1,32 +1,44 @@
-package com.example.lambda.lambdaorganizer;
+package com.example.lambda.lambdaorganizer.ToDo;
 
 import android.content.Intent;
-import java.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.content.Context;
 
+import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+
 import database.tables.CommitmentTable;
 import database.tables.TaskTable;
 import entities.Task;
+
+import com.example.lambda.lambdaorganizer.R;
+
 
 /**
  * Created by ReedPosehn on 2017-10-12.
  */
 
-public class ToDoAdd extends AppCompatActivity {
+public class ToDoEdit extends AppCompatActivity {
 
-    public final String TAG = "ToDoAdd";
+    String datePattern = "yyyy-MM-dd";
+    String timePattern = "HH:mm:ss";
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
+    SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
+    Context c;
+    Task taskFound;
+    public final String TAG = "ToDoEdit";
 
     public void sendNotification(final String notification) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(ToDoAdd.this, notification, Toast.LENGTH_LONG).show();
+                Toast.makeText(ToDoEdit.this, notification, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -35,7 +47,7 @@ public class ToDoAdd extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(ToDoAdd.this, toastStr, Toast.LENGTH_LONG).show();
+                Toast.makeText(ToDoEdit.this, toastStr, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -63,19 +75,23 @@ public class ToDoAdd extends AppCompatActivity {
         });
     }
 
-    private class AsyncAddToDatabase implements Runnable {
+    private class AsyncAddToDatabaseEdit implements Runnable {
         Task task;
-        AsyncAddToDatabase(Task task) {
+        Task newTask;
+        AsyncAddToDatabaseEdit(Task task, Task newTask) {
             this.task = task;
+            this.newTask = newTask;
         }
 
         @Override
         public void run() {
             try {
-                CommitmentTable.getInstance(getBaseContext()).insert(this.task);
-                TaskTable.getInstance(getBaseContext()).insert(this.task);
+                TaskTable.getInstance(getBaseContext()).remove(this.task);
+                CommitmentTable.getInstance(getBaseContext()).remove(this.task);
+                CommitmentTable.getInstance(getBaseContext()).insert(this.newTask);
+                TaskTable.getInstance(getBaseContext()).insert(this.newTask);
                 clearFields();
-                toast("Added " + this.task.getTitle());
+                toast("Edited " + this.newTask.getTitle());
             } catch(Exception e) {
                 toast(e.getMessage());
                 e.printStackTrace();
@@ -85,17 +101,19 @@ public class ToDoAdd extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.todoadd);
+        setContentView(R.layout.todoedit);
 
         /**
          * Buttons:
          */
+        final Button taskButton = (Button) findViewById(R.id.btnTask);
         final Button subButton = (Button) findViewById(R.id.btnSubmit);
         final Button backButton = (Button) findViewById(R.id.btnBack);
 
         /**
          * Form fields:
          */
+        final EditText taskEdit = (EditText) findViewById(R.id.txtTaskName);
         final EditText nameEdit  = (EditText) findViewById(R.id.txtName);
         final EditText dateEdit  = (EditText) findViewById(R.id.txtDate);
         final EditText startEdit  = (EditText) findViewById(R.id.txtStart);
@@ -103,27 +121,60 @@ public class ToDoAdd extends AppCompatActivity {
         final EditText descEdit  = (EditText) findViewById(R.id.txtDesc);
         final EditText priorEdit  = (EditText) findViewById(R.id.txtPrior);
 
-        // Submit handling:
+        /**
+         *  Get Task info
+         */
+        taskButton.setOnClickListener(new View.OnClickListener() {
+          public void onClick(View v) {
+              try {
+                  String task = taskEdit.getText().toString();
+                  LinkedList<Task> list = TaskTable.getInstance(c).selectByTitle(task);
+                  for(Task i : list) Log.v(TAG, i.toString());
+                  Task t = list.getFirst();
+                  taskFound = t;
+                  nameEdit.setText(t.getTitle());
+                  String dateEd = simpleDateFormat.format(t.getDate());
+                  String startEd = simpleTimeFormat.format(t.getStart());
+                  String endEd = simpleTimeFormat.format(t.getEnd());
+                  dateEdit.setText(dateEd);
+                  startEdit.setText(startEd);
+                  endEdit.setText(endEd);
+                  descEdit.setText(t.getDesc());
+                  priorEdit.setText(String.valueOf(t.getPrio()));
+              }
+              catch (Exception e)
+              {
+                  Toast.makeText(getBaseContext(),
+                          "Task can't be found",
+                          Toast.LENGTH_SHORT).show();
+              }
+           }
+        });
+
+        /**
+         * Submit handling:
+         */
         subButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                // Consruct task object:
-                String name = nameEdit.getText().toString();
-                String date = dateEdit.getText().toString();
-                String start = startEdit.getText().toString();
-                String end = endEdit.getText().toString();
-                String description = descEdit.getText().toString();
-                String priority = priorEdit.getText().toString();
                 try {
+                    String name = nameEdit.getText().toString();
+                    String date = dateEdit.getText().toString();
+                    String start = startEdit.getText().toString();
+                    String end = endEdit.getText().toString();
+                    String description = descEdit.getText().toString();
+                    String priority = priorEdit.getText().toString();
+                    String task = taskEdit.getText().toString();
+                    LinkedList<Task> list = TaskTable.getInstance(c).selectByTitle(task);
+                    TaskTable.getInstance(c).remove(list.getFirst());
                     Task newTask = new Task(name, description, Integer.parseInt(priority));
                     newTask.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(date));
                     newTask.setStart(new SimpleDateFormat("HH:mm:ss").parse(start));
                     newTask.setEnd(new SimpleDateFormat("HH:mm:ss").parse(end));
-                    new Thread(new AsyncAddToDatabase(newTask)).start();
+                    new Thread(new ToDoEdit.AsyncAddToDatabaseEdit(taskFound, newTask)).start();
+                    taskFound = null;
                     Toast.makeText(getBaseContext(),
                             "Task added!",
                             Toast.LENGTH_SHORT).show();
-
                 } catch(NumberFormatException e) { // Error in priority format
                     Toast.makeText(getBaseContext(),
                             "Priority must be a number",
@@ -133,9 +184,11 @@ public class ToDoAdd extends AppCompatActivity {
                     Toast.makeText(getBaseContext(),
                             "Date format must be: yyyy-MM-dd\nTime format must be: HH:MM:SS",
                             Toast.LENGTH_SHORT).show();
-                } catch(Exception e) { // Unknown error: need to debug
+                }
+                catch (Exception e)
+                {
                     Toast.makeText(getBaseContext(),
-                            "Unknown error",
+                            "Task not in database",
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -143,7 +196,7 @@ public class ToDoAdd extends AppCompatActivity {
 
         backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(ToDoAdd.this, ToDoListManager.class));
+                startActivity(new Intent(ToDoEdit.this, ToDoListManager.class));
             }
         });
     }
