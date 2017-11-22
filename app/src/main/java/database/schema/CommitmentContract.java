@@ -25,6 +25,7 @@ public final class CommitmentContract {
                     CommitmentEntry.COLUMN_NAME_DESC + " TEXT," +
                     CommitmentEntry.COLUMN_NAME_PRIO + " INTEGER," +
                     CommitmentEntry.COLUMN_NAME_TYPE + " TEXT," +
+                    CommitmentEntry.COLUMN_NAME_GOOGLE_ID + " TEXT," +
                     "PRIMARY KEY ("
                         + CommitmentEntry.COLUMN_NAME_TITLE + ","
                         + CommitmentEntry.COLUMN_NAME_TYPE
@@ -44,6 +45,7 @@ public final class CommitmentContract {
         public static final String COLUMN_NAME_DESC = "desc";
         public static final String COLUMN_NAME_PRIO = "priority";
         public static final String COLUMN_NAME_TYPE = "type";
+        public static final String COLUMN_NAME_GOOGLE_ID = "google_id";
     }
 
 }

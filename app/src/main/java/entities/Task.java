@@ -23,6 +23,7 @@ public class Task extends Commitment {
 
     public Task(String title, String desc, int prio) {
         super(title, desc, prio);
+        super.setGoogleId("");
     }
 
     // Getters and setters:
@@ -54,12 +55,13 @@ public class Task extends Commitment {
     public String toString() {
         SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
-        return "Task: Title: " + this.title
+        return "Task: Title: " + this.getTitle()
+                + "; Google ID: " + this.getGoogleId()
                 + "; Date: " + dateFmt.format(this.date)
                 + "; Start: " + timeFmt.format(this.start)
                 + "; End: " + timeFmt.format(this.end)
-                + "; Description: " + this.desc
-                + "; Priority: " + this.prio;
+                + "; Description: " + this.getDesc()
+                + "; Priority: " + this.getPrio();
     }
 
     /**

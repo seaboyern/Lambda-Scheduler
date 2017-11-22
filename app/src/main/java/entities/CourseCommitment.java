@@ -15,6 +15,7 @@ public abstract class CourseCommitment extends Commitment {
 
     public CourseCommitment(String title, String desc, int prio) {
         super(title, desc, prio);
+        super.setGoogleId("");
     }
 
     public String getCourseId() {

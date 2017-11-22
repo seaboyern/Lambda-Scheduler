@@ -10,6 +10,7 @@ import database.schema.CommitmentContract;
 import database.schema.CourseCommitmentContract;
 import database.schema.CourseContract;
 import database.schema.ExamContract;
+import database.schema.RecurringCommitmentContract;
 import database.schema.TaskContract;
 
 /**
@@ -40,6 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CourseCommitmentContract.CREATE_TABLE);
         db.execSQL(AssignmentContract.CREATE_TABLE);
         db.execSQL(ExamContract.CREATE_TABLE);
+        db.execSQL(RecurringCommitmentContract.CREATE_TABLE);
     }
 
     @Override
