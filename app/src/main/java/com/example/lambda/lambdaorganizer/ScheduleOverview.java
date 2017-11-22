@@ -347,7 +347,8 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      */
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        showEvent(event);
+        // showEvent(event);
+        editEvent(event);
     }
 
     /**
@@ -486,32 +487,44 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         }
         Toast.makeText(ScheduleOverview.this, "TODO: Open event " + event.getName(), Toast.LENGTH_SHORT).show();
     }
+
     /**
      * Display the details of the task clicked.
      * @param event
      */
     public void showEvent(final WeekViewEvent event) {
+        if(mEventToTask.containsKey(event)) {
+            Task t = (Task)mEventToTask.get(event);
+            TaskInfoDialog infoscreen = new TaskInfoDialog();
+            Bundle args = new Bundle();
+            args.putString("info", t.toString());
+            infoscreen.setArguments(args);
+            infoscreen.show(getSupportFragmentManager(), "Task info");
+        } //TODO: add support for assignments, events, etc.
+
+    }
+
+    public void editEvent(final WeekViewEvent event) {
         // Example of how to use the date time picker
         class ShowTaskListener implements DateTimePicker.DateTimeListener {
             @Override
             public void onDateTimePickerConfirm(Date d) {
                 Calendar newStart = Calendar.getInstance();
-                newStart.setTime(d);
+                Log.v(TAG, d.toString());
+                newStart.set(d.getYear(), d.getMonth(), d.getDate(),
+                        d.getHours(), d.getMinutes());
+                Log.v(TAG, newStart.toString());
                 event.setStartTime(newStart);
+                Calendar newEnd = (Calendar)newStart.clone();
+                newEnd.add(Calendar.HOUR, 1);
+                event.setEndTime(newEnd);
                 Toast.makeText(ScheduleOverview.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
+                mWeekView.notifyDatasetChanged();
             }
         }
         DateTimePicker datetimepicker = new DateTimePicker();
         datetimepicker.setDateTimeListener(new ShowTaskListener());
         datetimepicker.show(getSupportFragmentManager(), "date time picker");
-        // if(mEventToTask.containsKey(event)) {
-        //     Task t = (Task)mEventToTask.get(event);
-        //     TaskInfoDialog infoscreen = new TaskInfoDialog();
-        //     Bundle args = new Bundle();
-        //     args.putString("info", t.toString());
-        //     infoscreen.setArguments(args);
-        //     infoscreen.show(getSupportFragmentManager(), "Task info");
-        // } //TODO: add support for assignments, events, etc.
     }
 
     public void deleteEvent(WeekViewEvent event) {
