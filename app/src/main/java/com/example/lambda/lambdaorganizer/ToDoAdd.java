@@ -1,13 +1,27 @@
 package com.example.lambda.lambdaorganizer;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Intent;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
+import android.content.Context;
+
+import com.alamkanak.weekview.WeekViewEvent;
 
 import database.tables.CommitmentTable;
 import database.tables.TaskTable;
@@ -18,7 +32,12 @@ import entities.Task;
  */
 
 public class ToDoAdd extends AppCompatActivity {
+
     public final String TAG = "ToDoAdd";
+    String datePattern = "yyyy-MM-dd";
+    String timePattern = "HH:mm:ss";
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
+    SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
 
     public void sendNotification(final String notification) {
         runOnUiThread(new Runnable() {
@@ -100,6 +119,38 @@ public class ToDoAdd extends AppCompatActivity {
         final EditText endEdit  = (EditText) findViewById(R.id.txtEnd);
         final EditText descEdit  = (EditText) findViewById(R.id.txtDesc);
         final EditText priorEdit  = (EditText) findViewById(R.id.txtPrior);
+
+        startEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                class addStartDateListener implements DateTimePicker.DateTimeListener {
+                    public void onDateTimePickerConfirm(Date d) {
+                        String startEd = simpleTimeFormat.format(d.getTime());
+                        startEdit.setText(startEd);
+                    }
+                }
+                DateTimePicker datetimepicker = new DateTimePicker();
+                datetimepicker.setDateTimeListener(new addStartDateListener());
+                datetimepicker.show(getSupportFragmentManager(), "date time picker");
+            }
+
+        });
+
+        endEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                class addStartDateListener implements DateTimePicker.DateTimeListener {
+                    public void onDateTimePickerConfirm(Date d) {
+                        String endEd = simpleTimeFormat.format(d.getTime());
+                        endEdit.setText(endEd);
+                    }
+                }
+                DateTimePicker datetimepicker = new DateTimePicker();
+                datetimepicker.setDateTimeListener(new addStartDateListener());
+                datetimepicker.show(getSupportFragmentManager(), "date time picker");
+            }
+
+        });
 
         // Submit handling:
         subButton.setOnClickListener(new View.OnClickListener() {

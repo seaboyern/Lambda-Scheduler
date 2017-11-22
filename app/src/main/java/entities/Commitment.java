@@ -9,9 +9,10 @@ import database.DatabaseObject;
  */
 
 public abstract class Commitment implements DatabaseObject {
-    protected String title;
-    protected String desc;
-    protected int prio;
+    private String title;
+    private String googleId;
+    private String desc;
+    private int prio;
 
     public Commitment(String title, String desc, int prio) {
         this.setTitle(title);
@@ -43,4 +44,11 @@ public abstract class Commitment implements DatabaseObject {
         this.prio = prio;
     }
 
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
 }

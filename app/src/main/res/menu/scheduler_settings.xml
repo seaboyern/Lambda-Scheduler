@@ -5,4 +5,12 @@
         android:showAsAction="ifRoom"/>
     <item android:id="@+id/monthview"
         android:title="Month view" />
+    <group android:checkableBehavior="all">
+        <item android:id="@+id/showAssignments"
+              android:title="Assignments" />
+        <item android:id="@+id/showTasks"
+              android:title="Tasks" />
+        <item android:id="@+id/showEvents"
+              android:title="Events" />
+    </group>
 </menu>
