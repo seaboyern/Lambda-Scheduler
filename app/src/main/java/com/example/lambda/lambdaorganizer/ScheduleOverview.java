@@ -43,7 +43,6 @@ import database.tables.TaskTable;
 
 public class ScheduleOverview extends AppCompatActivity implements WeekView.EventClickListener,
         MonthLoader.MonthChangeListener, WeekView.EmptyViewClickListener,
-        DateTimePicker.DateTimeListener,
         WeekView.EventLongPressListener{
 
     private static final int TYPE_DAY_VIEW = 1;
@@ -112,7 +111,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         Date d = new Date();
         d.setHours(0);
         a.setDeadline(d);
-        // addAssignment(a);
+        addAssignment(a);
 
         // Task tsk = new Task("Task1", "desc", 1);
         // Date start = new Date();
@@ -347,8 +346,8 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      */
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        // showEvent(event);
-        editEvent(event);
+        showEvent(event);
+        // editEvent(event);
     }
 
     /**
@@ -470,24 +469,6 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         }
     }
 
-    @Override
-    public void onDateTimePickerConfirm(Date d) {
-        Calendar startTime = Calendar.getInstance();
-        startTime.setTime(d);
-        Calendar endTime = (Calendar)startTime.clone();
-        endTime.add(Calendar.HOUR, 1);
-        Log.v(TAG, startTime.toString());
-        Log.v(TAG, endTime.toString());
-        WeekViewEvent event = new WeekViewEvent(mEventIDCounter, getEventTitle(startTime), startTime, endTime);
-        mEvents.add(event);
-
-        mWeekView.notifyDatasetChanged();
-        for (WeekViewEvent e : mEvents) {
-            Log.v(TAG, e.getName());
-        }
-        Toast.makeText(ScheduleOverview.this, "TODO: Open event " + event.getName(), Toast.LENGTH_SHORT).show();
-    }
-
     /**
      * Display the details of the task clicked.
      * @param event
@@ -500,7 +481,20 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
             args.putString("info", t.toString());
             infoscreen.setArguments(args);
             infoscreen.show(getSupportFragmentManager(), "Task info");
-        } //TODO: add support for assignments, events, etc.
+        } else if(mEventToAssignment.containsKey(event)) {
+            Assignment a = (Assignment)mEventToAssignment.get(event);
+            TaskInfoDialog infoscreen = new TaskInfoDialog();
+            Bundle args = new Bundle();
+            args.putString("info", a.toString());
+            infoscreen.setArguments(args);
+            infoscreen.show(getSupportFragmentManager(), "Assignment info");
+        } else {
+            TaskInfoDialog infoscreen = new TaskInfoDialog();
+            Bundle args = new Bundle();
+            args.putString("info", event.getName());
+            infoscreen.setArguments(args);
+            infoscreen.show(getSupportFragmentManager(), "Assignment info");
+        }
 
     }
 
