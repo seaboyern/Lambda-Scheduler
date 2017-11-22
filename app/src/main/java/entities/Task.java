@@ -40,7 +40,13 @@ public class Task extends Commitment {
     }
 
     public void setStart(Date start) {
-        this.start = start;
+        try {
+            String startStr = new SimpleDateFormat("HH:mm:ss").format(start);
+            this.start = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(
+                    new SimpleDateFormat("yyyy-MM-dd").format(this.date) + " " + startStr
+                    );
+        } catch (Exception e) {
+        }
     }
 
     public Date getEnd() {
@@ -48,7 +54,13 @@ public class Task extends Commitment {
     }
 
     public void setEnd(Date end) {
-        this.end = end;
+        try {
+            String endStr = new SimpleDateFormat("HH:mm:ss").format(end);
+            this.end = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(
+                    new SimpleDateFormat("yyyy-MM-dd").format(this.date) + " " + endStr
+                    );
+        } catch (Exception e) {
+        }
     }
 
     @Override
