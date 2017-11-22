@@ -55,7 +55,7 @@ public final class InitDb {
 
         // Insert an assignment:
         // Insert commitment entry:
-        Assignment a1 = new Assignment("A1", "First assignment", 10);
+        Assignment a1 = new Assignment("A1", "First assignment", 1);
         a1.setCourseId("CMPT 370");
         a1.setWeight((float) 5.5);
         a1.setRequired((float) 5.5);
@@ -84,50 +84,31 @@ public final class InitDb {
 
         // Insert a Task:
         // Insert a commitment:
-        Task task1 = new Task("Task 1", "First task", 5);
-        SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
-        try {
-            task1.setDate(dateFmt.parse("2017-11-10"));
-            task1.setStart(timeFmt.parse("04:00:00"));
-            task1.setEnd(timeFmt.parse("04:30:00"));
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        for(int i = 1; i <= 15; i++) {
+            Task task1 = new Task("Task " + i, "A task",
+                    (int)((Math.random() * 3) + 1));
+            SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
+            try {
+                task1.setDate(dateFmt.parse("2017-11-" + i));
+                task1.setStart(timeFmt.parse("04:00:00"));
+                task1.setEnd(timeFmt.parse("04:30:00"));
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
 
-        try {
-            CommitmentTable.getInstance(c).remove(task1);
-            TaskTable.getInstance(c).remove(task1);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            CommitmentTable.getInstance(c).insert(task1);
-            TaskTable.getInstance(c).insert(task1);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        Task task2 = new Task("Task 2", "Second task", 4);
-        try {
-            task2.setDate(dateFmt.parse("2017-11-11"));
-            task2.setStart(timeFmt.parse("04:00:00"));
-            task2.setEnd(timeFmt.parse("04:30:00"));
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            CommitmentTable.getInstance(c).remove(task2);
-            TaskTable.getInstance(c).remove(task2);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            CommitmentTable.getInstance(c).insert(task2);
-            TaskTable.getInstance(c).insert(task2);
-        } catch(Exception e) {
-            e.printStackTrace();
+            try {
+                CommitmentTable.getInstance(c).remove(task1);
+                TaskTable.getInstance(c).remove(task1);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                CommitmentTable.getInstance(c).insert(task1);
+                TaskTable.getInstance(c).insert(task1);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
 
         // Print tables changed:

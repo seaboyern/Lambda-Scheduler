@@ -1,39 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    android:orientation="vertical"
     android:baselineAligned="false"
+    android:background="@color/caldroid_middle_gray"
     android:weightSum="1">
 
 
-    <EditText
-        android:id="@+id/editText3"
+    <TextView
+        android:id="@+id/Time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number" />
+        android:ellipsize="none"
+        android:fontFamily="sans-serif-thin"
+        android:gravity="center_vertical|center_horizontal"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:text="25:00"
+        android:textSize="80sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="189dp" />
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="match_parent"
+        android:id="@+id/button11"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start" />
+        android:text="Start"
+        android:backgroundTint="@color/darkgreen"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/Time"
+        android:layout_alignParentStart="true" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
+        android:id="@+id/button12"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Stop"
-        android:layout_weight="0.02" />
+        android:backgroundTint="@color/caldroid_light_red"
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/button11"
+        android:layout_alignStart="@+id/button11" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/button13"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Seconds" />
+        android:text="Resume"
+        android:background="@color/cardview_dark_background"
+        android:layout_alignBottom="@+id/button12"
+        android:layout_alignStart="@+id/button14" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/button14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pause"
+        android:layout_marginStart="32dp"
+        android:layout_alignTop="@+id/button11"
+        android:layout_toEndOf="@+id/button12" />
+</RelativeLayout>
