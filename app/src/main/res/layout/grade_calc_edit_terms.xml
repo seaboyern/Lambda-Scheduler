@@ -22,17 +22,28 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="1"
-        android:layout_weight="0.01"
         tools:layout_editor_absoluteY="46dp"
         tools:layout_editor_absoluteX="0dp">
 
 
+        <Button
+            android:id="@+id/Submit_terms"
+            android:layout_width="363dp"
+            android:layout_height="49dp"
+            android:text="Submit"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="18dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent" />
+
         <Spinner
             android:id="@+id/editTerms_spin"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -46,8 +57,8 @@
 
         <TextView
             android:id="@+id/linearLayout"
-            android:layout_width="82dp"
-            android:layout_height="29dp"
+            android:layout_width="68dp"
+            android:layout_height="28dp"
             android:autoText="false"
             android:paddingLeft="5dp"
             android:text="Name:"
@@ -58,13 +69,13 @@
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.171"
+            app:layout_constraintVertical_bias="0.19"
             android:layout_marginStart="16dp" />
 
         <EditText
             android:id="@+id/editText"
-            android:layout_width="281dp"
-            android:layout_height="56dp"
+            android:layout_width="291dp"
+            android:layout_height="59dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -77,16 +88,12 @@
             app:layout_constraintTop_toBottomOf="@+id/editTerms_spin"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="8dp"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintVertical_bias="0.125" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="0.193"
+            tools:layout_editor_absoluteY="106dp"
+            tools:layout_editor_absoluteX="92dp" />
 
 
     </android.support.constraint.ConstraintLayout>
-
-    <Button
-        android:id="@+id/Submit_terms"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Submit" />
 
 </LinearLayout>
