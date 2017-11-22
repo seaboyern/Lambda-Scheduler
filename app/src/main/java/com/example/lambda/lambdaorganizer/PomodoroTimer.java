@@ -1,6 +1,7 @@
 package com.example.lambda.lambdaorganizer;
 
 
+import android.icu.util.TimeUnit;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.CountDownTimer;
@@ -10,78 +11,115 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.sql.Time;
+
 public class PomodoroTimer extends AppCompatActivity {
-    private boolean paused = false;
+/* Created boolean values to check for
 
-
-EditText editText;
+ */
+private boolean boolp = false;
+    private boolean boolc = false;
+    long timeRemaing = 0;
+    TextView text;
     Button start;
-    TextView texts;
     Button stop;
+    Button pause;
+    Button resume;
 
-private long timing = 0;
-    protected void onCreate(Bundle savedInstanceState){
-         paused= false;
+    @Override
+    protected void onCreate( Bundle savedInstanceState) {
+
+
+        /* Setting the values for ui
+
+         */
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pomodoro_timer);
-
-        editText = (EditText) findViewById(R.id.editText3);
-        start = (Button) findViewById(R.id.button2);
-        texts = (TextView) findViewById(R.id.textView3);
-        stop = (Button) findViewById(R.id.button);
-
-
+        start = (Button) findViewById(R.id.button11);
+        stop = (Button) findViewById(R.id.button12);
+         pause = (Button) findViewById(R.id.button14);
+         resume = (Button) findViewById(R.id.button13);
+        text = (TextView) findViewById(R.id.Time);
 
         start.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-paused = false;
+            @Override
+            public void onClick(View view) {
 
 
-                int secs = Integer.valueOf(editText.getText().toString());
-
-                CountDownTimer timer = new CountDownTimer(secs * 1000,1000) {
+                boolp = false;
+                boolc = false;
+                int minutes = 15000000;
+                int min = 10000;
+                CountDownTimer timer = new CountDownTimer(min,1000) {
                     @Override
-
                     public void onTick(long l) {
-
-                            if(paused){
-                                cancel();
-                            }
-
-                            else {
-                                texts.setText("seconds: " + (int) (l / 1000));
-                                timing = l;
-
-                            }
+                        if(boolc || boolp){
+                            cancel();
+                        }
+                                else {
+                            String format = String.format("%02d:%02d", java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(l),
+                                    java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(l));
+                            text.setText(format);
+                            timeRemaing = l;
+                        }
                     }
-
 
                     @Override
                     public void onFinish() {
-                        texts.setText("Finished!!!");
+                        text.setText("25:00");
+
+
+
                     }
                 }.start();
 
             }
-
         });
-
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                paused = true;
+                boolc = true;
+                text.setText("25:00");
+            }
+        });
+        resume.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolp =false;
+                boolc = false;
+                long newTime = timeRemaing;
+                CountDownTimer timer = new CountDownTimer(newTime,1000) {
+                    @Override
+                    public void onTick(long l) {
+                        if(boolp || boolc){
+                            cancel();
+                        }
+                        else{
+                            String format = String.format("%02d:%02d", java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(l),
+                                    java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(l));
+                            text.setText(format);
+                            timeRemaing = l;
+                        }
+                    }
 
+                    @Override
+                    public void onFinish() {
+                            text.setText("25:00");
+                    }
+                }.start();
+
+            }
+        });
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolp = true;
             }
         });
 
 
-
-
     }
-
-
-
-
-
 
 }
