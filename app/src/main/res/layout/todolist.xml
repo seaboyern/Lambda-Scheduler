@@ -22,13 +22,6 @@
         android:text="add task" />
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:backgroundTint="@color/caldroid_darker_gray"
-        android:text="del task" />
-
-    <Button
         android:id="@+id/button3"
         android:layout_width="match_parent"
         android:layout_height="76dp"

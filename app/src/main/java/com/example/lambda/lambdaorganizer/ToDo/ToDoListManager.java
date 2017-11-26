@@ -21,7 +21,6 @@ public class ToDoListManager extends AppCompatActivity {
 
         // Declaration of objects
         final Button addButton = (Button) findViewById(R.id.button);
-        final Button delButton = (Button) findViewById(R.id.button2);
         final Button edButton = (Button) findViewById(R.id.button3);
         final Button viewButton = (Button) findViewById(R.id.button4);
         final Button menButton = (Button) findViewById(R.id.btnMain);
@@ -30,11 +29,6 @@ public class ToDoListManager extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(ToDoListManager.this, ToDoAdd.class));
-            }
-        });
-        delButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(ToDoListManager.this, ToDoDel.class));
             }
         });
         edButton.setOnClickListener(new View.OnClickListener() {

@@ -25,7 +25,6 @@
         <activity android:name=".ToDo.ToDoListManager"></activity>
         <activity android:name=".GradeCalculator.GradeCalculatorMain"></activity>
         <activity android:name=".ToDo.ToDoAdd"></activity>
-        <activity android:name=".ToDo.ToDoDel"></activity>
         <activity android:name=".ToDo.ToDoEdit"></activity>
         <activity android:name=".ToDo.ToDoView"></activity>
 

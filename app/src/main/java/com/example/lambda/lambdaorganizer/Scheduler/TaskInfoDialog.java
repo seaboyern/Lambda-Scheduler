@@ -8,9 +8,11 @@ import android.app.AlertDialog;
 import android.util.Log;
 
 import com.example.lambda.lambdaorganizer.FormatDateTime;
+import com.example.lambda.lambdaorganizer.ToDo.ToDoView;
 
 import java.text.ParseException;
 
+import database.tables.TaskTable;
 import entities.Task;
 
 public class TaskInfoDialog extends DialogFragment {
@@ -56,7 +58,15 @@ public class TaskInfoDialog extends DialogFragment {
     private class TaskDeleteListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
-            //
+            // Delete task from database asynchronously:
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ToDoView v = (ToDoView)getActivity();
+                    v.deleteTask(task);
+                    dismiss();
+                }
+            }).start();
         }
     }
 

@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TreeMap;
@@ -18,10 +16,8 @@ import entities.Task;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.lambda.lambdaorganizer.FormatDateTime;
 import com.example.lambda.lambdaorganizer.R;
 import com.example.lambda.lambdaorganizer.Scheduler.TaskInfoDialog;
-import com.google.common.io.LittleEndianDataInputStream;
 
 /**
  * Created by ReedPosehn on 2017-10-12.
@@ -30,8 +26,27 @@ import com.google.common.io.LittleEndianDataInputStream;
 public class ToDoView extends AppCompatActivity {
 
     private static final int NUM_PRIO = 3; // Number of priority classes
-    private static final String taskDisplayFormat = "%s\n  on %s,\n  from %s to %s";
     private static final String TAG = "ToDoView";
+
+    private ListView[] lv;
+    private ArrayList<TaskView>[] lsArr;
+    private ArrayAdapter<TaskView>[] adapter;
+
+    public void deleteTask(final Task task) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                TaskTable.getInstance(getApplicationContext()).remove(task);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter[task.getPrio() - 1].remove(new TaskView(task));
+                        adapter[task.getPrio() - 1].notifyDataSetChanged();
+                    }
+                });
+            }
+        }).start();
+    }
 
     private class TaskClickListener implements AdapterView.OnItemClickListener {
         @Override
@@ -53,7 +68,7 @@ public class ToDoView extends AppCompatActivity {
         /**
          * ListViews
          */
-        ListView[] lv = new ListView[NUM_PRIO];
+        lv = new ListView[NUM_PRIO];
         lv[0] = (ListView) findViewById(R.id.listView);
         lv[1] = (ListView) findViewById(R.id.listView2);
         lv[2] = (ListView) findViewById(R.id.listView3);
@@ -61,12 +76,12 @@ public class ToDoView extends AppCompatActivity {
         /**
          * Arraylists for the listviews
          */
-        ArrayList<TaskView>[] lsArr = new ArrayList[NUM_PRIO];
+        lsArr = new ArrayList[NUM_PRIO];
 
         /**
          * ArrayAdapters for each of the arraylists
          */
-        ArrayAdapter<TaskView>[] adapter  = new ArrayAdapter[NUM_PRIO];
+        adapter  = new ArrayAdapter[NUM_PRIO];
 
         for(int i = 0; i < NUM_PRIO; i++) {
             lsArr[i] = new ArrayList<TaskView>();
