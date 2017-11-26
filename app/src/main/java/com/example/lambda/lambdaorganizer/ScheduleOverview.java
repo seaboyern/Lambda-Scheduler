@@ -12,9 +12,6 @@ import java.lang.Runnable ;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.graphics.RectF;
 import android.widget.Toast;
@@ -31,14 +28,13 @@ import android.graphics.drawable.Drawable;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
-import com.alamkanak.weekview.WeekViewLoader;
 
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
 import entities.Task;
 import entities.Assignment;
-import com.example.lambda.lambdaorganizer.Scheduler.TaskInfoDialog;
+import com.example.lambda.lambdaorganizer.ToDo.TaskInfoDialog;
 import database.tables.TaskTable;
 
 public class ScheduleOverview extends AppCompatActivity implements WeekView.EventClickListener,

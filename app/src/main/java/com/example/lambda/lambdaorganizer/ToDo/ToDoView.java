@@ -1,11 +1,12 @@
 package com.example.lambda.lambdaorganizer.ToDo;
 
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,19 +14,14 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import database.tables.TaskTable;
 import entities.Task;
+
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.R;
-import com.example.lambda.lambdaorganizer.Scheduler.TaskEditDialog;
-import com.example.lambda.lambdaorganizer.Scheduler.TaskInfoDialog;
 
 /**
  * Created by ReedPosehn on 2017-10-12.
@@ -85,7 +81,25 @@ public class ToDoView extends AppCompatActivity {
         }
     }
 
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.todolist_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.new_item:
+                showDialog(new TaskAddDialog(), "New task");
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.todoview);
 

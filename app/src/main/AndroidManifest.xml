@@ -22,9 +22,7 @@
         <activity android:name=".ScheduleOverview"></activity>
         <activity android:name=".SessionEngineer"></activity>
         <activity android:name=".PomodoroTimer"></activity>
-        <activity android:name=".ToDo.ToDoListManager"></activity>
         <activity android:name=".GradeCalculator.GradeCalculatorMain"></activity>
-        <activity android:name=".ToDo.ToDoAdd"></activity>
         <activity android:name=".ToDo.ToDoView"></activity>
 
     </application>

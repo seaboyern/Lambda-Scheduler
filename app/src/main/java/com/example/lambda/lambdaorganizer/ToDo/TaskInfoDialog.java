@@ -1,4 +1,4 @@
-package com.example.lambda.lambdaorganizer.Scheduler;
+package com.example.lambda.lambdaorganizer.ToDo;
 
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.util.Log;
 
 import com.example.lambda.lambdaorganizer.FormatDateTime;
-import com.example.lambda.lambdaorganizer.ToDo.ToDoView;
 
 import java.text.ParseException;
 
