@@ -1,6 +1,9 @@
 package com.example.lambda.lambdaorganizer.ToDo;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +13,10 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import database.tables.TaskTable;
 import entities.Task;
@@ -17,6 +24,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.R;
+import com.example.lambda.lambdaorganizer.Scheduler.TaskEditDialog;
 import com.example.lambda.lambdaorganizer.Scheduler.TaskInfoDialog;
 
 /**
@@ -32,20 +40,36 @@ public class ToDoView extends AppCompatActivity {
     private ArrayList<TaskView>[] lsArr;
     private ArrayAdapter<TaskView>[] adapter;
 
-    public void deleteTask(final Task task) {
-        new Thread(new Runnable() {
+    public void deleteTask(final Task task, final String message) {
+        TaskTable.getInstance(getApplicationContext()).remove(task);
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                TaskTable.getInstance(getApplicationContext()).remove(task);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter[task.getPrio() - 1].remove(new TaskView(task));
-                        adapter[task.getPrio() - 1].notifyDataSetChanged();
-                    }
-                });
+                adapter[task.getPrio() - 1].remove(new TaskView(task));
+                adapter[task.getPrio() - 1].notifyDataSetChanged();
+                if(null != message) {
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                }
             }
-        }).start();
+        });
+    }
+
+    public void addTask(final Task newTask, final String message) {
+        TaskTable.getInstance(getApplicationContext()).insert(newTask);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter[newTask.getPrio() - 1].add(new TaskView(newTask));
+                adapter[newTask.getPrio() - 1].notifyDataSetChanged();
+                if(null != message) {
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    public void showDialog(DialogFragment dialog, String tag) {
+        dialog.show(getFragmentManager(), tag);
     }
 
     private class TaskClickListener implements AdapterView.OnItemClickListener {

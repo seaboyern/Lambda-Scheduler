@@ -22,13 +22,6 @@
         android:text="add task" />
 
     <Button
-        android:id="@+id/button3"
-        android:layout_width="match_parent"
-        android:layout_height="76dp"
-        android:backgroundTint="@color/caldroid_darker_gray"
-        android:text="edit task" />
-
-    <Button
         android:id="@+id/button4"
         android:layout_width="match_parent"
         android:backgroundTint="@color/caldroid_darker_gray"

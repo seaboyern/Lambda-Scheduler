@@ -12,7 +12,6 @@ import com.example.lambda.lambdaorganizer.ToDo.ToDoView;
 
 import java.text.ParseException;
 
-import database.tables.TaskTable;
 import entities.Task;
 
 public class TaskInfoDialog extends DialogFragment {
@@ -51,7 +50,10 @@ public class TaskInfoDialog extends DialogFragment {
     private class TaskEditListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
-            //
+            ToDoView view = (ToDoView)getActivity();
+            TaskEditDialog editDialog= new TaskEditDialog();
+            editDialog.setArguments(buildBundleFromTask(task));
+            view.showDialog(editDialog, "Task edit");
         }
     }
 
@@ -59,12 +61,11 @@ public class TaskInfoDialog extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
             // Delete task from database asynchronously:
+            final ToDoView v = (ToDoView)getActivity();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    ToDoView v = (ToDoView)getActivity();
-                    v.deleteTask(task);
-                    dismiss();
+                    v.deleteTask(task, "Deleted task " + task.getTitle());
                 }
             }).start();
         }
@@ -95,7 +96,7 @@ public class TaskInfoDialog extends DialogFragment {
                    public void onClick(DialogInterface dialogInterface, int i) {
                        // dismiss dialog
                    }
-               });
+                });
 
         // Create the AlertDialog object and return it
         return builder.create();
