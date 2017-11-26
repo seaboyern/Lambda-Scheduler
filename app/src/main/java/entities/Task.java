@@ -1,5 +1,8 @@
 package entities;
 
+import com.example.lambda.lambdaorganizer.FormatDateTime;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -49,6 +52,15 @@ public class Task extends Commitment {
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+    public void setTimeBounds(String date, String start, String end) throws ParseException {
+        String startStr = String.format("%s %s", date, start);
+        String endStr = String.format("%s %s", date, end);
+        String dateStr = startStr;
+        this.setDate(FormatDateTime.getDateFromString(dateStr));
+        this.setStart(FormatDateTime.getDateFromString(startStr));
+        this.setEnd(FormatDateTime.getDateFromString(endStr));
     }
 
     @Override

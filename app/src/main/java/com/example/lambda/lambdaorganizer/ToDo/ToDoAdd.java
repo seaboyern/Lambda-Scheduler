@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.DateTimePicker;
+import com.example.lambda.lambdaorganizer.FormatDateTime;
 import com.example.lambda.lambdaorganizer.R;
 
 import database.tables.CommitmentTable;
@@ -157,9 +158,7 @@ public class ToDoAdd extends AppCompatActivity {
                 String priority = priorEdit.getText().toString();
                 try {
                     Task newTask = new Task(name, description, Integer.parseInt(priority));
-                    newTask.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(date));
-                    newTask.setStart(new SimpleDateFormat("HH:mm:ss").parse(start));
-                    newTask.setEnd(new SimpleDateFormat("HH:mm:ss").parse(end));
+                    newTask.setTimeBounds(date, start, end);
                     new Thread(new AsyncAddToDatabase(newTask)).start();
                     Toast.makeText(getBaseContext(),
                             "Task added!",

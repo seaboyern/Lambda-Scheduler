@@ -2,10 +2,12 @@ package com.example.lambda.lambdaorganizer.ToDo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -16,6 +18,7 @@ import entities.Task;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.lambda.lambdaorganizer.FormatDateTime;
 import com.example.lambda.lambdaorganizer.R;
 import com.example.lambda.lambdaorganizer.Scheduler.TaskInfoDialog;
 import com.google.common.io.LittleEndianDataInputStream;
@@ -26,32 +29,18 @@ import com.google.common.io.LittleEndianDataInputStream;
 
 public class ToDoView extends AppCompatActivity {
 
-    String datePattern = "yyyy-MM-dd";
-    String timePattern = "HH:mm:ss";
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
-    SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
-
     private static final int NUM_PRIO = 3; // Number of priority classes
     private static final String taskDisplayFormat = "%s\n  on %s,\n  from %s to %s";
-
-    public void toast(final String toastStr) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(ToDoView.this, toastStr, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
+    private static final String TAG = "ToDoView";
 
     private class TaskClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
             TaskView t = (TaskView) adapterView.getItemAtPosition(position);
-            toast("TODO: Display dialog for " + t.getTask().getTitle());
 
             TaskInfoDialog dialog = new TaskInfoDialog();
-            Bundle taskBundle = new Bundle();
-            taskBundle.putString("info", t.getTask().toString());
+            Bundle taskBundle = TaskInfoDialog.buildBundleFromTask(t.getTask());
+            Log.d(TAG, taskBundle.toString());
             dialog.setArguments(taskBundle);
             dialog.show(getSupportFragmentManager(), "Task info");
         }
@@ -92,16 +81,13 @@ public class ToDoView extends AppCompatActivity {
             for(Integer prio : prioMap.keySet()) {
                 LinkedList<Task> l = prioMap.get(prio);
                 for(Task task : l) {
-                    // Parse dates and times:
-                    String dateLs = simpleDateFormat.format(task.getDate());
-                    String startLs = simpleTimeFormat.format(task.getStart());
-                    String endLs = simpleTimeFormat.format(task.getEnd());
-                    // Build string to display:
+                    // Populate array for displaying:
                     lsArr[prio-1].add(new TaskView(task));
                 }
             }
         }
         catch(Exception e){
+            e.printStackTrace();
             Toast.makeText(getBaseContext(),
                     "No tasks at the moment",
                     Toast.LENGTH_SHORT).show();
