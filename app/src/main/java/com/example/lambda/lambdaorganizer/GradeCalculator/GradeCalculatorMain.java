@@ -45,6 +45,11 @@ public class GradeCalculatorMain extends AppCompatActivity {
         storage = Storage.getInstance();
         addSelectTermItems();
 
+        //display a help message for the user if there is no data entered
+        if(storage.terms.size() < 1){
+            toast("To get started, add some data using the menu in the top right of the screen.");
+        }
+
     }
 
     @Override
@@ -171,8 +176,15 @@ public class GradeCalculatorMain extends AppCompatActivity {
     }
 
     public String getWorkListViewItem(CourseWork work, Course parentCourse){
+        if(work.getFinalGrade() != 0){
+            return work.getName() + "        Grade: " + work.getFinalGrade();
 
-        return work.getName() + "        Grade: " + work.getFinalGrade() + "        Grade Needed: " + parentCourse.calcGradeNeeded(work);
+        }
+        else{
+            return work.getName() + "        Grade: " + work.getFinalGrade() + "        Grade Needed: " + parentCourse.calcGradeNeeded(work);
+
+        }
+
 
     }
 
