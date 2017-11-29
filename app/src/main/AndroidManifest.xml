@@ -23,8 +23,13 @@
         <activity android:name=".SessionEngineer"></activity>
         <activity android:name=".PomodoroTimer"></activity>
         <activity android:name=".GradeCalculator.GradeCalculatorMain"></activity>
+        <activity android:name=".GradeCalculator.EditTerms"></activity>
+        <activity android:name=".GradeCalculator.EditCourses"></activity>
+        <activity android:name=".GradeCalculator.EditCourseWork"></activity>
         <activity android:name=".ToDo.ToDoView"></activity>
+        <activity android:name=".AddStudyTime"></activity>
 
+        <receiver android:name=".NotificationSystem.NotifReceiver" />
     </application>
 
 </manifest>

@@ -3,4 +3,5 @@
     <string name="title_activity_schedule_overview">ScheduleOverview</string>
     <string name="title_activity_session_engineer_">SessionEngineer_Activity</string>
     <string name="todolist_add_button">Add Button</string>
+    <string-array name="term_select"></string-array>
 </resources>

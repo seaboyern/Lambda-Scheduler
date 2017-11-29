@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="event_color">#59dbe0</color>
     <color name="assignment_color">#f57f68</color>
+    <color name="event_color_02">#f57f68</color>
     <color name="task_color">#87d288</color>
     <color name="event_color_04">#f8b552</color>
     <color name="toolbar">#efefef</color>

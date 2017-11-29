@@ -9,6 +9,9 @@ import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.GradeCalculator.GradeCalculatorMain;
 import com.example.lambda.lambdaorganizer.ToDo.ToDoView;
+import com.example.lambda.lambdaorganizer.NotificationSystem.NotificationSystem;
+
+import database.DatabaseHelper;
 
 import database.InitDb;
 
@@ -87,11 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 }).start();
             }
         });
-
-        NotificationSystem notif = new NotificationSystem();
-        notif.sendNotification(MainActivity.this,
-                "App initialization",
-                "Finished initializing the main activity.");
 
     }
 }
