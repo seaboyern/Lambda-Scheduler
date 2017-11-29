@@ -91,10 +91,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        NotificationSystem notif = new NotificationSystem();
-        notif.sendNotification(MainActivity.this,
-                "App initialization",
-                "Finished initializing the main activity.");
-
     }
 }

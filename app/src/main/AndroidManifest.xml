@@ -33,6 +33,7 @@
         <activity android:name=".ToDo.ToDoView"></activity>
         <activity android:name=".AddStudyTime"></activity>
 
+        <receiver android:name=".NotificationSystem.NotifReceiver" />
     </application>
 
 </manifest>
