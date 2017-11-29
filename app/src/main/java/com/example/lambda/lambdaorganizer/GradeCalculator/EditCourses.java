@@ -131,10 +131,10 @@ public class EditCourses extends AppCompatActivity{
 
                 Term termChosen = storage.findTerm(termSelected);
                 Course courseChosen;
-                if (termSelected.compareTo("<Please Select Term>") == 0) {
+                if (termSelected.compareTo("<Please Select Term>") == 0 || termSelected == null) {
                     toast("Select a Term");
                 }
-                if (courseSelected.compareTo("<Please Select Course>") == 0) {
+                if (courseSelected.compareTo("<Please Select Course>") == 0 || courseSelected == null) {
                     toast("Select a Course");
                 }
 

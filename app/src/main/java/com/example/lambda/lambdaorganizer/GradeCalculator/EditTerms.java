@@ -55,6 +55,7 @@ public class EditTerms extends AppCompatActivity {
         spinnerItems.add("<Please Select Term>");
         spinnerItems.add("<New Term>");
 
+        //populate the spinner with all added terms
         for(int i = 0; i < storage.numOfTerms(); i++){
             spinnerItems.add(storage.terms.get(i).getName());
         }
@@ -92,7 +93,7 @@ public class EditTerms extends AppCompatActivity {
                     Term newTerm = new Term(nameInput.getText().toString());
                     toast("Term " + newTerm.getName() + " was added.");
                 }
-                else if(termSelected.compareTo("<Please Select Term>") == 0){
+                else if(termSelected.compareTo("<Please Select Term>") == 0 || termSelected == null){
                     toast("Select a Term");
                 }
                 else if(findViewById(editText).toString().compareTo("") == 0){
