@@ -34,11 +34,13 @@ public class CommitmentTable extends Table {
     }
 
     @Override
-    public void insert(DatabaseObject record) {
+    public synchronized void insert(DatabaseObject record) {
         Commitment comm = (Commitment)record;
         ContentValues commitmentValues = new ContentValues();
 
         commitmentValues.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE, comm.getTitle());
+        commitmentValues.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_GOOGLE_ID,
+                comm.getGoogleId());
         commitmentValues.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_DESC, comm.getDesc());
         commitmentValues.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_PRIO,
                 comm.getPrio());
@@ -48,7 +50,7 @@ public class CommitmentTable extends Table {
         super.rawInsert(commitmentValues);
     }
 
-    public static Table getInstance(Context c) {
+    public synchronized static Table getInstance(Context c) {
         if(instance == null) {
             instance = new CommitmentTable(c);
         }

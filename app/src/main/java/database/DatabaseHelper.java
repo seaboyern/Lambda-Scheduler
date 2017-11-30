@@ -10,6 +10,7 @@ import database.schema.CommitmentContract;
 import database.schema.CourseCommitmentContract;
 import database.schema.CourseContract;
 import database.schema.ExamContract;
+import database.schema.RecurringCommitmentContract;
 import database.schema.TaskContract;
 
 /**
@@ -40,6 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CourseCommitmentContract.CREATE_TABLE);
         db.execSQL(AssignmentContract.CREATE_TABLE);
         db.execSQL(ExamContract.CREATE_TABLE);
+        db.execSQL(RecurringCommitmentContract.CREATE_TABLE);
     }
 
     @Override
@@ -51,7 +53,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public String getTableAsString(String tableName) {
         String tableString = String.format("Table %s:\n", tableName);
-        Cursor allRows = this.getReadableDatabase().rawQuery("SELECT * FROM " + tableName, null);
+        SQLiteDatabase db  = this.getReadableDatabase();
+        Cursor allRows = db.rawQuery("SELECT * FROM " + tableName, null);
         if (allRows.moveToFirst()) {
             String[] columnNames = allRows.getColumnNames();
             do {
@@ -64,6 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (allRows.moveToNext());
         }
         allRows.close();
+        db.close();
 
         return tableString;
     }
