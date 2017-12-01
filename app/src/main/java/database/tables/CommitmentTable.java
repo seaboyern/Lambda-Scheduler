@@ -9,10 +9,12 @@ import java.util.LinkedList;
 import database.DatabaseObject;
 import database.schema.CommitmentContract;
 import database.schema.CourseCommitmentContract;
+import database.schema.SessionContract;
 import database.schema.TaskContract;
 import entities.Assignment;
 import entities.Commitment;
 import entities.CourseCommitment;
+import entities.Session;
 import entities.Task;
 
 /**
@@ -31,6 +33,7 @@ public class CommitmentTable extends Table {
         typeMap.put(CourseCommitment.class.getName(), CourseCommitmentContract.TABLE_NAME);
         typeMap.put(Task.class.getName(), TaskContract.TABLE_NAME);
         typeMap.put(Assignment.class.getName(), CourseCommitmentContract.TABLE_NAME);
+        typeMap.put(Session.class.getName(), SessionContract.TABLE_NAME);
     }
 
     @Override

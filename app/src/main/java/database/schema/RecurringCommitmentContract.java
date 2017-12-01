@@ -21,8 +21,8 @@ public final class RecurringCommitmentContract {
         TABLE_NAME + " (" +
         RecurringCommitmentEntry.COLUMN_NAME_TITLE + " TEXT," +
         RecurringCommitmentEntry.COLUMN_NAME_TYPE + " TEXT," +
-        RecurringCommitmentEntry.COLUMN_NAME_FREQ + "TEXT," +
-        RecurringCommitmentEntry.COLUMN_NAME_COUNT + "INTEGER," +
+        RecurringCommitmentEntry.COLUMN_NAME_FREQ + " TEXT," +
+        RecurringCommitmentEntry.COLUMN_NAME_COUNT + " INTEGER," +
             "PRIMARY KEY ("
                 + RecurringCommitmentEntry.COLUMN_NAME_TITLE
             + "))";
