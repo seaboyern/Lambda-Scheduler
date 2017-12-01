@@ -33,11 +33,10 @@ public class RecurringCommitmentTable extends Table {
 
     @Override
     public void insert(DatabaseObject record) {
-        Commitment comm = (Commitment)record;
         RecurringCommitment recComm = (RecurringCommitment)record;
         ContentValues values = new ContentValues();
         values.put(RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_TITLE,
-                comm.getTitle());
+                recComm.getTitle());
         values.put(RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_TYPE,
                 getTypeName(record));
         values.put(RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_COUNT,

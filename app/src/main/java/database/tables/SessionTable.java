@@ -10,6 +10,7 @@ import java.util.List;
 import database.DatabaseObject;
 import database.schema.SessionContract;
 import entities.Session;
+import entities.interfaces.SessionInterface;
 
 /**
  * Created by mahmudfasihulazam on 2017-11-30.
@@ -33,7 +34,7 @@ public class SessionTable extends Table {
 
     @Override
     public void insert(DatabaseObject record) {
-        Session s = (Session)record;
+        SessionInterface s = (SessionInterface) record;
         ContentValues values = new ContentValues();
 
         values.put(SessionContract.SessionEntry.COLUMN_NAME_TITLE, s.getTitle());
@@ -48,8 +49,8 @@ public class SessionTable extends Table {
         for(String email : attendees) {
             SessionAttendeesTable.getInstance(this.context).insert(email, s.getTitle());
         }
-        CommitmentTable.getInstance(this.context).insert(s);
-        if(0 != s.getRecCount()) RecurringCommitmentTable.getInstance(this.context).insert(s);
+        CommitmentTable.getInstance(this.context).insert(record);
+        if(0 != s.getRecCount()) RecurringCommitmentTable.getInstance(this.context).insert(record);
 
         super.rawInsert(values);
 
