@@ -13,4 +13,8 @@ public interface RecurringCommitment extends CommitmentInterface {
     public void setRecCount(int count);
     public Date getNext();
     public void setNext(Date next);
+    public Date getStart();
+    public Date getEnd();
+    public void setStart(Date start);
+    public void setEnd(Date end);
 }

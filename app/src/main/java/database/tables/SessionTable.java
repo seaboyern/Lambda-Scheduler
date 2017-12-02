@@ -87,7 +87,7 @@ public class SessionTable extends Table {
         values.put(SessionContract.SessionEntry.COLUMN_NAME_TIME_ZONE,
                 s.getTimeZone());
 
-        List<String> attendees = s.getAtendeesEmail();
+        List<String> attendees = s.getAttendeesEmail();
         for(String email : attendees) {
             SessionAttendeesTable.getInstance(this.context).insert(email, s.getTitle());
         }

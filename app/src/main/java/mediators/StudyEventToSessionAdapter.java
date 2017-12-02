@@ -99,7 +99,7 @@ public class StudyEventToSessionAdapter implements SessionInterface, DatabaseObj
     }
 
     @Override
-    public LinkedList<String> getAtendeesEmail() {
+    public LinkedList<String> getAttendeesEmail() {
         LinkedList<String> list = new LinkedList<>();
         ListIterator<String> iter = s.getAttendees().listIterator();
         while(iter.hasNext()) {

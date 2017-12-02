@@ -8,20 +8,8 @@ import java.util.LinkedList;
  */
 
 public interface SessionInterface extends CommitmentInterface, RecurringCommitment {
-    public Date getStart();
-
-    public void setStart(Date start);
-
-    public Date getEnd();
-
-    public void setEnd(Date end);
-
     public String getTimeZone();
-
     public void setTimeZone(String timeZone);
-
-    public LinkedList<String> getAtendeesEmail();
-
-    public void setAttendeesEmail(LinkedList<String> atendees);
-
+    public LinkedList<String> getAttendeesEmail();
+    public void setAttendeesEmail(LinkedList<String> attendees);
 }
