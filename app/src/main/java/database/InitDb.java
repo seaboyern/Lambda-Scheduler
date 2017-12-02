@@ -64,12 +64,6 @@ public final class InitDb {
 
         db_helper.close();
 
-        try {
-            TestSessionTable.testSessionTable(c);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
         // Insert an assignment:
         // Insert commitment entry:
         Assignment a1 = new Assignment("A1", "First assignment", 1);
@@ -128,29 +122,20 @@ public final class InitDb {
             }
         }
 
-        // Print tables changed:
-        Log.d(TAG, CommitmentTable.getInstance(c).toString());
-        Log.d(TAG, RecurringCommitmentTable.getInstance(c).toString());
-        Log.d(TAG, CourseCommitmentTable.getInstance(c).toString());
-        Log.d(TAG, AssignmentTable.getInstance(c).toString());
-        Log.d(TAG, TaskTable.getInstance(c).toString());
-        Log.d(TAG, SessionTable.getInstance(c).toString());
-        Log.d(TAG, SessionAttendeesTable.getInstance(c).toString());
-
         // Task table queries:
-        Log.d(TAG, "Select task by title:");
+        Log.d(TAG, "\n#####\n# Select task by title:");
         LinkedList<Task> list = TaskTable.getInstance(c).selectByTitle("Task 1");
         for(Task task : list) {
             Log.d(TAG, task.toString());
         }
 
-        Log.d(TAG, "Select task by date:");
+        Log.d(TAG, "\n#####\n# Select task by date:");
         list = TaskTable.getInstance(c).selectByDate("2017-11-03");
         for(Task task : list) {
             Log.d(TAG, task.toString());
         }
 
-        Log.d(TAG, "Select all tasks sorted by priority:");
+        Log.d(TAG, "\n#####\n#Select all tasks sorted by priority:");
         TreeMap<Integer, LinkedList<Task>> prioMap = TaskTable.getInstance(c).priorityMap();
         for(Integer i : prioMap.keySet()) {
             LinkedList<Task> l = prioMap.get(i);
@@ -158,6 +143,21 @@ public final class InitDb {
                 Log.d(TAG, j.toString());
             }
         }
+
+        try {
+            TestSessionTable.testSessionTable(c);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        // Print tables changed:
+//        Log.d(TAG, CommitmentTable.getInstance(c).toString());
+//        Log.d(TAG, RecurringCommitmentTable.getInstance(c).toString());
+//        Log.d(TAG, CourseCommitmentTable.getInstance(c).toString());
+//        Log.d(TAG, AssignmentTable.getInstance(c).toString());
+//        Log.d(TAG, TaskTable.getInstance(c).toString());
+//        Log.d(TAG, SessionTable.getInstance(c).toString());
+//        Log.d(TAG, SessionAttendeesTable.getInstance(c).toString());
 
     }
 

@@ -77,8 +77,8 @@ public class Session extends Commitment implements
 
     @Override
     public String toString() {
-        return String.format("Session: %s\nStart: %s, End: %s, Time Zone: %s\nRec: (%s, %d)\n" +
-                        "Emails:\n%s",
+        return String.format("\nSession: %s\nStart: %s, End: %s, Time Zone: %s\nRec: (%s, %d)\n" +
+                        "Emails:\n%s\n",
                 this.getTitle(), this.getStart().toString(), this.getEnd().toString(),
                 this.getTimeZone(), this.getRecFreq(), this.getRecCount(),
                 this.getAtendeesEmail().toString());

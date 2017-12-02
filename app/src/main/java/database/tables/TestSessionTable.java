@@ -45,12 +45,49 @@ public final class TestSessionTable {
             a[i].setRecCount(i);
             a[i].setRecFreq(frequencies[i % 2]);
             a[i].setGoogleId("SOME_GOOGLE_ID");
-            Log.d(TAG, a[i].toString());
             try {
                 SessionTable.getInstance(c).insert(a[i]);
             } catch(Exception e) {
                 e.printStackTrace();
             }
         }
+
+        for(int i = 0; i < size; i ++) {
+            a[i] = new Session("Session " + (i + 4), "A session", 1);
+            LinkedList<String> emails = new LinkedList<>();
+            emails.add("hello1@gmail.com");
+            emails.add("hello2@gmail.com");
+            emails.add("hello3@gmail.com");
+            a[i].setAttendeesEmail(emails);
+            a[i].setTimeZone("-0600");
+            a[i].setStart(FormatDateTime.getDateFromString("2017-11-11 02:30:00"));
+            a[i].setEnd(FormatDateTime.getDateFromString(
+                    String.format("2017-11-1%s 03:30:00",
+                            Integer.toString(i + 2)))
+            );
+            a[i].setTimeZone("-6:00");
+            a[i].setRecCount(i);
+            a[i].setRecFreq(frequencies[i % 2]);
+            a[i].setGoogleId("SOME_GOOGLE_ID");
+            try {
+                SessionTable.getInstance(c).insert(a[i]);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        Session titleResult = SessionTable.getInstance(c).selectByTitle("Session 1");
+        Log.d(TAG, "\n#####\n# Select from Session Table by title:" + titleResult.toString());
+
+        LinkedList<Session> startResult = SessionTable.getInstance(c).selectByStart(
+                FormatDateTime.getDateFromString("2017-11-11 02:30:00")
+        );
+        Log.d(TAG, startResult != null
+                // found
+                ? "\n#####\n# Select from Session Table by start:\n" + startResult.toString()
+                // not found
+                : "NULL List for selectByStart");
+
     }
+
 }

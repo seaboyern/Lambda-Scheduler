@@ -16,6 +16,9 @@ public abstract class Table {
     protected Context context;
     protected String tableName;
     protected HashMap<String, String> typeMap;
+    protected static String uniDimQuery =
+            "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s\nWHERE %s.%s = '%s'";
+    protected static String selectAllQuery = "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s";
 
     protected Table(Context c) {
         this.context = c;
