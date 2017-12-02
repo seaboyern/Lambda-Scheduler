@@ -41,6 +41,7 @@ public final class TestSessionTable {
                     String.format("2017-11-%s 03:30:00",
                             Integer.toString(i + 2)))
             );
+            a[i].setNext(a[i].getStart());
             a[i].setTimeZone("-6:00");
             a[i].setRecCount(i);
             a[i].setRecFreq(frequencies[i % 2]);
@@ -65,6 +66,7 @@ public final class TestSessionTable {
                     String.format("2017-11-1%s 03:30:00",
                             Integer.toString(i + 2)))
             );
+            a[i].setNext(a[i].getStart());
             a[i].setTimeZone("-6:00");
             a[i].setRecCount(i);
             a[i].setRecFreq(frequencies[i % 2]);
@@ -85,7 +87,7 @@ public final class TestSessionTable {
         Log.d(TAG, startResult != null
                 // found
                 ? "\n#####\n# Select from Session Table by start:\n" + startResult.toString()
-                // not found
+                // not founds
                 : "NULL List for selectByStart");
 
     }

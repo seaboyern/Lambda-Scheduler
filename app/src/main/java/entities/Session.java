@@ -14,10 +14,11 @@ public class Session extends Commitment implements
         SessionInterface, DatabaseObject {
     private Date start;
     private Date end;
+    private Date next;
     private String timeZone;
     private String recFreq;
     private int recCount;
-    private LinkedList<String> atendeesEmail;
+    private LinkedList<String> attendeesEmail;
 
     public Session(String title, String desc, int prio) {
         super(title, desc, prio);
@@ -68,19 +69,31 @@ public class Session extends Commitment implements
     }
 
     public LinkedList<String> getAtendeesEmail() {
-        return atendeesEmail;
+        return attendeesEmail;
     }
 
-    public void setAttendeesEmail(LinkedList<String> atendeesEmail) {
-        this.atendeesEmail = atendeesEmail;
+    public void setAttendeesEmail(LinkedList<String> attendeesEmail) {
+        this.attendeesEmail = attendeesEmail;
     }
 
     @Override
     public String toString() {
-        return String.format("\nSession: %s\nStart: %s, End: %s, Time Zone: %s\nRec: (%s, %d)\n" +
+        return String.format("\nSession: %s\nStart: %s,\nNext: %s,\nEnd: %s, Time Zone: %s\nRec: (%s, %d)\n" +
                         "Emails:\n%s\n",
-                this.getTitle(), this.getStart().toString(), this.getEnd().toString(),
+                this.getTitle(), this.getStart().toString(), this.getNext().toString(),
+                this.getEnd().toString(),
                 this.getTimeZone(), this.getRecFreq(), this.getRecCount(),
                 this.getAtendeesEmail().toString());
     }
+
+    @Override
+    public Date getNext() {
+        return next;
+    }
+
+    @Override
+    public void setNext(Date next) {
+        this.next = next;
+    }
+
 }

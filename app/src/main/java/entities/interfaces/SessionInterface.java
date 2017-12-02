@@ -23,4 +23,5 @@ public interface SessionInterface extends CommitmentInterface, RecurringCommitme
     public LinkedList<String> getAtendeesEmail();
 
     public void setAttendeesEmail(LinkedList<String> atendees);
+
 }

@@ -3,6 +3,8 @@ package database.tables;
 import android.content.ContentValues;
 import android.content.Context;
 
+import com.example.lambda.lambdaorganizer.FormatDateTime;
+
 import database.DatabaseObject;
 import database.schema.RecurringCommitmentContract;
 import database.schema.SessionContract;
@@ -39,6 +41,8 @@ public class RecurringCommitmentTable extends Table {
                 recComm.getTitle());
         values.put(RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_TYPE,
                 getTypeName(record));
+        values.put(RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_NEXT,
+                FormatDateTime.getDateTimeStringFromDate(recComm.getNext()));
         values.put(RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_COUNT,
                 recComm.getRecCount());
         values.put(RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_FREQ,

@@ -110,9 +110,9 @@ public class StudyEventToSessionAdapter implements SessionInterface, DatabaseObj
     }
 
     @Override
-    public void setAttendeesEmail(LinkedList<String> atendees) {
+    public void setAttendeesEmail(LinkedList<String> attendees) {
         ArrayList<String> list = new ArrayList<>();
-        ListIterator<String> iter = atendees.listIterator();
+        ListIterator<String> iter = attendees.listIterator();
         while(iter.hasNext()) {
             String next = iter.next();
             list.add(next);
@@ -136,6 +136,16 @@ public class StudyEventToSessionAdapter implements SessionInterface, DatabaseObj
     @Override
     public void setRecCount(int count) {
         s.setEventRecurrenceCount(count);
+    }
+
+    @Override
+    public Date getNext() {
+        return null;
+    }
+
+    @Override
+    public void setNext(Date next) {
+
     }
 
 }

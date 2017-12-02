@@ -133,6 +133,8 @@ public class SessionTable extends Table {
                 cur.getColumnIndex(SessionContract.SessionEntry.COLUMN_NAME_START));
         String end = cur.getString(
                 cur.getColumnIndex(SessionContract.SessionEntry.COLUMN_NAME_END));
+        String next = cur.getString(
+                cur.getColumnIndex(RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_NEXT));
         String timeZone = cur.getString(
                 cur.getColumnIndex(SessionContract.SessionEntry.COLUMN_NAME_TIME_ZONE));
         String recFreq = cur.getString(
@@ -144,6 +146,7 @@ public class SessionTable extends Table {
         try {
             s.setStart(FormatDateTime.getDateFromString(start));
             s.setEnd(FormatDateTime.getDateFromString(end));
+            s.setNext(FormatDateTime.getDateFromString(next));
         } catch (ParseException e) {
             e.printStackTrace();
         }

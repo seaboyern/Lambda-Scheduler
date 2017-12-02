@@ -22,6 +22,7 @@ public final class RecurringCommitmentContract {
         RecurringCommitmentEntry.COLUMN_NAME_TITLE + " TEXT," +
         RecurringCommitmentEntry.COLUMN_NAME_TYPE + " TEXT," +
         RecurringCommitmentEntry.COLUMN_NAME_FREQ + " TEXT," +
+        RecurringCommitmentEntry.COLUMN_NAME_NEXT + " TEXT," +
         RecurringCommitmentEntry.COLUMN_NAME_COUNT + " INTEGER," +
             "PRIMARY KEY ("
                 + RecurringCommitmentEntry.COLUMN_NAME_TITLE
@@ -41,6 +42,6 @@ public final class RecurringCommitmentContract {
                 CommitmentContract.CommitmentEntry.COLUMN_NAME_TYPE;
         public static final String COLUMN_NAME_FREQ = "freq";
         public static final String COLUMN_NAME_COUNT = "count";
-        
+        public static final String COLUMN_NAME_NEXT = "next";
     }
 }
