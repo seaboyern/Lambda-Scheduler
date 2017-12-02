@@ -198,4 +198,27 @@ public class SessionTable extends Table {
         LinkedList<Session> result = this.getSessionsFromQuery(recJoin);
         return result;
     }
+
+    public LinkedList<Session> selectByNext(Date next) {
+        String joinSessionComm = String.format(
+                joinTwo,
+                SessionContract.TABLE_NAME, CommitmentContract.TABLE_NAME,
+                SessionContract.TABLE_NAME, SessionContract.SessionEntry.COLUMN_NAME_TITLE,
+                CommitmentContract.TABLE_NAME, CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE
+        );
+        String recQuery = String.format(
+                Table.uniDimQuery,
+                String.format("(%s) p", joinSessionComm),
+                RecurringCommitmentContract.TABLE_NAME,
+                RecurringCommitmentContract.TABLE_NAME,
+                    RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_TITLE,
+                "p",
+                    RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_TITLE,
+                RecurringCommitmentContract.TABLE_NAME,
+                    RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_NEXT,
+                FormatDateTime.getDateTimeStringFromDate(next)
+        );
+        LinkedList<Session> result = this.getSessionsFromQuery(recQuery);
+        return result;
+    }
 }

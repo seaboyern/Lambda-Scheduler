@@ -90,6 +90,15 @@ public final class TestSessionTable {
                 // not founds
                 : "NULL List for selectByStart");
 
+        LinkedList<Session> nextResult = SessionTable.getInstance(c)
+                .selectByNext(startResult.getFirst().getNext());
+
+        Log.d(TAG, startResult != null
+                // found
+                ? "\n#####\n# Select from Session Table by next:\n" + nextResult.toString()
+                // not founds
+                : "NULL List for selectByNext");
+
     }
 
 }

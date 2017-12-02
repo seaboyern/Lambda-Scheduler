@@ -8,7 +8,7 @@ import database.DatabaseObject;
  * Created by mahmudfasihulazam on 2017-12-01.
  */
 
-public class RecurringCommitment extends Commitment implements
+public abstract class RecurringCommitment extends Commitment implements
         entities.interfaces.RecurringCommitment, DatabaseObject {
 
     private Date start;
