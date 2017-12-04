@@ -36,6 +36,7 @@ import com.roomorama.caldroid.CaldroidListener;
 import entities.Task;
 import entities.Assignment;
 import com.example.lambda.lambdaorganizer.ToDo.TaskInfoDialog;
+import com.example.lambda.lambdaorganizer.ToDo.TaskAddDialog;
 import com.example.lambda.lambdaorganizer.TaskDisplay;
 import database.tables.TaskTable;
 
@@ -237,6 +238,12 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         mEventToTask.put(e, t);
         mTaskEvents.add(e);
         mTasks.add(t);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mWeekView.notifyDatasetChanged();
+            }
+        });
     }
 
     public void deleteTask(Task t, final String message) {
@@ -390,7 +397,8 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         Calendar endTime = (Calendar) time.clone();
         endTime.add(Calendar.HOUR, 1);
 
-        addEvent("Test", time, endTime);
+        showDialog(new TaskAddDialog(), "New task");
+        // addEvent("Test", time, endTime);
     }
 
     /**
