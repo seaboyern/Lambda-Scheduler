@@ -45,9 +45,15 @@ import com.google.api.services.calendar.model.Events;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
+import adapters.SessionToStudyEventAdapter;
+import adapters.StudyEventToSessionAdapter;
+import database.tables.SessionTable;
+import entities.Session;
 import entities.StudyEvent;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -92,6 +98,19 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
     boolean getResult = false;
     StudyEvent newStudyEvent;
 
+    /**
+     * Inserts a StudyEvent into the local database:
+     */
+    public void addStudyEventToDatabase(StudyEvent e) {
+        StudyEventToSessionAdapter a = new StudyEventToSessionAdapter(e);
+        SessionTable.getInstance(getApplicationContext()).insert(a);
+    }
+
+    public LinkedList<SessionToStudyEventAdapter> getStudyEventsByDate(Date date) {
+        LinkedList<Session> list = SessionTable.getInstance(this.getApplicationContext())
+                .selectByNextDate(date);
+        return SessionToStudyEventAdapter.adaptSessions(list);
+    }
 
     /**
      * Create the main activity.
