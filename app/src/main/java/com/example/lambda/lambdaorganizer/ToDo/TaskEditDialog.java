@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.FormatDateTime;
 import com.example.lambda.lambdaorganizer.R;
+import com.example.lambda.lambdaorganizer.TaskDisplay;
 
 import java.text.ParseException;
 
@@ -52,7 +53,7 @@ public class TaskEditDialog extends DialogFragment {
                         ? "Successfully edited task " + newTask.getTitle()
                         : "Successfully changed task " + task.getTitle() + " to "
                             + newTask.getTitle();
-                final ToDoView v = (ToDoView)getActivity();
+                final TaskDisplay v = (TaskDisplay)getActivity();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.R;
 import com.example.lambda.lambdaorganizer.ToDo.ToDoView;
+import com.example.lambda.lambdaorganizer.TaskDisplay;
 
 import entities.Task;
 
@@ -43,7 +44,7 @@ public class TaskAddDialog extends DialogFragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        ToDoView v = (ToDoView)getActivity();
+                        TaskDisplay v = (TaskDisplay)getActivity();
                         v.addTask(newTask,
                                 "Successfully added task " + newTask.getTitle());
                     }

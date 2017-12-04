@@ -112,6 +112,8 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         a.setDeadline(d);
         addAssignment(a);
 
+        getTasksDB();
+
         Task tsk = new Task("Task1", "desc", 1);
         Date start = new Date();
         start.setHours(2);
@@ -122,7 +124,6 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         tsk.setDate(start);
         addTask(tsk, "Test");
 
-        getTasksDB();
     }
 
     private void getAssignmentDB() {
@@ -130,18 +131,12 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     }
 
     private void getTasksDB() {
-        new Thread(new Runnable() {
-            public void run() {
-                TaskTable table = TaskTable.getInstance(getBaseContext());
-                LinkedList<Task> tasks = table.selectAll();
-                // LinkedList<Task> tasks = new LinkedList<Task>();
-                for(Task t : tasks) {
-                    addTask(t, "test");
-                    Log.v(TAG, t.getStart().toString());
-                }
-                mWeekView.postInvalidate();
-            }
-        }).start();
+        TaskTable table = TaskTable.getInstance(getBaseContext());
+        LinkedList<Task> tasks = table.selectAll();
+        for(Task t : tasks) {
+            addTask(t, "test");
+        }
+        mWeekView.postInvalidate();
     }
 
     /**
@@ -237,6 +232,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      * @param t A task with the start end end times set.
      */
     public void addTask(Task t, final String message) {
+        Log.v(TAG, "ADD: "+t.toString());
         WeekViewEvent e = taskToEvent(t);
         mEventToTask.put(e, t);
         mTaskEvents.add(e);
@@ -244,7 +240,16 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     }
 
     public void deleteTask(Task t, final String message) {
-
+        Log.v(TAG, "DELETE"+ t.toString());
+        // mTasks.remove(t);
+        for (Map.Entry<WeekViewEvent, Task> e : mEventToTask.entrySet()) {
+            Log.v(TAG, e.getValue().toString());
+            if (e.getValue().toString().equals(t.toString())) {
+                Log.v(TAG, e.getKey().getName());
+                deleteEvent(e.getKey());
+                break;
+            }
+        }
     }
 
     public void showDialog(DialogFragment dialog, String tag) {
@@ -561,6 +566,11 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
             mEventToTask.remove(event);
             mTaskEvents = UpdatedList;
         }
-        mWeekView.notifyDatasetChanged();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mWeekView.notifyDatasetChanged();
+            }
+        });
     }
 }
