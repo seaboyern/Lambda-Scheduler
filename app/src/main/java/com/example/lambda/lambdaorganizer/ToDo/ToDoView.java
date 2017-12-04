@@ -22,12 +22,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.R;
+import com.example.lambda.lambdaorganizer.TaskDisplay;
 
 /**
  * Created by ReedPosehn on 2017-10-12.
  */
 
-public class ToDoView extends AppCompatActivity {
+public class ToDoView extends AppCompatActivity implements TaskDisplay{
 
     private static final int NUM_PRIO = 3; // Number of priority classes
     private static final String TAG = "ToDoView";

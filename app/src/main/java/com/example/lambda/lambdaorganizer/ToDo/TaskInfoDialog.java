@@ -1,6 +1,7 @@
 package com.example.lambda.lambdaorganizer.ToDo;
 
 import android.support.v4.app.DialogFragment;
+import android.app.Activity;
 import android.os.Bundle;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -8,6 +9,7 @@ import android.app.AlertDialog;
 import android.util.Log;
 
 import com.example.lambda.lambdaorganizer.FormatDateTime;
+import com.example.lambda.lambdaorganizer.TaskDisplay;
 
 import java.text.ParseException;
 
@@ -49,7 +51,7 @@ public class TaskInfoDialog extends DialogFragment {
     private class TaskEditListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
-            ToDoView view = (ToDoView)getActivity();
+            TaskDisplay view = (TaskDisplay)getActivity();
             TaskEditDialog editDialog= new TaskEditDialog();
             editDialog.setArguments(buildBundleFromTask(task));
             view.showDialog(editDialog, "Task edit");
@@ -60,7 +62,7 @@ public class TaskInfoDialog extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
             // Delete task from database asynchronously:
-            final ToDoView v = (ToDoView)getActivity();
+            final TaskDisplay v = (TaskDisplay)getActivity();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
