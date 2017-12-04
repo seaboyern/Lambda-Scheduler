@@ -1,4 +1,4 @@
-package com.example.lambda.lambdaorganizer;
+package com.example.lambda.lambdaorganizer.SessionEngineer;
 
 import android.Manifest;
 import android.accounts.AccountManager;
@@ -22,6 +22,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.lambda.lambdaorganizer.MainActivity;
+import com.example.lambda.lambdaorganizer.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -46,6 +48,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
 
+import entities.StudyEvent;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 

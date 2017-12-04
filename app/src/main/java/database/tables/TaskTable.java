@@ -32,17 +32,17 @@ public class TaskTable extends Table {
      */
     private static String uniDimQuery =
             String.format(
-                    "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s\nWHERE %s.%s = '%s';",
+                    Table.uniDimQuery,
                     TaskContract.TABLE_NAME, CommitmentContract.TABLE_NAME,
                     TaskContract.TABLE_NAME, TaskContract.TaskEntry.COLUMN_NAME_TITLE,
                     CommitmentContract.TABLE_NAME,
-                        CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE,
+                    CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE,
                     TaskContract.TABLE_NAME, "%s", "%s"
             );
 
     private static String selectAllQuery =
             String.format(
-                    "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s;",
+                    Table.selectAllQuery,
                     TaskContract.TABLE_NAME, CommitmentContract.TABLE_NAME,
                     TaskContract.TABLE_NAME, TaskContract.TaskEntry.COLUMN_NAME_TITLE,
                     CommitmentContract.TABLE_NAME,

@@ -1,4 +1,4 @@
-package com.example.lambda.lambdaorganizer;
+package com.example.lambda.lambdaorganizer.SessionEngineer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.lambda.lambdaorganizer.DateTimePicker;
+import com.example.lambda.lambdaorganizer.R;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
