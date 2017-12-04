@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import database.DatabaseObject;
@@ -69,5 +70,20 @@ public abstract class RecurringCommitment extends Commitment implements
     @Override
     public void setNext(Date next) {
         this.next = next;
+    }
+
+    /**
+     * Move this object to the next cycle
+     */
+    public void increment() {
+        if(this.getRecCount() < 0) return;
+        Calendar cal = Calendar.getInstance();
+        Date now = cal.getTime();
+        cal.setTime(this.getNext());
+        int increment = this.getRecFreq().equals("DAILY") ? 1 : 7;
+        cal.add(Calendar.DATE, increment);
+        this.setNext(cal.getTime());
+        cal.setTime(now);
+        this.setRecCount(this.getRecCount() - 1);
     }
 }

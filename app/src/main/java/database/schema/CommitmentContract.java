@@ -26,9 +26,11 @@ public final class CommitmentContract {
                     CommitmentEntry.COLUMN_NAME_PRIO + " INTEGER," +
                     CommitmentEntry.COLUMN_NAME_TYPE + " TEXT," +
                     CommitmentEntry.COLUMN_NAME_GOOGLE_ID + " TEXT," +
+                    CommitmentEntry.COLUMN_NAME_DATE + " TEXT," +
                     "PRIMARY KEY ("
                         + CommitmentEntry.COLUMN_NAME_TITLE + ","
-                        + CommitmentEntry.COLUMN_NAME_TYPE
+                        + CommitmentEntry.COLUMN_NAME_TYPE + ","
+                        + CommitmentEntry.COLUMN_NAME_DATE
                     + "))";
     /**
      * Table deletion command:
@@ -46,6 +48,7 @@ public final class CommitmentContract {
         public static final String COLUMN_NAME_PRIO = "priority";
         public static final String COLUMN_NAME_TYPE = "type";
         public static final String COLUMN_NAME_GOOGLE_ID = "google_id";
+        public static final String COLUMN_NAME_DATE = "seq_date";
     }
 
 }

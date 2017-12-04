@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -17,6 +18,22 @@ public class Session extends RecurringCommitment implements
 
     public Session(String title, String desc, int prio) {
         super(title, desc, prio);
+    }
+
+    @Override
+    public Date getSequencingDateTime() {
+        Date now = new Date();
+        if(now.compareTo(this.getStart()) < 0) {
+            return this.getStart();
+        } else if(now.compareTo(this.getStart()) < 0) {
+            return this.getEnd();
+        } else {
+            if(this.getRecCount() >= 0) {
+                return this.getNext();
+            } else {
+                return null;
+            }
+        }
     }
 
     public String getTimeZone() {

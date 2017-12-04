@@ -26,6 +26,16 @@ public class Task extends Commitment {
         super.setGoogleId("");
     }
 
+    @Override
+    public Date getSequencingDateTime() {
+        Date now = new Date();
+        if(now.compareTo(this.getStart()) < 0) {
+            return this.getStart();
+        } else {
+            return this.getEnd();
+        }
+    }
+
     // Getters and setters:
     public Date getDate() {
         return date;

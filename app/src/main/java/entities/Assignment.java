@@ -16,12 +16,23 @@ public class Assignment extends CourseCommitment {
         super(title, desc, prio);
     }
 
+    @Override
+    public Date getSequencingDateTime() {
+        return this.getDeadline();
+    }
+
     public Date getDeadline() {
         return deadline;
     }
 
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("\nAssignment: %s\nDeadline: %s\nCourse ID: %s\n",
+                this.getTitle(), this.getDeadline().toString(), this.getCourseId());
     }
 
 }

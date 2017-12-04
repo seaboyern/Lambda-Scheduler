@@ -16,9 +16,15 @@ public abstract class Table {
     protected Context context;
     protected String tableName;
     protected HashMap<String, String> typeMap;
+
     protected static String uniDimQuery =
             "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s\nWHERE %s.%s = '%s'";
+    protected static String uniDimLikeQuery =
+            "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s\nWHERE %s.%s LIKE '%s'";
     protected static String selectAllQuery = "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s";
+
+    protected static String joinTwo = "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s";
+    protected static String joinTwoLike = "SELECT * FROM %s\nJOIN %s\nON %s.%s LIKE %s.%s";
 
     protected Table(Context c) {
         this.context = c;

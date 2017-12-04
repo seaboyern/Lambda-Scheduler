@@ -27,9 +27,9 @@ import entities.interfaces.SessionInterface;
 
 public class SessionTable extends Table {
 
-    private static String joinCommitment =
+    private static String joinCommitmentLike =
             String.format(
-                    Table.uniDimQuery, //"SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s\nWHERE %s.%s = '%s';"
+                    Table.uniDimLikeQuery, //"SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s\nWHERE %s.%s LIKE '%s';"
                     SessionContract.TABLE_NAME, CommitmentContract.TABLE_NAME,
                     SessionContract.TABLE_NAME, SessionContract.SessionEntry.COLUMN_NAME_TITLE,
                     CommitmentContract.TABLE_NAME,
@@ -38,13 +38,28 @@ public class SessionTable extends Table {
                     "%s", "%s"
             );
 
-    private static String joinTwo = "SELECT * FROM %s\n" +
-            "JOIN %s\n" +
-            "ON %s.%s = %s.%s";
-
-    private static String joinRecComm =
+    private static String joinRecCommLike =
             String.format(
-                    joinTwo,
+                    joinTwoLike,
+                    "(%s) p" /* Other table */, RecurringCommitmentContract.TABLE_NAME, // rec_comm
+                    RecurringCommitmentContract.TABLE_NAME, "%s", // rec_comm.<field> =
+                    "p", "%s" // p.<field>
+            );
+
+    private static String joinCommitmentExact =
+            String.format(
+                    Table.uniDimLikeQuery, //"SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s\nWHERE %s.%s LIKE '%s';"
+                    SessionContract.TABLE_NAME, CommitmentContract.TABLE_NAME,
+                    SessionContract.TABLE_NAME, SessionContract.SessionEntry.COLUMN_NAME_TITLE,
+                    CommitmentContract.TABLE_NAME,
+                    CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE,
+                    SessionContract.TABLE_NAME,
+                    "%s", "%s"
+            );
+
+    private static String joinRecCommExact =
+            String.format(
+                    joinTwoLike,
                     "(%s) p" /* Other table */, RecurringCommitmentContract.TABLE_NAME, // rec_comm
                     RecurringCommitmentContract.TABLE_NAME, "%s", // rec_comm.<field> =
                     "p", "%s" // p.<field>
@@ -103,13 +118,12 @@ public class SessionTable extends Table {
         return null;
     }
 
-    private LinkedList<String> getAttendeesFromCursor(Cursor cur) {
+    private LinkedList<String> getAttendeesFromCursor(Cursor cur, DatabaseHelper db) {
         LinkedList<String> result = new LinkedList<>();
         String query = "SELECT * FROM " + SessionAttendeesContract.TABLE_NAME + " p WHERE p."
                 + SessionAttendeesContract.SessionAttendeesEntry.COLUMN_NAME_SESSION + " = '"
                 + cur.getString(cur.getColumnIndex(SessionContract.SessionEntry.COLUMN_NAME_TITLE))
                 + "'";
-        DatabaseHelper db = new DatabaseHelper(this.context);
         Cursor cur2 = db.query(query);
         if(cur2.moveToFirst()) {
             do {
@@ -120,7 +134,7 @@ public class SessionTable extends Table {
         return result;
     }
 
-    private Session getSessionFromCursor(Cursor cur) {
+    private Session getSessionFromCursor(Cursor cur, DatabaseHelper db) {
         String title = cur.getString(
                 cur.getColumnIndex(SessionContract.SessionEntry.COLUMN_NAME_TITLE));
         String desc = cur.getString(
@@ -153,7 +167,7 @@ public class SessionTable extends Table {
         s.setTimeZone(timeZone);
         s.setRecFreq(recFreq);
         s.setRecCount(recCount);
-        LinkedList<String> attendeeEmails = getAttendeesFromCursor(cur);
+        LinkedList<String> attendeeEmails = getAttendeesFromCursor(cur, db);
         s.setAttendeesEmail(attendeeEmails);
         return s;
     }
@@ -165,7 +179,7 @@ public class SessionTable extends Table {
         if(cur.moveToFirst()) {
             list = new LinkedList<Session>();
             do {
-                list.add(getSessionFromCursor(cur));
+                list.add(getSessionFromCursor(cur, db));
             } while (cur.moveToNext());
         } else {
             Log.d(this.getTableName(), "Cursor did not move to first");
@@ -176,11 +190,11 @@ public class SessionTable extends Table {
     }
 
     public Session selectByTitle(String title) {
-        String commJoin = String.format(joinCommitment,
+        String commJoin = String.format(joinCommitmentExact,
                 SessionContract.SessionEntry.COLUMN_NAME_TITLE, title);
-        String recJoin = String.format(joinRecComm, commJoin,
+        String recJoin = String.format(joinRecCommExact, commJoin,
                 RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_TITLE,
-                SessionContract.SessionEntry.COLUMN_NAME_TITLE) + ";";
+                SessionContract.SessionEntry.COLUMN_NAME_TITLE);
         LinkedList<Session> l = this.getSessionsFromQuery(recJoin);
         Session result = (l != null && !l.isEmpty())
                 ? l.getFirst() // found
@@ -188,18 +202,18 @@ public class SessionTable extends Table {
         return result;
     }
 
-    public LinkedList<Session> selectByStart(Date start) {
-        String startString = FormatDateTime.getDateTimeStringFromDate(start);
-        String commJoin = String.format(joinCommitment,
+    public LinkedList<Session> selectByStartDate(Date start) {
+        String startString = FormatDateTime.getDateStringFromDate(start) + "%";
+        String commJoin = String.format(joinCommitmentLike,
                 SessionContract.SessionEntry.COLUMN_NAME_START, startString);
-        String recJoin = String.format(joinRecComm, commJoin,
+        String recJoin = String.format(joinRecCommLike, commJoin,
                 RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_TITLE,
                 SessionContract.SessionEntry.COLUMN_NAME_TITLE) + ";";
         LinkedList<Session> result = this.getSessionsFromQuery(recJoin);
         return result;
     }
 
-    public LinkedList<Session> selectByNext(Date next) {
+    public LinkedList<Session> selectByNextDate(Date next) {
         String joinSessionComm = String.format(
                 joinTwo,
                 SessionContract.TABLE_NAME, CommitmentContract.TABLE_NAME,
@@ -207,7 +221,7 @@ public class SessionTable extends Table {
                 CommitmentContract.TABLE_NAME, CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE
         );
         String recQuery = String.format(
-                Table.uniDimQuery,
+                Table.uniDimLikeQuery,
                 String.format("(%s) p", joinSessionComm),
                 RecurringCommitmentContract.TABLE_NAME,
                 RecurringCommitmentContract.TABLE_NAME,
@@ -216,7 +230,7 @@ public class SessionTable extends Table {
                     RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_TITLE,
                 RecurringCommitmentContract.TABLE_NAME,
                     RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_NEXT,
-                FormatDateTime.getDateTimeStringFromDate(next)
+                FormatDateTime.getDateStringFromDate(next) + "%"
         );
         LinkedList<Session> result = this.getSessionsFromQuery(recQuery);
         return result;

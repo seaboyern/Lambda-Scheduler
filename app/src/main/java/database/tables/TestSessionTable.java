@@ -8,6 +8,7 @@ import com.example.lambda.lambdaorganizer.FormatDateTime;
 import java.text.ParseException;
 import java.util.LinkedList;
 
+import entities.Commitment;
 import entities.Session;
 
 /**
@@ -81,23 +82,30 @@ public final class TestSessionTable {
         Session titleResult = SessionTable.getInstance(c).selectByTitle("Session 1");
         Log.d(TAG, "\n#####\n# Select from Session Table by title:" + titleResult.toString());
 
-        LinkedList<Session> startResult = SessionTable.getInstance(c).selectByStart(
+        LinkedList<Session> startResult = SessionTable.getInstance(c).selectByStartDate(
                 FormatDateTime.getDateFromString("2017-11-11 02:30:00")
         );
         Log.d(TAG, startResult != null
                 // found
                 ? "\n#####\n# Select from Session Table by start:\n" + startResult.toString()
                 // not founds
-                : "NULL List for selectByStart");
+                : "NULL List for selectByStartDate");
 
         LinkedList<Session> nextResult = SessionTable.getInstance(c)
-                .selectByNext(startResult.getFirst().getNext());
+                .selectByNextDate(startResult.getFirst().getNext());
 
         Log.d(TAG, startResult != null
                 // found
                 ? "\n#####\n# Select from Session Table by next:\n" + nextResult.toString()
                 // not founds
-                : "NULL List for selectByNext");
+                : "NULL List for selectByNextDate");
+
+        LinkedList<Commitment> commitments =
+                CommitmentTable.getInstance(c).selectByDate(startResult.getFirst().getStart());
+
+        Log.d(TAG, commitments != null
+            ? "\n#####\n# Select from Commitment Table by date:\n" + commitments.toString()
+            : "NULL List for selectByDate");
 
     }
 

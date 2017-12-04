@@ -73,7 +73,7 @@ public final class InitDb {
         a1.setAchieved((float) 5.5);
         SimpleDateFormat fmt = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
         try {
-            a1.setDeadline(fmt.parse("2017-11-21 23:59:00"));
+            a1.setDeadline(fmt.parse("2017-11-11 23:59:00"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
