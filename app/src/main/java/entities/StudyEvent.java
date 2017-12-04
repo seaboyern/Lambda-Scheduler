@@ -11,11 +11,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.sql.Date;
 
+import entities.interfaces.SessionInterface;
+import entities.interfaces.StudyEventInterface;
+
 /**
  * Created by priom on 11/13/2017.
  */
 
-public class StudyEvent {
+public class StudyEvent implements StudyEventInterface {
 
     private String eventDescription;
     private String eventLocation;
@@ -31,6 +34,7 @@ public class StudyEvent {
     private int eventRecurrenceCount;
     private ArrayList<String> attendees;
     private String googleEventID;
+    private String nextStart;
 
     public static String TAG = "StudyEvent";
 
@@ -161,4 +165,11 @@ public class StudyEvent {
     }
 
 
+    public String getNextStart() {
+        return nextStart;
+    }
+
+    public void setNextStart(String nextStart) {
+        this.nextStart = nextStart;
+    }
 }

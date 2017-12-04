@@ -24,6 +24,7 @@ public class SessionContract {
                     SessionEntry.COLUMN_NAME_TITLE + " TEXT," +
                     SessionEntry.COLUMN_NAME_START + " TEXT," +
                     SessionEntry.COLUMN_NAME_END + " TEXT," +
+                    SessionEntry.COLUMN_NAME_LOC + " TEXT," +
                     SessionEntry.COLUMN_NAME_TIME_ZONE + " TEXT," +
                     "PRIMARY KEY ("
                     + SessionEntry.COLUMN_NAME_TITLE
@@ -42,6 +43,7 @@ public class SessionContract {
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_START = "start";
         public static final String COLUMN_NAME_END = "end";
+        public static final String COLUMN_NAME_LOC = "location";
         public static final String COLUMN_NAME_TIME_ZONE = "time_zone";
     }
 

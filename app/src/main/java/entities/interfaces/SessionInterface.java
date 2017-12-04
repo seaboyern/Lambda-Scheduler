@@ -12,4 +12,6 @@ public interface SessionInterface extends CommitmentInterface, RecurringCommitme
     public void setTimeZone(String timeZone);
     public LinkedList<String> getAttendeesEmail();
     public void setAttendeesEmail(LinkedList<String> attendees);
+    public String getLocation();
+    public void setLocation(String location);
 }

@@ -98,6 +98,7 @@ public class AssignmentTable extends Table {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        a.setCourseId(crid);
         a.setWeight(weight);
         a.setRequired(req);
         a.setAchieved(achieved);

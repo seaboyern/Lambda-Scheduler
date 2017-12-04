@@ -101,6 +101,8 @@ public class SessionTable extends Table {
                 FormatDateTime.getDateTimeStringFromDate(s.getEnd()));
         values.put(SessionContract.SessionEntry.COLUMN_NAME_TIME_ZONE,
                 s.getTimeZone());
+        values.put(SessionContract.SessionEntry.COLUMN_NAME_LOC,
+                s.getLocation());
 
         List<String> attendees = s.getAttendeesEmail();
         for(String email : attendees) {
@@ -155,6 +157,8 @@ public class SessionTable extends Table {
                 cur.getColumnIndex(RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_FREQ));
         int recCount = cur.getInt(
                 cur.getColumnIndex(RecurringCommitmentContract.RecurringCommitmentEntry.COLUMN_NAME_COUNT));
+        String location = cur.getString(
+                cur.getColumnIndex(SessionContract.SessionEntry.COLUMN_NAME_LOC));
         Session s = new Session(title, desc, prio);
         s.setGoogleId(googleId);
         try {
@@ -169,6 +173,7 @@ public class SessionTable extends Table {
         s.setRecCount(recCount);
         LinkedList<String> attendeeEmails = getAttendeesFromCursor(cur, db);
         s.setAttendeesEmail(attendeeEmails);
+        s.setLocation(location);
         return s;
     }
 

@@ -8,8 +8,11 @@ import com.example.lambda.lambdaorganizer.FormatDateTime;
 import java.text.ParseException;
 import java.util.LinkedList;
 
+import adapters.SessionToStudyEventAdapter;
+import adapters.StudyEventToSessionAdapter;
 import entities.Commitment;
 import entities.Session;
+import entities.StudyEvent;
 
 /**
  * Created by mahmudfasihulazam on 2017-11-30.
@@ -47,6 +50,7 @@ public final class TestSessionTable {
             a[i].setRecCount(i);
             a[i].setRecFreq(frequencies[i % 2]);
             a[i].setGoogleId("SOME_GOOGLE_ID");
+            a[i].setLocation("Saskatoon");
             try {
                 SessionTable.getInstance(c).insert(a[i]);
             } catch(Exception e) {
@@ -72,6 +76,7 @@ public final class TestSessionTable {
             a[i].setRecCount(i);
             a[i].setRecFreq(frequencies[i % 2]);
             a[i].setGoogleId("SOME_GOOGLE_ID");
+            a[i].setLocation("Saskatoon");
             try {
                 SessionTable.getInstance(c).insert(a[i]);
             } catch(Exception e) {
@@ -82,12 +87,26 @@ public final class TestSessionTable {
         Session titleResult = SessionTable.getInstance(c).selectByTitle("Session 1");
         Log.d(TAG, "\n#####\n# Select from Session Table by title:" + titleResult.toString());
 
+        /**
+         * Retrieving sessions from the database as study sessions:
+         */
         LinkedList<Session> startResult = SessionTable.getInstance(c).selectByStartDate(
                 FormatDateTime.getDateFromString("2017-11-11 02:30:00")
         );
         Log.d(TAG, startResult != null
                 // found
                 ? "\n#####\n# Select from Session Table by start:\n" + startResult.toString()
+                // not founds
+                : "NULL List for selectByStartDate");
+
+        LinkedList<SessionToStudyEventAdapter> startResultAdapted =
+                SessionToStudyEventAdapter.adaptSessions(startResult);
+
+        Log.d(TAG, startResultAdapted != null
+                // found
+                ? "\n#####\n# Select from Session Table by start and adapt to StudyEvent:\n"
+                        + ((startResultAdapted.toString().equals(startResult.toString()))
+                                ? "SUCCESS" : "FAILED")
                 // not founds
                 : "NULL List for selectByStartDate");
 

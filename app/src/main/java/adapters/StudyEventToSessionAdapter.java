@@ -1,5 +1,8 @@
-package mediators;
+package adapters;
 
+import com.example.lambda.lambdaorganizer.FormatDateTime;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -120,6 +123,16 @@ public class StudyEventToSessionAdapter implements SessionInterface, DatabaseObj
         this.s.setAttendees(list);
     }
 
+    @Override
+    public String getLocation() {
+        return this.s.getEventLocation();
+    }
+
+    @Override
+    public void setLocation(String location) {
+        this.s.setEventLocation(location);
+    }
+
     public String getRecFreq() {
         return s.getEventRecurrenceFrequency();
     }
@@ -140,12 +153,25 @@ public class StudyEventToSessionAdapter implements SessionInterface, DatabaseObj
 
     @Override
     public Date getNext() {
-        return null;
+        try {
+            return FormatDateTime.getDateFromString(this.s.getNextStart());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public void setNext(Date next) {
+        this.s.setNextStart(FormatDateTime.getDateTimeStringFromDate(next));
+    }
 
+    public static LinkedList<StudyEventToSessionAdapter> adaptStudyEvents(LinkedList<StudyEvent> input) {
+        LinkedList<StudyEventToSessionAdapter> result = new LinkedList<>();
+        for(StudyEvent i : input) {
+            result.addLast(new StudyEventToSessionAdapter(i));
+        }
+        return result;
     }
 
 }
