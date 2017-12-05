@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.TreeMap;
 
 import database.tables.TaskTable;
+import database.tables.CommitmentTable;
 import entities.Task;
 
 import android.widget.ListView;
@@ -38,7 +39,10 @@ public class ToDoView extends AppCompatActivity implements TaskDisplay{
     private ArrayAdapter<TaskView>[] adapter;
 
     public void deleteTask(final Task task, final String message) {
-        TaskTable.getInstance(getApplicationContext()).remove(task);
+        LinkedList<Task> list = TaskTable.getInstance(
+                getApplicationContext()).selectByTitle(task.getTitle());
+        TaskTable.getInstance(getApplicationContext()).remove(list.getFirst());
+        CommitmentTable.getInstance(getApplicationContext()).remove(list.getFirst());
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -53,6 +57,7 @@ public class ToDoView extends AppCompatActivity implements TaskDisplay{
 
     public void addTask(final Task newTask, final String message) {
         TaskTable.getInstance(getApplicationContext()).insert(newTask);
+        CommitmentTable.getInstance(getApplicationContext()).insert(newTask);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

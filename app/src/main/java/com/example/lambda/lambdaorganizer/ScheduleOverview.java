@@ -39,6 +39,7 @@ import com.example.lambda.lambdaorganizer.ToDo.TaskInfoDialog;
 import com.example.lambda.lambdaorganizer.ToDo.TaskAddDialog;
 import com.example.lambda.lambdaorganizer.TaskDisplay;
 import database.tables.TaskTable;
+import database.tables.CommitmentTable;
 
 public class ScheduleOverview extends AppCompatActivity implements WeekView.EventClickListener,
         MonthLoader.MonthChangeListener, WeekView.EmptyViewClickListener,
@@ -123,7 +124,7 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         tsk.setStart(start);
         tsk.setEnd(end);
         tsk.setDate(start);
-        addTask(tsk, "Test");
+        // addTaskNoDB(tsk);
 
     }
 
@@ -134,10 +135,16 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     private void getTasksDB() {
         TaskTable table = TaskTable.getInstance(getBaseContext());
         LinkedList<Task> tasks = table.selectAll();
+        Log.v(TAG, "DB"+table.toString());
         for(Task t : tasks) {
-            addTask(t, "test");
+            addTaskNoDB(t);
         }
-        mWeekView.postInvalidate();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mWeekView.notifyDatasetChanged();
+            }
+        });
     }
 
     /**
@@ -234,10 +241,10 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      */
     public void addTask(Task t, final String message) {
         Log.v(TAG, "ADD: "+t.toString());
-        WeekViewEvent e = taskToEvent(t);
-        mEventToTask.put(e, t);
-        mTaskEvents.add(e);
-        mTasks.add(t);
+        TaskTable.getInstance(getApplicationContext()).insert(t);
+        CommitmentTable.getInstance(getApplicationContext()).insert(t);
+        addTaskNoDB(t);
+        Log.v(TAG, "DB"+TaskTable.getInstance(getApplicationContext()).toString());
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -246,9 +253,21 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         });
     }
 
+    public void addTaskNoDB(Task t) {
+        Log.v(TAG, "ADD noDB: "+t.toString());
+        WeekViewEvent e = taskToEvent(t);
+        mEventToTask.put(e, t);
+        mTaskEvents.add(e);
+        mTasks.add(t);
+    }
+
     public void deleteTask(Task t, final String message) {
         Log.v(TAG, "DELETE"+ t.toString());
         // mTasks.remove(t);
+        LinkedList<Task> list = TaskTable.getInstance(
+                getApplicationContext()).selectByTitle(t.getTitle());
+        TaskTable.getInstance(getApplicationContext()).remove(list.getFirst());
+        CommitmentTable.getInstance(getApplicationContext()).remove(list.getFirst());
         for (Map.Entry<WeekViewEvent, Task> e : mEventToTask.entrySet()) {
             Log.v(TAG, e.getValue().toString());
             if (e.getValue().toString().equals(t.toString())) {
