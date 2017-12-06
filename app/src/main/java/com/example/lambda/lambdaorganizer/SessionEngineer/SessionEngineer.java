@@ -681,9 +681,9 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
 
 
         //DateTime startDateTime = new DateTime(eventStartTime);
-        //DateTime startDateTime = new DateTime("2017-11-11T07:50:00-06:00");
+        //DateTime startDateTime = new DateTime("2017-12-06T07:50:00-06:00");
         DateTime startDateTime = new DateTime(studyEvent.getEventStartDate().toString()+"T"+studyEvent.getEventStarTime()+studyEvent.getEventTimeZone().toString());
-        Log.d(TAG, "createGoogleEvent: startDateTime"+startDateTime.toString());
+        Log.d(TAG, "createGoogleEvent: startDateTime: "+startDateTime.toString());
         EventDateTime start = new EventDateTime()
                 .setDateTime(startDateTime)
                 .setTimeZone(timezoneID);

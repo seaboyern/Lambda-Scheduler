@@ -306,7 +306,7 @@ public class AddStudyTime extends AppCompatActivity  {
             public void onDateTimePickerConfirm(Date d) {
 
                // String date =d.getYear()+"-"+(d.getMonth()+1)+"-"+d.getDay();
-                String date =d.getYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+                String date =String.format("%02d-%02d-%02d",d.getYear(),(d.getMonth()+1),d.getDate());
                 //String time =d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"0";
                 //String time =String.format("%02d:%02d:02%",d.getHours(),d.getMinutes(),d.getSeconds());
                 String time =String.format("%02d:%02d:%02d",d.getHours(),d.getMinutes(),d.getSeconds());
