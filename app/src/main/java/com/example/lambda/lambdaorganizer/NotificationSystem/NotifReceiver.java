@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.MainActivity;
 import com.example.lambda.lambdaorganizer.R;
-import com.example.lambda.lambdaorganizer.ToDo.ToDoListManager;
+import com.example.lambda.lambdaorganizer.ToDo.ToDoView;
 
 /**
  * Created by jadenball on 2017-11-11.
@@ -26,7 +26,7 @@ public class NotifReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String msg = "Task is Due";
-        Intent alarmIntent = new Intent(context, ToDoListManager.class);
+        Intent alarmIntent = new Intent(context, ToDoView.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
 
         Notification n = new Notification.Builder(context)

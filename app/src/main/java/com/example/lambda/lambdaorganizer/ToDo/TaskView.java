@@ -38,4 +38,17 @@ public class TaskView {
     public void setTask(Task task) {
         this.task = task;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        TaskView view;
+        try {
+            view = (TaskView)o;
+        } catch(Exception e) {
+            return false;
+        }
+
+        // If the titles are the same, they are equal:
+        return view.getTask().getTitle().equals(this.getTask().getTitle());
+    }
 }

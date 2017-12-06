@@ -16,7 +16,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 
 import com.example.lambda.lambdaorganizer.R;
-import com.example.lambda.lambdaorganizer.ToDo.ToDoListManager;
 
 import java.util.Calendar;
 import java.util.Date;

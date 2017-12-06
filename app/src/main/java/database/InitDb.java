@@ -9,6 +9,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.lambda.lambdaorganizer.FormatDateTime;
+
 import database.schema.AssignmentContract;
 import database.schema.CommitmentContract;
 import database.schema.CourseCommitmentContract;
@@ -60,9 +62,8 @@ public final class InitDb {
         a1.setWeight((float) 5.5);
         a1.setRequired((float) 5.5);
         a1.setAchieved((float) 5.5);
-        SimpleDateFormat fmt = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
         try {
-            a1.setDeadline(fmt.parse("2017-11-21 23:59:00"));
+            a1.setDeadline(FormatDateTime.getDateFromString("2017-11-21 23:59:00"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -87,12 +88,11 @@ public final class InitDb {
         for(int i = 1; i <= 15; i++) {
             Task task1 = new Task("Task " + i, "A task",
                     (int)((Math.random() * 3) + 1));
-            SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
-            SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
             try {
-                task1.setDate(dateFmt.parse("2017-11-" + i));
-                task1.setStart(timeFmt.parse("04:00:00"));
-                task1.setEnd(timeFmt.parse("04:30:00"));
+                String date = "2017-12-" + i;
+                String start =  "04:00:00";
+                String end = " 04:30:00";
+                task1.setTimeBounds(date, start, end);
             } catch(Exception e) {
                 e.printStackTrace();
             }

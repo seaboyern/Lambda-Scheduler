@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.GradeCalculator.GradeCalculatorMain;
-import com.example.lambda.lambdaorganizer.ToDo.ToDoListManager;
+import com.example.lambda.lambdaorganizer.ToDo.ToDoView;
 import com.example.lambda.lambdaorganizer.NotificationSystem.NotificationSystem;
 
 import database.DatabaseHelper;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         btnToDoList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ToDoListManager.class));
+                startActivity(new Intent(MainActivity.this, ToDoView.class));
             }
         });
 
