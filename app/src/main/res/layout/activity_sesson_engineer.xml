@@ -8,6 +8,7 @@
     android:baselineAligned="false"
     android:orientation="vertical"
     android:weightSum="1"
+    android:background="@color/colorPrimary"
     tools:context="com.example.lambda.lambdaorganizer.SessionEngineer">
 
     <RelativeLayout
