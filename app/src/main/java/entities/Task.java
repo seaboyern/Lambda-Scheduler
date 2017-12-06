@@ -62,6 +62,11 @@ public class Task extends Commitment implements TimeSlot {
         return end;
     }
 
+    @Override
+    public int compareTo(TimeSlot other) {
+        return this.getStart().compareTo(other.getStart());
+    }
+
     public void setEnd(Date end) {
         this.end = end;
     }

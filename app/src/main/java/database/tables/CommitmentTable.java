@@ -72,8 +72,9 @@ public class CommitmentTable extends Table {
     }
 
     public LinkedList<Commitment> selectByDate(Date date) {
+        Log.d(this.getTableName(), "Date given: " + FormatDateTime.getDateStringFromDate(date));
         LinkedList<Task> tasks = TaskTable.getInstance(this.context).selectByDate(
-                FormatDateTime.getDateTimeStringFromDate(date)
+                FormatDateTime.getDateStringFromDate(date)
         );
         LinkedList<Assignment> assignments =
                 AssignmentTable.getInstance(this.context).selectByDeadlineDate(date);

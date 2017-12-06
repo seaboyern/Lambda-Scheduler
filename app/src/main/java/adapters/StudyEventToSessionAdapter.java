@@ -12,6 +12,7 @@ import java.util.ListIterator;
 import database.DatabaseObject;
 import entities.StudyEvent;
 import entities.interfaces.SessionInterface;
+import entities.interfaces.TimeSlot;
 
 /**
  * Created by mahmudfasihulazam on 2017-11-30.
@@ -84,6 +85,11 @@ public class StudyEventToSessionAdapter implements SessionInterface, DatabaseObj
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public int compareTo(TimeSlot other) {
+        return this.compareTo(other);
     }
 
     @Override

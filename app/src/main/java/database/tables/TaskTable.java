@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.lambda.lambdaorganizer.FormatDateTime;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
@@ -32,17 +34,17 @@ public class TaskTable extends Table {
      */
     private static String uniDimQuery =
             String.format(
-                    Table.uniDimQuery,
+                    "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s\nWHERE %s.%s = '%s';",
                     TaskContract.TABLE_NAME, CommitmentContract.TABLE_NAME,
                     TaskContract.TABLE_NAME, TaskContract.TaskEntry.COLUMN_NAME_TITLE,
                     CommitmentContract.TABLE_NAME,
-                    CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE,
+                        CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE,
                     TaskContract.TABLE_NAME, "%s", "%s"
             );
 
     private static String selectAllQuery =
             String.format(
-                    Table.selectAllQuery,
+                    "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s;",
                     TaskContract.TABLE_NAME, CommitmentContract.TABLE_NAME,
                     TaskContract.TABLE_NAME, TaskContract.TaskEntry.COLUMN_NAME_TITLE,
                     CommitmentContract.TABLE_NAME,
@@ -108,15 +110,13 @@ public class TaskTable extends Table {
                 cur.getInt(cur.getColumnIndex(CommitmentContract.CommitmentEntry.COLUMN_NAME_PRIO))
         );
         try {
-            task.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(
-                    cur.getString(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_DATE))
-            ));
-            task.setStart(new SimpleDateFormat("HH:mm:ss").parse(
-                    cur.getString(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_START))
-            ));
-            task.setEnd(new SimpleDateFormat("HH:mm:ss").parse(
-                    cur.getString(cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_END))
-            ));
+            String date = cur.getString(
+                    cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_DATE));
+            String start = cur.getString(
+                    cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_START));
+            String end = cur.getString(
+                    cur.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME_END));
+            task.setTimeBounds(date, start, end);
             return task;
         } catch (ParseException e) {
             e.printStackTrace();

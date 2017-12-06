@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import database.DatabaseObject;
 import entities.interfaces.SessionInterface;
+import entities.interfaces.TimeSlot;
 
 /**
  * Created by mahmudfasihulazam on 2017-11-30.
@@ -77,4 +78,8 @@ public class Session extends RecurringCommitment implements
                 this.getLocation());
     }
 
+    @Override
+    public int compareTo(TimeSlot other) {
+        return this.getStart().compareTo(other.getStart());
+    }
 }

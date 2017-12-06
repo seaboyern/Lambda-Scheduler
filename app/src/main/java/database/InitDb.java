@@ -2,12 +2,16 @@ package database;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import com.example.lambda.lambdaorganizer.FormatDateTime;
 
 import database.schema.AssignmentContract;
 import database.schema.CommitmentContract;
@@ -38,31 +42,53 @@ public final class InitDb {
     public static String TAG = "InitDb";
     private InitDb(){}
 
+    private static Date increment(Date date, int incr, int unit) {
+        Calendar cal = Calendar.getInstance();
+        Date now = cal.getTime();
+        cal.setTime(date);
+        switch (unit) {
+            case 0:
+                cal.add(Calendar.DATE, incr);
+                break;
+            case 1:
+                cal.add(Calendar.HOUR, incr);
+                break;
+            case 2:
+                cal.add(Calendar.MINUTE, incr);
+                break;
+            default:
+                break;
+        }
+        Date ret = cal.getTime();
+        cal.setTime(now);
+        return ret;
+    }
+
     public static void initDb(Context c) {
         // Clear and recreate Tables:
-//        DatabaseHelper db_helper = new DatabaseHelper(c);
-//        SQLiteDatabase db = db_helper.getWritableDatabase();
-//        db.execSQL(CourseContract.DELETE_TABLE);
-//        db.execSQL(TaskContract.DELETE_TABLE);
-//        db.execSQL(CommitmentContract.DELETE_TABLE);
-//        db.execSQL(CourseCommitmentContract.DELETE_TABLE);
-//        db.execSQL(AssignmentContract.DELETE_TABLE);
-//        db.execSQL(ExamContract.DELETE_TABLE);
-//        db.execSQL(RecurringCommitmentContract.DELETE_TABLE);
-//        db.execSQL(SessionContract.DELETE_TABLE);
-//        db.execSQL(SessionAttendeesContract.DELETE_TABLE);
-//
-//        db.execSQL(CourseContract.CREATE_TABLE);
-//        db.execSQL(TaskContract.CREATE_TABLE);
-//        db.execSQL(CommitmentContract.CREATE_TABLE);
-//        db.execSQL(CourseCommitmentContract.CREATE_TABLE);
-//        db.execSQL(AssignmentContract.CREATE_TABLE);
-//        db.execSQL(ExamContract.CREATE_TABLE);
-//        db.execSQL(RecurringCommitmentContract.CREATE_TABLE);
-//        db.execSQL(SessionContract.CREATE_TABLE);
-//        db.execSQL(SessionAttendeesContract.CREATE_TABLE);
-//cl
-//        db_helper.close();
+        DatabaseHelper db_helper = new DatabaseHelper(c);
+        SQLiteDatabase db = db_helper.getWritableDatabase();
+        db.execSQL(CourseContract.DELETE_TABLE);
+        db.execSQL(TaskContract.DELETE_TABLE);
+        db.execSQL(CommitmentContract.DELETE_TABLE);
+        db.execSQL(CourseCommitmentContract.DELETE_TABLE);
+        db.execSQL(AssignmentContract.DELETE_TABLE);
+        db.execSQL(ExamContract.DELETE_TABLE);
+        db.execSQL(RecurringCommitmentContract.DELETE_TABLE);
+        db.execSQL(SessionContract.DELETE_TABLE);
+        db.execSQL(SessionAttendeesContract.DELETE_TABLE);
+
+        db.execSQL(CourseContract.CREATE_TABLE);
+        db.execSQL(TaskContract.CREATE_TABLE);
+        db.execSQL(CommitmentContract.CREATE_TABLE);
+        db.execSQL(CourseCommitmentContract.CREATE_TABLE);
+        db.execSQL(AssignmentContract.CREATE_TABLE);
+        db.execSQL(ExamContract.CREATE_TABLE);
+        db.execSQL(RecurringCommitmentContract.CREATE_TABLE);
+        db.execSQL(SessionContract.CREATE_TABLE);
+        db.execSQL(SessionAttendeesContract.CREATE_TABLE);
+
+        db_helper.close();
 
         // Insert an assignment:
         // Insert commitment entry:
@@ -71,9 +97,8 @@ public final class InitDb {
         a1.setWeight((float) 5.5);
         a1.setRequired((float) 5.5);
         a1.setAchieved((float) 5.5);
-        SimpleDateFormat fmt = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
         try {
-            a1.setDeadline(fmt.parse("2017-11-11 23:59:00"));
+            a1.setDeadline(FormatDateTime.getDateFromString("2017-11-21 23:59:00"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -98,12 +123,11 @@ public final class InitDb {
         for(int i = 1; i <= NUM_TASKS; i++) {
             Task task1 = new Task("Task " + i, "A task",
                     (int)((Math.random() * 3) + 1));
-            SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
-            SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm:ss");
             try {
-                task1.setDate(dateFmt.parse("2017-11-" + i));
-                task1.setStart(timeFmt.parse("04:00:00"));
-                task1.setEnd(timeFmt.parse("04:30:00"));
+                String date = "2017-11-" + i;
+                String start =  "04:00:00";
+                String end = " 04:30:00";
+                task1.setTimeBounds(date, start, end);
             } catch(Exception e) {
                 e.printStackTrace();
             }
@@ -121,6 +145,37 @@ public final class InitDb {
                 e.printStackTrace();
             }
         }
+
+        Date now = new Date();
+
+        Date start1 = increment(now, 10, 2);
+        Date end1 = increment(now, 20, 2);
+        Date start2 = increment(now, -20, 2);
+        Date end2 = increment(now, -10, 2);
+        Date start3 = increment(now, 30, 2);
+        Date end3 = increment(now, 40, 2);
+
+        Task t1 = new Task("Test 1", "desc1", 1);
+        t1.setStart(start1);
+        t1.setDate(start1);
+        t1.setEnd(end1);
+
+        Task t2 = new Task("Test 2", "desc1", 1);
+        t2.setStart(start2);
+        t2.setDate(start2);
+        t2.setEnd(end2);
+
+        Task t3 = new Task("Test 3", "desc1", 1);
+        t3.setStart(start3);
+        t3.setDate(start3);
+        t3.setEnd(end3);
+
+        CommitmentTable.getInstance(c).insert(t1);
+        TaskTable.getInstance(c).insert(t1);
+        CommitmentTable.getInstance(c).insert(t2);
+        TaskTable.getInstance(c).insert(t2);
+        CommitmentTable.getInstance(c).insert(t3);
+        TaskTable.getInstance(c).insert(t3);
 
         // Task table queries:
         Log.d(TAG, "\n#####\n# Select task by title:");

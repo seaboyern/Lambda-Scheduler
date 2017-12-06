@@ -58,6 +58,7 @@ import database.tables.SessionTable;
 import entities.Commitment;
 import entities.Session;
 import entities.StudyEvent;
+import entities.interfaces.TimeSlot;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -102,7 +103,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
     StudyEvent newStudyEvent;
     
     public LinkedList<Commitment> getEventsByDate(Date date) {
-        LinkedList<Commitment> list = CommitmentTable.getInstance(this.getApplicationContext())
+        LinkedList<Commitment> list = CommitmentTable.getInstance(getBaseContext())
                 .selectByDate(date);
         return list;
     }
@@ -115,7 +116,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             @Override
             public void run() {
                 StudyEventToSessionAdapter a = new StudyEventToSessionAdapter(e);
-                SessionTable.getInstance(getApplicationContext()).insert(a);
+                SessionTable.getInstance(getBaseContext()).insert(a);
             }
         }).start();
     }
@@ -217,23 +218,32 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                 Date today = new Date();
                 LinkedList<Commitment> list = getEventsByDate(today);
                 ListIterator<Commitment> iter = list.listIterator();
+
+                Log.d(TAG, "Slots from database: " + list.toString());
+
                 while(iter.hasNext()) {
                     Commitment i = iter.next();
-                    if(i.getSequencingDateTime().compareTo(today) < 1) {
+                    if(!(i instanceof TimeSlot)) {
                         iter.remove();
+                    } else {
+                        TimeSlot slot = (TimeSlot)i;
+                        Log.d(TAG, slot.getStart().toString());
+                        if(slot.getStart().compareTo(today) < 1) {
+                            Log.d(TAG, "Slot: " + slot.toString());
+                            iter.remove();
+                        }
                     }
                 }
 
+                Log.d(TAG, "Slots from database: " + list.toString());
 
-
-                Log.d(TAG, "Commitments today: " + list.toString());
-
-                if(list.size()==1){
-                    Log.d(TAG, "Only one event Found.....");
-                    Date cursor = list.getFirst().getSequencingDateTime();
-
-
+                TimeSlot array[] = new TimeSlot[list.size()];
+                for(int i = 0; i < list.size(); i++) {
+                    Log.d(TAG, "Slot: " + list.get(i).toString());
+                    array[i] = (TimeSlot)list.get(i);
                 }
+
+                Log.d(TAG, "Commitments today: " + array.length);
 
                 adapter.notifyDataSetChanged();
             }
