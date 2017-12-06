@@ -33,10 +33,12 @@ public class Course {
     }
 
     public float getCurrentFinalGrade() {
+        calcFinalGrade();
         return currentFinalGrade;
     }
 
     public void setCurrentFinalGrade(float currentFinalGrade) {
+
         this.currentFinalGrade = currentFinalGrade;
     }
 
