@@ -52,7 +52,9 @@ import java.util.TimeZone;
 
 import adapters.SessionToStudyEventAdapter;
 import adapters.StudyEventToSessionAdapter;
+import database.tables.CommitmentTable;
 import database.tables.SessionTable;
+import entities.Commitment;
 import entities.Session;
 import entities.StudyEvent;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -106,10 +108,10 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
         SessionTable.getInstance(getApplicationContext()).insert(a);
     }
 
-    public LinkedList<SessionToStudyEventAdapter> getStudyEventsByDate(Date date) {
-        LinkedList<Session> list = SessionTable.getInstance(this.getApplicationContext())
-                .selectByNextDate(date);
-        return SessionToStudyEventAdapter.adaptSessions(list);
+    public LinkedList<Commitment> getEventsByDate(Date date) {
+        LinkedList<Commitment> list = CommitmentTable.getInstance(this.getApplicationContext())
+                .selectByDate(date);
+        return list;
     }
 
     /**
@@ -205,7 +207,10 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             @Override
             public void onClick(View v) {
 
-                mOutputText.add("RAM");
+                //mOutputText.add("RAM");
+
+                LinkedList<Commitment> list = getEventsByDate(new Date());
+                Log.d(TAG, "Commitments today: " + list.toString());
 
                 adapter.notifyDataSetChanged();
             }
