@@ -48,6 +48,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.TimeZone;
 
 import adapters.SessionToStudyEventAdapter;
@@ -99,19 +100,24 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
     boolean createEvent =false;
     boolean getResult = false;
     StudyEvent newStudyEvent;
-
-    /**
-     * Inserts a StudyEvent into the local database:
-     */
-    public void addStudyEventToDatabase(StudyEvent e) {
-        StudyEventToSessionAdapter a = new StudyEventToSessionAdapter(e);
-        SessionTable.getInstance(getApplicationContext()).insert(a);
-    }
-
+    
     public LinkedList<Commitment> getEventsByDate(Date date) {
         LinkedList<Commitment> list = CommitmentTable.getInstance(this.getApplicationContext())
                 .selectByDate(date);
         return list;
+    }
+
+    /**
+     * Inserts a StudyEvent into the local database:
+     */
+    public void addStudyEventToDatabase(final StudyEvent e) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                StudyEventToSessionAdapter a = new StudyEventToSessionAdapter(e);
+                SessionTable.getInstance(getApplicationContext()).insert(a);
+            }
+        }).start();
     }
 
     /**
@@ -208,9 +214,26 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             public void onClick(View v) {
 
                 //mOutputText.add("RAM");
+                Date today = new Date();
+                LinkedList<Commitment> list = getEventsByDate(today);
+                ListIterator<Commitment> iter = list.listIterator();
+                while(iter.hasNext()) {
+                    Commitment i = iter.next();
+                    if(i.getSequencingDateTime().compareTo(today) < 1) {
+                        iter.remove();
+                    }
+                }
 
-                LinkedList<Commitment> list = getEventsByDate(new Date());
+
+
                 Log.d(TAG, "Commitments today: " + list.toString());
+
+                if(list.size()==1){
+                    Log.d(TAG, "Only one event Found.....");
+                    Date cursor = list.getFirst().getSequencingDateTime();
+
+
+                }
 
                 adapter.notifyDataSetChanged();
             }
