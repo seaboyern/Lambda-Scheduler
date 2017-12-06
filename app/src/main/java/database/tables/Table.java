@@ -2,6 +2,7 @@ package database.tables;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.HashMap;
 
@@ -57,6 +58,7 @@ public abstract class Table {
         } catch(Exception e) {
             throw e;
         } finally {
+            Log.d(this.getTableName(), dbHelper.getTableAsString(this.getTableName()));
             dbHelper.close();
             if(-1 == status) throw new RuntimeException("Insertion failed");
         }
@@ -70,6 +72,7 @@ public abstract class Table {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            Log.d(this.getTableName(), dbHelper.getTableAsString(this.getTableName()));
             dbHelper.close();
         }
     }
