@@ -235,15 +235,19 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                     }
                 }
 
-                Log.d(TAG, "Slots from database: " + list.toString());
+                Log.d(TAG, "Slots from database after removal: " + list.toString());
 
                 TimeSlot array[] = new TimeSlot[list.size()];
                 for(int i = 0; i < list.size(); i++) {
-                    Log.d(TAG, "Slot: " + list.get(i).toString());
                     array[i] = (TimeSlot)list.get(i);
                 }
 
-                Log.d(TAG, "Commitments today: " + array.length);
+                Arrays.sort(array);
+
+                Log.d(TAG, "After sorting: ");
+                for(TimeSlot i : array) {
+                    Log.d(TAG, "Slot :" + i.toString());
+                }
 
                 adapter.notifyDataSetChanged();
             }

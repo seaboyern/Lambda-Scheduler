@@ -115,6 +115,8 @@ public class AssignmentTable extends Table {
                 list.add(getFromCursor(cur));
             } while(cur.moveToNext());
         }
+        db.close();
+        cur.close();
         return list;
     }
 
