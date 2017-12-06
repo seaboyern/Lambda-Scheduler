@@ -19,6 +19,7 @@ public class Session extends RecurringCommitment implements
 
     public Session(String title, String desc, int prio) {
         super(title, desc, prio);
+        this.attendeesEmail = new LinkedList<>();
     }
 
     @Override
@@ -50,6 +51,8 @@ public class Session extends RecurringCommitment implements
     }
 
     public void setAttendeesEmail(LinkedList<String> attendeesEmail) {
+        if(null == attendeesEmail)
+            return;
         this.attendeesEmail = attendeesEmail;
     }
 

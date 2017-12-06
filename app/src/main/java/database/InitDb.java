@@ -40,29 +40,29 @@ public final class InitDb {
 
     public static void initDb(Context c) {
         // Clear and recreate Tables:
-        DatabaseHelper db_helper = new DatabaseHelper(c);
-        SQLiteDatabase db = db_helper.getWritableDatabase();
-        db.execSQL(CourseContract.DELETE_TABLE);
-        db.execSQL(TaskContract.DELETE_TABLE);
-        db.execSQL(CommitmentContract.DELETE_TABLE);
-        db.execSQL(CourseCommitmentContract.DELETE_TABLE);
-        db.execSQL(AssignmentContract.DELETE_TABLE);
-        db.execSQL(ExamContract.DELETE_TABLE);
-        db.execSQL(RecurringCommitmentContract.DELETE_TABLE);
-        db.execSQL(SessionContract.DELETE_TABLE);
-        db.execSQL(SessionAttendeesContract.DELETE_TABLE);
-
-        db.execSQL(CourseContract.CREATE_TABLE);
-        db.execSQL(TaskContract.CREATE_TABLE);
-        db.execSQL(CommitmentContract.CREATE_TABLE);
-        db.execSQL(CourseCommitmentContract.CREATE_TABLE);
-        db.execSQL(AssignmentContract.CREATE_TABLE);
-        db.execSQL(ExamContract.CREATE_TABLE);
-        db.execSQL(RecurringCommitmentContract.CREATE_TABLE);
-        db.execSQL(SessionContract.CREATE_TABLE);
-        db.execSQL(SessionAttendeesContract.CREATE_TABLE);
-
-        db_helper.close();
+//        DatabaseHelper db_helper = new DatabaseHelper(c);
+//        SQLiteDatabase db = db_helper.getWritableDatabase();
+//        db.execSQL(CourseContract.DELETE_TABLE);
+//        db.execSQL(TaskContract.DELETE_TABLE);
+//        db.execSQL(CommitmentContract.DELETE_TABLE);
+//        db.execSQL(CourseCommitmentContract.DELETE_TABLE);
+//        db.execSQL(AssignmentContract.DELETE_TABLE);
+//        db.execSQL(ExamContract.DELETE_TABLE);
+//        db.execSQL(RecurringCommitmentContract.DELETE_TABLE);
+//        db.execSQL(SessionContract.DELETE_TABLE);
+//        db.execSQL(SessionAttendeesContract.DELETE_TABLE);
+//
+//        db.execSQL(CourseContract.CREATE_TABLE);
+//        db.execSQL(TaskContract.CREATE_TABLE);
+//        db.execSQL(CommitmentContract.CREATE_TABLE);
+//        db.execSQL(CourseCommitmentContract.CREATE_TABLE);
+//        db.execSQL(AssignmentContract.CREATE_TABLE);
+//        db.execSQL(ExamContract.CREATE_TABLE);
+//        db.execSQL(RecurringCommitmentContract.CREATE_TABLE);
+//        db.execSQL(SessionContract.CREATE_TABLE);
+//        db.execSQL(SessionAttendeesContract.CREATE_TABLE);
+//cl
+//        db_helper.close();
 
         // Insert an assignment:
         // Insert commitment entry:
@@ -151,13 +151,13 @@ public final class InitDb {
         }
 
         // Print tables changed:
-//        Log.d(TAG, CommitmentTable.getInstance(c).toString());
-//        Log.d(TAG, RecurringCommitmentTable.getInstance(c).toString());
-//        Log.d(TAG, CourseCommitmentTable.getInstance(c).toString());
-//        Log.d(TAG, AssignmentTable.getInstance(c).toString());
-//        Log.d(TAG, TaskTable.getInstance(c).toString());
-//        Log.d(TAG, SessionTable.getInstance(c).toString());
-//        Log.d(TAG, SessionAttendeesTable.getInstance(c).toString());
+        Log.d(TAG, CommitmentTable.getInstance(c).toString());
+        Log.d(TAG, RecurringCommitmentTable.getInstance(c).toString());
+        Log.d(TAG, CourseCommitmentTable.getInstance(c).toString());
+        Log.d(TAG, AssignmentTable.getInstance(c).toString());
+        Log.d(TAG, TaskTable.getInstance(c).toString());
+        Log.d(TAG, SessionTable.getInstance(c).toString());
+        Log.d(TAG, SessionAttendeesTable.getInstance(c).toString());
 
     }
 

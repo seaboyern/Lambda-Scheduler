@@ -3,13 +3,14 @@ package entities;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import com.example.lambda.lambdaorganizer.FormatDateTime;
 import com.google.api.client.util.DateTime;
 
 import java.lang.reflect.Array;
-import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.sql.Date;
+import java.util.Date;
 
 import entities.interfaces.SessionInterface;
 import entities.interfaces.StudyEventInterface;
@@ -34,13 +35,14 @@ public class StudyEvent implements StudyEventInterface {
     private int eventRecurrenceCount;
     private ArrayList<String> attendees;
     private String googleEventID;
-    private String nextStart;
+    private String nextStartDate;
+    private String nextStartTime;
 
     public static String TAG = "StudyEvent";
 
 
     public StudyEvent() {
-
+        this.attendees = new ArrayList<>();
     }
 
 
@@ -75,6 +77,8 @@ public class StudyEvent implements StudyEventInterface {
     }
 
     public void setAttendees(ArrayList<String> attendees) {
+            if(null == attendees)
+                return;
 
             this.attendees = attendees;
 
@@ -104,6 +108,7 @@ public class StudyEvent implements StudyEventInterface {
 
     public void setEventStartDate(String eventStartDate) {
         this.eventStartDate = eventStartDate;
+        this.nextStartDate = eventStartDate;
     }
 
     public String getEventEndDate() {
@@ -120,6 +125,7 @@ public class StudyEvent implements StudyEventInterface {
 
     public void setEventStarTime(String eventStarTime) {
         this.eventStarTime = eventStarTime;
+        this.nextStartTime = eventStarTime;
     }
 
     public String getEventEndTime() {
@@ -166,10 +172,40 @@ public class StudyEvent implements StudyEventInterface {
 
 
     public String getNextStart() {
-        return nextStart;
+        Date start = new Date();
+        Date end = new Date();
+        try {
+            start = FormatDateTime.getDateFromString(
+                    String.format("%s %s", this.getEventStartDate(), this.getEventStarTime()));
+            end = FormatDateTime.getDateFromString(
+                    String.format("%s %s", this.getEventEndDate(), this.getEventEndTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+
+        Date now = new Date();
+        if(now.compareTo(start) < 0) {
+            return FormatDateTime.getDateTimeStringFromDate(start);
+        } else if(now.compareTo(start) < 0) {
+            return FormatDateTime.getDateTimeStringFromDate(end);
+        } else {
+            if(this.eventRecurrenceCount >= 0) {
+                return String.format("%s %s", this.nextStartDate, this.nextStartTime);
+            } else {
+                return "";
+            }
+        }
     }
 
     public void setNextStart(String nextStart) {
-        this.nextStart = nextStart;
+        Date next = new Date();
+        try {
+            next = FormatDateTime.getDateFromString(nextStart);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        this.nextStartDate = FormatDateTime.getDateTimeStringFromDate(next);
+        this.nextStartTime = FormatDateTime.getDateTimeStringFromDate(next);
     }
 }

@@ -45,12 +45,17 @@ public class StudyEventToSessionAdapter implements SessionInterface, DatabaseObj
         return s.getGoogleEventID();
     }
 
+    @Override
+    public Date getSequencingDateTime() {
+        return new Date();
+    }
+
     public Date getStart() {
         String startDate = s.getEventStartDate();
         String startTime = s.getEventStarTime();
         String timeZone = s.getEventTimeZone();
         try {
-            Date ret = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssXXX").parse(
+            Date ret = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(
                     String.format("%s %s%s", startDate, startTime, timeZone));
             return ret;
         } catch(Exception e) {
@@ -63,10 +68,8 @@ public class StudyEventToSessionAdapter implements SessionInterface, DatabaseObj
     public void setStart(Date start) {
         String startDate = new SimpleDateFormat("yyyy-MM-dd").format(start);
         String startTime = new SimpleDateFormat("HH:mm:ss").format(start);
-        String timeZone = new SimpleDateFormat("XXX").format(start);
         s.setEventStartDate(startDate);
         s.setEventStarTime(startTime);
-        s.setEventTimeZone(timeZone);
     }
 
     @Override
@@ -74,7 +77,7 @@ public class StudyEventToSessionAdapter implements SessionInterface, DatabaseObj
         String endDate = s.getEventEndDate();
         String endTime = s.getEventEndTime();
         try {
-            Date ret = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssXXX").parse(
+            Date ret = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(
                     String.format("%s %s", endDate, endTime));
             return ret;
         } catch(Exception e) {
@@ -86,7 +89,7 @@ public class StudyEventToSessionAdapter implements SessionInterface, DatabaseObj
     @Override
     public void setEnd(Date end) {
         String endDate = new SimpleDateFormat("yyyy-MM-dd").format(end);
-        String endTime = new SimpleDateFormat("HH:mm:ssXXX").format(end);
+        String endTime = new SimpleDateFormat("HH:mm:ss").format(end);
         s.setEventEndDate(endDate);
         s.setEventEndTime(endTime);
     }

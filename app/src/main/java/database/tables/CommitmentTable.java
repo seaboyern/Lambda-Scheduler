@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import adapters.StudyEventToSessionAdapter;
 import database.DatabaseObject;
 import database.schema.AssignmentContract;
 import database.schema.CommitmentContract;
@@ -21,6 +22,7 @@ import entities.Commitment;
 import entities.CourseCommitment;
 import entities.Session;
 import entities.Task;
+import entities.interfaces.CommitmentInterface;
 
 /**
  * Created by mahmudfasihulazam on 2017-11-05.
@@ -39,11 +41,13 @@ public class CommitmentTable extends Table {
         typeMap.put(Assignment.class.getName(), CourseCommitmentContract.TABLE_NAME);
         typeMap.put(Task.class.getName(), TaskContract.TABLE_NAME);
         typeMap.put(Session.class.getName(), RecurringCommitmentContract.TABLE_NAME);
+        typeMap.put(StudyEventToSessionAdapter.class.getName(),
+                RecurringCommitmentContract.TABLE_NAME);
     }
 
     @Override
     public synchronized void insert(DatabaseObject record) {
-        Commitment comm = (Commitment)record;
+        CommitmentInterface comm = (CommitmentInterface)record;
         ContentValues commitmentValues = new ContentValues();
 
         commitmentValues.put(CommitmentContract.CommitmentEntry.COLUMN_NAME_TITLE, comm.getTitle());

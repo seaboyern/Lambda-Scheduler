@@ -5,11 +5,13 @@ import android.content.Context;
 
 import com.example.lambda.lambdaorganizer.FormatDateTime;
 
+import adapters.StudyEventToSessionAdapter;
 import database.DatabaseObject;
 import database.schema.RecurringCommitmentContract;
 import database.schema.SessionContract;
 import entities.Commitment;
 import entities.Session;
+import entities.StudyEvent;
 import entities.interfaces.RecurringCommitment;
 
 /**
@@ -24,6 +26,7 @@ public class RecurringCommitmentTable extends Table {
         super(c);
         this.tableName = RecurringCommitmentContract.TABLE_NAME;
         typeMap.put(Session.class.getName(), SessionContract.TABLE_NAME);
+        typeMap.put(StudyEventToSessionAdapter.class.getName(), SessionContract.TABLE_NAME);
     }
 
     public static RecurringCommitmentTable getInstance(Context c) {
