@@ -1,13 +1,18 @@
 package entities;
 
+import com.example.lambda.lambdaorganizer.FormatDateTime;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import entities.interfaces.TimeSlot;
 
 /**
  * Created by mahmudfasihulazam on 2017-10-12.
  */
 
-public class Task extends Commitment {
+public class Task extends Commitment implements TimeSlot {
 
     /**
      * Fields:
@@ -72,6 +77,15 @@ public class Task extends Commitment {
                 + "; End: " + timeFmt.format(this.end)
                 + "; Description: " + this.getDesc()
                 + "; Priority: " + this.getPrio();
+    }
+
+    public void setTimeBounds(String date, String start, String end) throws ParseException {
+        String startStr = String.format("%s %s", date, start);
+        String endStr = String.format("%s %s", date, end);
+        String dateStr = startStr;
+        this.setDate(FormatDateTime.getDateFromString(dateStr));
+        this.setStart(FormatDateTime.getDateFromString(startStr));
+        this.setEnd(FormatDateTime.getDateFromString(endStr));
     }
 
     /**
