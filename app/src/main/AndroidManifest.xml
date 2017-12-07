@@ -20,7 +20,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".ScheduleOverview"></activity>
-        <activity android:name=".GoogleCalAPI"></activity>
         <activity android:name=".PomodoroTimer"></activity>
         <activity android:name=".ToDoListManager"></activity>
         <activity android:name=".GradeCalculator.GradeCalculatorMain"></activity>

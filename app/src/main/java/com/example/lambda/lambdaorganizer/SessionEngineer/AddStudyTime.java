@@ -153,7 +153,7 @@ public class AddStudyTime extends AppCompatActivity  {
 
                 Log.d(TAG, "Got Request from SessonEngineer.");
 
-                //Bug is here need to implement it 
+                //Bug is here need to implement it
 //                    Bundle newBundle = getIntent.getExtras();
 //                    if (!newBundle.isEmpty()) {
 //                        Log.d(TAG, "Its here...................................");
