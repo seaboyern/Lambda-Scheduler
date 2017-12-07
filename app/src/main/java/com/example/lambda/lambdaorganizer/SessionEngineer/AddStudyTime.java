@@ -152,8 +152,7 @@ public class AddStudyTime extends AppCompatActivity  {
             if(getIntent()!=null){
 
                 Log.d(TAG, "Got Request from SessonEngineer.");
-
-                //Bug is here need to implement it
+                //There is a Bug is here. Need to implement it for auto populate date field.
 //                    Bundle newBundle = getIntent.getExtras();
 //                    if (!newBundle.isEmpty()) {
 //                        Log.d(TAG, "Its here...................................");
