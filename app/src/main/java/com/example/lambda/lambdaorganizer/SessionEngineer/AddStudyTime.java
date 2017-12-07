@@ -25,6 +25,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import entities.StudyEvent;
+
+import static android.R.attr.data;
+
 /**
  * Created by priom on 11/8/2017.
  */
@@ -55,7 +59,7 @@ public class AddStudyTime extends AppCompatActivity  {
     public static String TAG = "AddStudyTime";
     private Intent getIntent;
 
-
+    static final int REQUEST_CODE_ADD_STUDY_TIME =42;
 
     String startDate = new String();
     String endDate = new String();
@@ -149,6 +153,33 @@ public class AddStudyTime extends AppCompatActivity  {
 
                 Log.d(TAG, "Got Request from SessonEngineer.");
 
+                //Bug is here need to implement it 
+//                    Bundle newBundle = getIntent.getExtras();
+//                    if (!newBundle.isEmpty()) {
+//                        Log.d(TAG, "Its here...................................");
+//
+//
+//                        if (newBundle.containsKey("startTime") && newBundle.containsKey("endTime")) {
+//
+//                             try {
+//
+//                                eventStartTime.setText(newBundle.getString("startTime"));
+//                                eventEndTime.setText(newBundle.getString("endTime"));
+//                            } catch (Exception e) {
+//                                errorText.setText(e.getMessage());
+//                                Log.d(TAG, "Event Create Failed: " + e.getMessage());
+//                            }
+//
+//                            Log.d(TAG, "Auto Field Populated : OK");
+//                        } else {
+//                            Log.d(TAG, "Auto Field Populated: No Ref. Found in newBundle.");
+//
+//                        }
+//
+//
+//                    }
+
+
             }
         }catch (Exception e){
             Log.d(TAG, e.getMessage());
@@ -235,6 +266,50 @@ public class AddStudyTime extends AppCompatActivity  {
             }
         });
 
+
+    }
+
+    /**
+     * Called when an activity launched here (specifically, AccountPicker
+     * and authorization) exits, giving you the requestCode you started it with,
+     * the resultCode it returned, and any additional data from it.
+     * @param requestCode code indicating which activity result is incoming.
+     * @param resultCode code indicating the result of the incoming
+     *     activity result.
+     * @param data Intent (containing result data) returned by incoming
+     *     activity result.
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+
+       // Log.d(TAG, "Automated Request for add study..:" + requestCode + "resultCode:" + resultCode);
+        if (requestCode == REQUEST_CODE_ADD_STUDY_TIME ) {
+            Log.d(TAG, "Activity Result Found from AddStudyTime.......................................");
+//            Bundle newBundle = data.getExtras();
+//            if (!newBundle.isEmpty()) {
+//
+//
+//                if (newBundle.containsKey("startTime") && newBundle.containsKey("endTime")) {
+//
+//                    try {
+//
+//                        eventStartTime.setText(newBundle.getString("startTime"));
+//                        eventEndTime.setText(newBundle.getString("endTime"));
+//                    } catch (Exception e) {
+//                        errorText.setText(e.getMessage());
+//                        Log.d(TAG, "Event Create Failed: " + e.getMessage());
+//                    }
+//
+//                    Log.d(TAG, "Auto Field Populated : OK");
+//                } else {
+//                    Log.d(TAG, "Auto Field Populated: No Ref. Found in newBundle.");
+//
+//                }
+//
+//
+//            }
+        }
 
     }
 

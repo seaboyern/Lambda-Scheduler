@@ -170,13 +170,13 @@ public final class InitDb {
         t3.setDate(start3);
         t3.setEnd(end3);
 
+
         CommitmentTable.getInstance(c).insert(t1);
         TaskTable.getInstance(c).insert(t1);
         CommitmentTable.getInstance(c).insert(t2);
         TaskTable.getInstance(c).insert(t2);
         CommitmentTable.getInstance(c).insert(t3);
         TaskTable.getInstance(c).insert(t3);
-
         // Task table queries:
         Log.d(TAG, "\n#####\n# Select task by title:");
         LinkedList<Task> list = TaskTable.getInstance(c).selectByTitle("Task 1");

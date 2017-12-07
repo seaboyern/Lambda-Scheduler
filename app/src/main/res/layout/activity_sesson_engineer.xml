@@ -8,7 +8,11 @@
     android:baselineAligned="false"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context="com.example.lambda.lambdaorganizer.SessionEngineer">
+    android:clickable="false"
+    android:descendantFocusability="blocksDescendants"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    tools:context="com.example.lambda.lambdaorganizer.SessionEngineer.SessionEngineer">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -41,6 +45,8 @@
             android:layout_gravity="end"
             android:layout_marginEnd="12dp"
             android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             app:backgroundTint="@android:color/holo_blue_bright"
             app:fabSize="mini"
             app:srcCompat="@drawable/googleg_standard_color_18"
@@ -85,24 +91,35 @@
         android:layout_height="wrap_content"
         android:layout_column="0"
         android:layout_row="2"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:text="No Item Found" />
 
     <Button
         android:id="@+id/showList"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:text="Show List" />
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:clickable="false"
+        android:text="Find Study Time" />
 
     <Button
         android:id="@+id/AddStudyTiime"
         android:layout_width="match_parent"
         android:layout_height="37dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:text="Add Study Tiime" />
 
     <Button
         android:id="@+id/Back_Menu"
         android:layout_width="match_parent"
         android:layout_height="34dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:clickable="false"
         android:text="Back To Menu" />
 
 </LinearLayout>
