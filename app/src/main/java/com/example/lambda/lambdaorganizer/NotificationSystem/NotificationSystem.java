@@ -3,33 +3,27 @@ package com.example.lambda.lambdaorganizer.NotificationSystem;
 
 import android.app.AlarmManager;
 import android.app.Notification;
-//import android.support.v4.app.TaskStackBuilder;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
-//import android.support.v7.app.NotificationCompat;
 import android.app.NotificationManager;
-//import android.app.PendingIntent;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.lambda.lambdaorganizer.R;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import static android.content.Context.ALARM_SERVICE;
-//import android.content.Intent;
 
 
 /**
  * Created by jadenball on 2017-10-12.
  * System of static methods for sending notifications to the user
  */
-
 public class NotificationSystem {
 
     /**
@@ -71,26 +65,15 @@ public class NotificationSystem {
         mNotificationManager.notify(notifID, notif);
     }
 
-    public static void sendNotification(AppCompatActivity activity, String subject, String body){
-
-        String sTitle = "Lambda Organizer";
-//        String body = "Lambda Scheduler notification";
-//        String subject = "Lambda Subject";
-        NotificationManager mNM =
-                (NotificationManager)activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notif = new Notification.Builder(activity.getApplicationContext())
-                .setContentTitle(sTitle)  // duplicate
-                .setContentText(body)
-                .setContentTitle(subject) // duplicate
-                .setSmallIcon(R.drawable.lambda_icon)
-                .build();
-
-        notif.flags |= Notification.FLAG_AUTO_CANCEL;
-        mNM.notify(0, notif);
-
-    }
-
-    public static void notifCreate(AppCompatActivity activity, AppCompatActivity resultActivity, int notifID, String msg){
+    /**
+     * Builds and returns a notification
+     * @param activity activity to create the notification from
+     * @param resultActivity activity to open when notification is pressed
+     * @param notifID unique id for the type of notification
+     * @param msg message to send the user in the notification
+     * @return built notification
+     */
+    public static Notification notifCreate(AppCompatActivity activity, AppCompatActivity resultActivity, int notifID, String msg){
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(activity)
                         .setSmallIcon(R.drawable.lambda_icon)
@@ -117,7 +100,7 @@ public class NotificationSystem {
         //NotificationManager mNotificationManager =
         //        (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        mBuilder.build();
+        return mBuilder.build();
 
         // mNotificationId is a unique integer your app uses to identify the
         // notification. For example, to cancel the notification, you can pass its ID
@@ -126,7 +109,10 @@ public class NotificationSystem {
     }
 
 
-    // Cancels the notification with the id notifID
+    /** Cancels the notification with the id notifID
+     * @param activity activity cancelling the notification
+     * @param notifID id of the notification to cancel
+     */
     public static void notifCancel(AppCompatActivity activity, int notifID){
         NotificationManager mNotificationManager =
                 (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -137,7 +123,7 @@ public class NotificationSystem {
      * Sets up a notification to notify the user at the given time
      * */
     public static void createAlarmNotif(AppCompatActivity activity,
-                                        int minute, int hour, int day, int month){
+                                        int minute, int hour, int day, int month, int year){
         String msg = "Task is Due";
 
         Intent intent = new Intent(activity, NotifReceiver.class);
@@ -153,24 +139,30 @@ public class NotificationSystem {
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.DAY_OF_MONTH, day);
-        calendar.set(Calendar.MONTH, month - 1);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.YEAR, year);
+        Log.d("NotificationSystem", "calendar = " + calendar.toString());
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
-//  // EXAMPLE FOR ADDING AN ALARM FOR A TASK:
-//  NotificationSystem.createAlarmNotif(ToDoAdd.this, newTask.getStart().getMinutes(),
-//                          newTask.getStart().getHours(), newTask.getDate().getDay(),
-//                          newTask.getDate().getMonth());
 
-
+    /**
+     * Sets up a notification to notify the user at the given time
+     * */
     public static void createAlarmNotif(AppCompatActivity activity, Date date){
         Intent intent = new Intent(activity, NotifReceiver.class);
+        intent.putExtra(NotifReceiver.NOTIFICATION_ID, 2);
         AlarmManager alarmManager = (AlarmManager) activity.getSystemService(ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getService(activity, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getService(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Log.d("NotificationSystem", "date = " + date.toString());
 
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.setTime(date);
+
+        Log.d("NotificationSystem", "Calendar = " + calendar.toString());
 
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);

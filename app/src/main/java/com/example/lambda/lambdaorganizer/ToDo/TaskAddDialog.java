@@ -5,14 +5,19 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.lambda.lambdaorganizer.NotificationSystem.NotificationSystem;
 import com.example.lambda.lambdaorganizer.R;
 import com.example.lambda.lambdaorganizer.ToDo.ToDoView;
 import com.example.lambda.lambdaorganizer.TaskDisplay;
+
+import java.util.Date;
 
 import entities.Task;
 
@@ -41,6 +46,10 @@ public class TaskAddDialog extends DialogFragment {
             try {
                 final Task newTask = new Task(name, description, Integer.parseInt(priority));
                 newTask.setTimeBounds(date, start, end);
+
+                Log.d("TaskAddDialog", "date: " + newTask.getDate().toString());
+                NotificationSystem.createAlarmNotif((AppCompatActivity) getActivity(), newTask.getDate());
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
