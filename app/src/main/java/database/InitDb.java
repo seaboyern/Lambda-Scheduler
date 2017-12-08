@@ -185,7 +185,7 @@ public final class InitDb {
         }
 
         Log.d(TAG, "\n#####\n# Select task by date:");
-        list = TaskTable.getInstance(c).selectByDate("2017-11-03");
+        list = TaskTable.getInstance(c).selectByDate("2017-12-03");
         for(Task task : list) {
             Log.d(TAG, task.toString());
         }
