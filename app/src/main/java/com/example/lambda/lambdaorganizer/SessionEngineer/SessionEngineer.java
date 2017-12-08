@@ -572,9 +572,9 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                     }
 
                     Log.d(TAG, "onActivityResult: All Ref found :"+newStudyEvent.toString());
-
-                    addStudyEventToDatabase(newStudyEvent);
                     sendRequestToGoogleApi(newStudyEvent);
+                    addStudyEventToDatabase(newStudyEvent);
+
                 } else {
                     Log.d(TAG, "onActivityResult: No Ref. Found in newBundle.");
 
