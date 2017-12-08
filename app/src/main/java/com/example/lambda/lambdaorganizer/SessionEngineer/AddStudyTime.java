@@ -121,8 +121,6 @@ public class AddStudyTime extends AppCompatActivity  {
         recurrenceDropdown = (Spinner)findViewById(R.id.spinner1);
         //create a list of items for the spinner.
         String[] items = new String[]{"DAILY", "WEEKLY"};
-        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
-        //There are multiple variations of this, but this is the basic variant.
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         //set the spinners adapter to the previously created one.
         recurrenceDropdown.setAdapter(adapter);
@@ -152,7 +150,7 @@ public class AddStudyTime extends AppCompatActivity  {
             if(getIntent()!=null){
 
                 Log.d(TAG, "Got Request from SessonEngineer.");
-                //There is a Bug is here. Need to implement it for auto populate date field.
+                // There is a Bug is here. Need to implement it for auto populate date field.
 //                    Bundle newBundle = getIntent.getExtras();
 //                    if (!newBundle.isEmpty()) {
 //                        Log.d(TAG, "Its here...................................");
@@ -268,57 +266,13 @@ public class AddStudyTime extends AppCompatActivity  {
 
     }
 
-    /**
-     * Called when an activity launched here (specifically, AccountPicker
-     * and authorization) exits, giving you the requestCode you started it with,
-     * the resultCode it returned, and any additional data from it.
-     * @param requestCode code indicating which activity result is incoming.
-     * @param resultCode code indicating the result of the incoming
-     *     activity result.
-     * @param data Intent (containing result data) returned by incoming
-     *     activity result.
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-
-       // Log.d(TAG, "Automated Request for add study..:" + requestCode + "resultCode:" + resultCode);
-        if (requestCode == REQUEST_CODE_ADD_STUDY_TIME ) {
-            Log.d(TAG, "Activity Result Found from AddStudyTime.......................................");
-//            Bundle newBundle = data.getExtras();
-//            if (!newBundle.isEmpty()) {
-//
-//
-//                if (newBundle.containsKey("startTime") && newBundle.containsKey("endTime")) {
-//
-//                    try {
-//
-//                        eventStartTime.setText(newBundle.getString("startTime"));
-//                        eventEndTime.setText(newBundle.getString("endTime"));
-//                    } catch (Exception e) {
-//                        errorText.setText(e.getMessage());
-//                        Log.d(TAG, "Event Create Failed: " + e.getMessage());
-//                    }
-//
-//                    Log.d(TAG, "Auto Field Populated : OK");
-//                } else {
-//                    Log.d(TAG, "Auto Field Populated: No Ref. Found in newBundle.");
-//
-//                }
-//
-//
-//            }
-        }
-
-    }
 
 
+/*
+  Check if the input time formate is correct
+ */
 
     public boolean isTimeStampValid(String inputString) {
-        //format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-        //format = new java.text.SimpleDateFormat("yyyy");
-        //dateTimeFormat = new java.text.SimpleDateFormat("yyyy-MM-ddTHH:mm:ss-");
-
         try {
             dateTimeFormat.parse(inputString);
         } catch (Exception e) {
@@ -328,7 +282,9 @@ public class AddStudyTime extends AppCompatActivity  {
         return true;
     }
 
-
+/*
+   formating the date
+ */
 
     public String formatDate(String inputString) {
         String out = "";
@@ -345,7 +301,9 @@ public class AddStudyTime extends AppCompatActivity  {
         return out;
     }
 
-
+/*
+    Formating the time
+ */
     public String formatTime(String inputString) {
         String out = "";
         try {

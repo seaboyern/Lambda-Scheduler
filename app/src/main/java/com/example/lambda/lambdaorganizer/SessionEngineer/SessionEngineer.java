@@ -70,6 +70,9 @@ import entities.interfaces.TimeSlot;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+/*
+    Creating Study event, search for study event and Create event on google API.
+ */
 
 public class SessionEngineer extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
     GoogleAccountCredential mCredential;
@@ -155,37 +158,9 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
         eventDescription =new String();
         eventStartTime=new String();
         eventEndTime=new String();
-
-        //newStudyEvent = new StudyEvent();
-
-
-        //startTime = new DateTime(System.currentTimeMillis());
-        //endTime = new DateTime(System.currentTimeMillis());
-
-
         mOutputText = new ArrayList<String>();
-
-        //mOutputText.add("Press Google Button To see the content.");
-
-
-//        adapter = new ArrayAdapter<String>
-//                (this, android.R.layout.simple_list_item_1, mOutputText);
         adapter = new ArrayAdapter<String>
                 (this, android.R.layout.simple_list_item_1, mOutputText);
-
-//        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_2, android.R.id.text1, mOutputText) {
-//            @Override
-//            public View getView(int position, View convertView, ViewGroup parent) {
-//                View view = super.getView(position, convertView, parent);
-//                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-//                TextView text2 = (TextView) view.findViewById(android.R.id.text2);
-//
-//                text1.setText(persons.get(position).getName());
-//                text2.setText(persons.get(position).getAge());
-//                return view;
-//            }
-//        };
-
 
         googleResult = (TextView) findViewById(R.id.textviewAPIResult);
 
