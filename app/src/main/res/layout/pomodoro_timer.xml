@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
@@ -20,47 +21,61 @@
         android:includeFontPadding="false"
         android:maxLines="1"
         android:text="25:00"
-        android:textSize="80sp"
+        android:textSize="100sp"
+        android:layout_marginTop="8dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="189dp" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="7dp" />
 
-    <Button
-        android:id="@+id/button11"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start"
-        android:backgroundTint="@color/darkgreen"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="12dp"
-        android:layout_below="@+id/Time"
-        android:layout_alignParentStart="true" />
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop"
-        android:backgroundTint="@color/caldroid_light_red"
-        android:layout_marginTop="26dp"
-        android:layout_below="@+id/button11"
-        android:layout_alignStart="@+id/button11" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/button11"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="Start"
+                android:backgroundTint="@color/darkgreen" />
 
-    <Button
-        android:id="@+id/button13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Resume"
-        android:background="@color/cardview_dark_background"
-        android:layout_alignBottom="@+id/button12"
-        android:layout_alignStart="@+id/button14" />
+            <Button
+                android:id="@+id/button12"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="Stop"
+                android:backgroundTint="@color/event_color_02" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/button14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pause"
-        android:layout_marginStart="32dp"
-        android:layout_alignTop="@+id/button11"
-        android:layout_toEndOf="@+id/button12" />
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/button13"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="Resume"
+                android:backgroundTint="@color/cardview_dark_background" />
+
+            <Button
+                android:id="@+id/button14"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="Pause"
+                android:backgroundTint="@color/caldroid_white"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

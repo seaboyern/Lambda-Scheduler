@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.util.Log;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -28,19 +29,21 @@ import android.graphics.drawable.Drawable;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
-import com.alamkanak.weekview.WeekViewLoader;
 
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
 import entities.Task;
 import entities.Assignment;
-import com.example.lambda.lambdaorganizer.Scheduler.TaskInfoDialog;
+import com.example.lambda.lambdaorganizer.ToDo.TaskInfoDialog;
+import com.example.lambda.lambdaorganizer.ToDo.TaskAddDialog;
+import com.example.lambda.lambdaorganizer.TaskDisplay;
 import database.tables.TaskTable;
+import database.tables.CommitmentTable;
 
 public class ScheduleOverview extends AppCompatActivity implements WeekView.EventClickListener,
         MonthLoader.MonthChangeListener, WeekView.EmptyViewClickListener,
-        DateTimePicker.DateTimeListener,
+        TaskDisplay,
         WeekView.EventLongPressListener{
 
     private static final int TYPE_DAY_VIEW = 1;
@@ -109,19 +112,20 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         Date d = new Date();
         d.setHours(0);
         a.setDeadline(d);
-        // addAssignment(a);
-
-        // Task tsk = new Task("Task1", "desc", 1);
-        // Date start = new Date();
-        // start.setHours(2);
-        // Date end = new Date();
-        // end.setHours(3);
-        // tsk.setStart(start);
-        // tsk.setEnd(end);
-        // tsk.setDate(start);
-        // addTask(tsk);
+        addAssignment(a);
 
         getTasksDB();
+
+        Task tsk = new Task("Task1", "desc", 1);
+        Date start = new Date();
+        start.setHours(2);
+        Date end = new Date();
+        end.setHours(3);
+        tsk.setStart(start);
+        tsk.setEnd(end);
+        tsk.setDate(start);
+        // addTaskNoDB(tsk);
+
     }
 
     private void getAssignmentDB() {
@@ -129,18 +133,18 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
     }
 
     private void getTasksDB() {
-        new Thread(new Runnable() {
+        TaskTable table = TaskTable.getInstance(getBaseContext());
+        LinkedList<Task> tasks = table.selectAll();
+        Log.v(TAG, "DB"+table.toString());
+        for(Task t : tasks) {
+            addTaskNoDB(t);
+        }
+        runOnUiThread(new Runnable() {
+            @Override
             public void run() {
-                TaskTable table = TaskTable.getInstance(getBaseContext());
-                LinkedList<Task> tasks = table.selectAll();
-                // LinkedList<Task> tasks = new LinkedList<Task>();
-                for(Task t : tasks) {
-                    addTask(t);
-                    Log.v(TAG, t.getStart().toString());
-                }
-                mWeekView.postInvalidate();
+                mWeekView.notifyDatasetChanged();
             }
-        }).start();
+        });
     }
 
     /**
@@ -235,11 +239,47 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      * Add a Task to the internal data structures for the week view.
      * @param t A task with the start end end times set.
      */
-    public void addTask(Task t) {
+    public void addTask(Task t, final String message) {
+        Log.v(TAG, "ADD: "+t.toString());
+        TaskTable.getInstance(getApplicationContext()).insert(t);
+        CommitmentTable.getInstance(getApplicationContext()).insert(t);
+        addTaskNoDB(t);
+        Log.v(TAG, "DB"+TaskTable.getInstance(getApplicationContext()).toString());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mWeekView.notifyDatasetChanged();
+            }
+        });
+    }
+
+    public void addTaskNoDB(Task t) {
+        Log.v(TAG, "ADD noDB: "+t.toString());
         WeekViewEvent e = taskToEvent(t);
         mEventToTask.put(e, t);
         mTaskEvents.add(e);
         mTasks.add(t);
+    }
+
+    public void deleteTask(Task t, final String message) {
+        Log.v(TAG, "DELETE"+ t.toString());
+        // mTasks.remove(t);
+        LinkedList<Task> list = TaskTable.getInstance(
+                getApplicationContext()).selectByTitle(t.getTitle());
+        TaskTable.getInstance(getApplicationContext()).remove(list.getFirst());
+        CommitmentTable.getInstance(getApplicationContext()).remove(list.getFirst());
+        for (Map.Entry<WeekViewEvent, Task> e : mEventToTask.entrySet()) {
+            Log.v(TAG, e.getValue().toString());
+            if (e.getValue().toString().equals(t.toString())) {
+                Log.v(TAG, e.getKey().getName());
+                deleteEvent(e.getKey());
+                break;
+            }
+        }
+    }
+
+    public void showDialog(DialogFragment dialog, String tag) {
+        dialog.show(getFragmentManager(), tag);
     }
 
     /**
@@ -344,8 +384,8 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
      */
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        // showEvent(event);
-        editEvent(event);
+        showEvent(event);
+        // editEvent(event);
     }
 
     /**
@@ -376,7 +416,8 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         Calendar endTime = (Calendar) time.clone();
         endTime.add(Calendar.HOUR, 1);
 
-        addEvent("Test", time, endTime);
+        showDialog(new TaskAddDialog(), "New task");
+        // addEvent("Test", time, endTime);
     }
 
     /**
@@ -460,29 +501,12 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         Log.v(TAG, endTime.toString());
 
         mEvents.add(event);
+        editEvent(event);
 
         mWeekView.notifyDatasetChanged();
         for (WeekViewEvent e : mEvents) {
             Log.v(TAG, e.getName());
         }
-    }
-
-    @Override
-    public void onDateTimePickerConfirm(Date d) {
-        Calendar startTime = Calendar.getInstance();
-        startTime.setTime(d);
-        Calendar endTime = (Calendar)startTime.clone();
-        endTime.add(Calendar.HOUR, 1);
-        Log.v(TAG, startTime.toString());
-        Log.v(TAG, endTime.toString());
-        WeekViewEvent event = new WeekViewEvent(mEventIDCounter, getEventTitle(startTime), startTime, endTime);
-        mEvents.add(event);
-
-        mWeekView.notifyDatasetChanged();
-        for (WeekViewEvent e : mEvents) {
-            Log.v(TAG, e.getName());
-        }
-        Toast.makeText(ScheduleOverview.this, "TODO: Open event " + event.getName(), Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -493,11 +517,23 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
         if(mEventToTask.containsKey(event)) {
             Task t = (Task)mEventToTask.get(event);
             TaskInfoDialog infoscreen = new TaskInfoDialog();
-            Bundle args = new Bundle();
-            args.putString("info", t.toString());
-            infoscreen.setArguments(args);
+            Bundle taskBundle = TaskInfoDialog.buildBundleFromTask(t);
+            infoscreen.setArguments(taskBundle);
             infoscreen.show(getSupportFragmentManager(), "Task info");
-        } //TODO: add support for assignments, events, etc.
+        } else if(mEventToAssignment.containsKey(event)) {
+            Assignment a = (Assignment)mEventToAssignment.get(event);
+            TaskInfoDialog infoscreen = new TaskInfoDialog();
+            Bundle args = new Bundle();
+            args.putString("info", a.toString());
+            infoscreen.setArguments(args);
+            infoscreen.show(getSupportFragmentManager(), "Assignment info");
+        } else {
+            TaskInfoDialog infoscreen = new TaskInfoDialog();
+            Bundle args = new Bundle();
+            args.putString("info", event.getName());
+            infoscreen.setArguments(args);
+            infoscreen.show(getSupportFragmentManager(), "Assignment info");
+        }
 
     }
 
@@ -515,7 +551,14 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
                 Calendar newEnd = (Calendar)newStart.clone();
                 newEnd.add(Calendar.HOUR, 1);
                 event.setEndTime(newEnd);
-                Toast.makeText(ScheduleOverview.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
+                if (mEventToTask.containsKey(event)) {
+                    // Update task, and update database
+                    Task t = mEventToTask.get(event);
+                    TaskTable.getInstance(getBaseContext()).remove(t);
+                    t.setStart(newStart.getTime());
+                    t.setEnd(newEnd.getTime());
+                    TaskTable.getInstance(getBaseContext()).insert(t);
+                }
                 mWeekView.notifyDatasetChanged();
             }
         }
@@ -550,6 +593,11 @@ public class ScheduleOverview extends AppCompatActivity implements WeekView.Even
             mEventToTask.remove(event);
             mTaskEvents = UpdatedList;
         }
-        mWeekView.notifyDatasetChanged();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mWeekView.notifyDatasetChanged();
+            }
+        });
     }
 }

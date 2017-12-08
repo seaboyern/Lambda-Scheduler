@@ -9,9 +9,7 @@ import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.GradeCalculator.GradeCalculatorMain;
 import com.example.lambda.lambdaorganizer.SessionEngineer.SessionEngineer;
-
-import database.DatabaseHelper;
-
+import com.example.lambda.lambdaorganizer.ToDo.ToDoView;
 import database.InitDb;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         // declaration of all objects
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         btnToDoList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ToDoListManager.class));
+                startActivity(new Intent(MainActivity.this, ToDoView.class));
             }
         });
 
@@ -89,11 +88,6 @@ public class MainActivity extends AppCompatActivity {
                 }).start();
             }
         });
-
-        NotificationSystem notif = new NotificationSystem();
-        notif.sendNotification(MainActivity.this,
-                "App initialization",
-                "Finished initializing the main activity.");
 
     }
 }

@@ -9,16 +9,22 @@ import java.util.LinkedList;
 public class Term {
 
     private String name;
-    private LinkedList<Course> courses;
+    public LinkedList<Course> courses;
+    protected Storage terms;
 
     public Term() {
         name = "<Empty>";
         courses = new LinkedList<>();
+        terms = Storage.getInstance();
+        terms.insert(this);
+
     }
 
     public Term(String initName) {
         name = initName;
         courses = new LinkedList<>();
+        terms = Storage.getInstance();
+        terms.insert(this);
     }
 
     public String getName() {
@@ -35,6 +41,17 @@ public class Term {
         courses.addLast(toAdd);
 
         return toAdd;
+    }
+
+    public Course findCourse(String name){
+
+        for(int i = 0; i < courses.size(); i++){
+            if(courses.get(i).toString().compareTo(name) == 0){
+                return courses.get(i);
+            }
+        }
+
+        return null;
     }
 
     public static void main(String args[]) {

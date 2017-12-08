@@ -1,5 +1,8 @@
 package entities;
 
+import com.example.lambda.lambdaorganizer.FormatDateTime;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import database.tables.AssignmentTable;
@@ -31,8 +34,10 @@ public class Assignment extends CourseCommitment {
 
     @Override
     public String toString() {
-        return String.format("\nAssignment: %s\nDeadline: %s\nCourse ID: %s\n",
-                this.getTitle(), this.getDeadline().toString(), this.getCourseId());
+        return "Task: Title: " + this.getTitle()
+                + "; Due Date: " + FormatDateTime.getDateTimeStringFromDate(this.deadline)
+                + "; Description: " + this.getDesc()
+                + "; Priority: " + this.getPrio();
     }
 
 }

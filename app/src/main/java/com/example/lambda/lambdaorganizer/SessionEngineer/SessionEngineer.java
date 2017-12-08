@@ -255,7 +255,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                     //Log.d(TAG, "StartDateConversion : " + startDate);
 
                 }
-                if(array.length <=2){
+                if(array.length > 0 && array.length <=2){
                     Log.d(TAG, "Number of Slot:" + array.length);
                     String sStartDate =sdf.format(array[0].getEnd());
                     Date fStartDate = new Date();
@@ -281,7 +281,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                         mOutputText.add(sStartDate + " To " + sEndDate);
                     }
                 }
-                else{
+                else if(array.length > 0){
                     for(int i=0; i<array.length-2;i++){
                         long differenceDates =0;
                         Log.d(TAG, "Number of Slot:" + array.length);
@@ -334,6 +334,8 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                     }
 
 
+                } else {
+                    ; // do nothing
                 }
                 adapter.notifyDataSetChanged();
             }

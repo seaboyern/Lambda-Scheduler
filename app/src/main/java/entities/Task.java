@@ -71,6 +71,15 @@ public class Task extends Commitment implements TimeSlot {
         this.end = end;
     }
 
+    public void setTimeBounds(String date, String start, String end) throws ParseException {
+        String startStr = String.format("%s %s", date, start);
+        String endStr = String.format("%s %s", date, end);
+        String dateStr = startStr;
+        this.setDate(FormatDateTime.getDateFromString(dateStr));
+        this.setStart(FormatDateTime.getDateFromString(startStr));
+        this.setEnd(FormatDateTime.getDateFromString(endStr));
+    }
+
     @Override
     public String toString() {
         SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
@@ -82,15 +91,6 @@ public class Task extends Commitment implements TimeSlot {
                 + "; End: " + timeFmt.format(this.end)
                 + "; Description: " + this.getDesc()
                 + "; Priority: " + this.getPrio();
-    }
-
-    public void setTimeBounds(String date, String start, String end) throws ParseException {
-        String startStr = String.format("%s %s", date, start);
-        String endStr = String.format("%s %s", date, end);
-        String dateStr = startStr;
-        this.setDate(FormatDateTime.getDateFromString(dateStr));
-        this.setStart(FormatDateTime.getDateFromString(startStr));
-        this.setEnd(FormatDateTime.getDateFromString(endStr));
     }
 
     /**

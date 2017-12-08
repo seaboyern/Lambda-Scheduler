@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:weightSum="1"
+    android:background="@color/colorPrimary"
     android:clickable="true">
 
     <TextView
@@ -13,12 +14,5 @@
         android:layout_height="61dp"
         android:layout_weight="0.97"
         android:clickable="true"/>
-    <TextView
-        android:id="@+id/listItem"
-        android:layout_width="318dp"
-        android:layout_height="61dp"
-        android:layout_weight="0.97"
-        android:clickable="true"/>
-
 
 </LinearLayout>

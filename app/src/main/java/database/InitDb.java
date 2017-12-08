@@ -124,7 +124,7 @@ public final class InitDb {
             Task task1 = new Task("Task " + i, "A task",
                     (int)((Math.random() * 3) + 1));
             try {
-                String date = "2017-11-" + i;
+                String date = "2017-12-" + i;
                 String start =  "04:00:00";
                 String end = " 04:30:00";
                 task1.setTimeBounds(date, start, end);

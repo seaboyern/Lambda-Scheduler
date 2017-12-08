@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.DateTimePicker;
 import com.example.lambda.lambdaorganizer.R;
+import com.example.lambda.lambdaorganizer.NotificationSystem.NotificationSystem;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -358,6 +359,7 @@ public class AddStudyTime extends AppCompatActivity  {
                 timeZone = curTimeZone;
 
                 Toast.makeText(AddStudyTime.this, "TODO: Open event " + d, Toast.LENGTH_SHORT).show();
+                NotificationSystem.createAlarmNotif(AddStudyTime.this, d);
 
             }
         }

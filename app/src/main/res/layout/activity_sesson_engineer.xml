@@ -12,7 +12,9 @@
     android:descendantFocusability="blocksDescendants"
     android:focusable="false"
     android:focusableInTouchMode="false"
+    android:background="@color/colorPrimary"
     tools:context="com.example.lambda.lambdaorganizer.SessionEngineer.SessionEngineer">
+
 
     <RelativeLayout
         android:layout_width="wrap_content"
