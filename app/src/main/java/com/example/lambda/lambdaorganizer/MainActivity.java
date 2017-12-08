@@ -8,11 +8,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.lambda.lambdaorganizer.GradeCalculator.GradeCalculatorMain;
+import com.example.lambda.lambdaorganizer.SessionEngineer.SessionEngineer;
 import com.example.lambda.lambdaorganizer.ToDo.ToDoView;
-import com.example.lambda.lambdaorganizer.NotificationSystem.NotificationSystem;
-
-import database.DatabaseHelper;
-
 import database.InitDb;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         // declaration of all objects

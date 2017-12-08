@@ -1,4 +1,4 @@
-package com.example.lambda.lambdaorganizer;
+package com.example.lambda.lambdaorganizer.SessionEngineer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lambda.lambdaorganizer.DateTimePicker;
+import com.example.lambda.lambdaorganizer.R;
 import com.example.lambda.lambdaorganizer.NotificationSystem.NotificationSystem;
 
 import java.sql.Time;
@@ -23,6 +25,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import entities.StudyEvent;
+
+import static android.R.attr.data;
 
 /**
  * Created by priom on 11/8/2017.
@@ -54,7 +60,7 @@ public class AddStudyTime extends AppCompatActivity  {
     public static String TAG = "AddStudyTime";
     private Intent getIntent;
 
-
+    static final int REQUEST_CODE_ADD_STUDY_TIME =42;
 
     String startDate = new String();
     String endDate = new String();
@@ -116,8 +122,6 @@ public class AddStudyTime extends AppCompatActivity  {
         recurrenceDropdown = (Spinner)findViewById(R.id.spinner1);
         //create a list of items for the spinner.
         String[] items = new String[]{"DAILY", "WEEKLY"};
-        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
-        //There are multiple variations of this, but this is the basic variant.
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         //set the spinners adapter to the previously created one.
         recurrenceDropdown.setAdapter(adapter);
@@ -147,6 +151,32 @@ public class AddStudyTime extends AppCompatActivity  {
             if(getIntent()!=null){
 
                 Log.d(TAG, "Got Request from SessonEngineer.");
+                // There is a Bug is here. Need to implement it for auto populate date field.
+//                    Bundle newBundle = getIntent.getExtras();
+//                    if (!newBundle.isEmpty()) {
+//                        Log.d(TAG, "Its here...................................");
+//
+//
+//                        if (newBundle.containsKey("startTime") && newBundle.containsKey("endTime")) {
+//
+//                             try {
+//
+//                                eventStartTime.setText(newBundle.getString("startTime"));
+//                                eventEndTime.setText(newBundle.getString("endTime"));
+//                            } catch (Exception e) {
+//                                errorText.setText(e.getMessage());
+//                                Log.d(TAG, "Event Create Failed: " + e.getMessage());
+//                            }
+//
+//                            Log.d(TAG, "Auto Field Populated : OK");
+//                        } else {
+//                            Log.d(TAG, "Auto Field Populated: No Ref. Found in newBundle.");
+//
+//                        }
+//
+//
+//                    }
+
 
             }
         }catch (Exception e){
@@ -239,11 +269,11 @@ public class AddStudyTime extends AppCompatActivity  {
 
 
 
-    public boolean isTimeStampValid(String inputString) {
-        //format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-        //format = new java.text.SimpleDateFormat("yyyy");
-        //dateTimeFormat = new java.text.SimpleDateFormat("yyyy-MM-ddTHH:mm:ss-");
+/*
+  Check if the input time formate is correct
+ */
 
+    public boolean isTimeStampValid(String inputString) {
         try {
             dateTimeFormat.parse(inputString);
         } catch (Exception e) {
@@ -253,7 +283,9 @@ public class AddStudyTime extends AppCompatActivity  {
         return true;
     }
 
-
+/*
+   formating the date
+ */
 
     public String formatDate(String inputString) {
         String out = "";
@@ -270,7 +302,9 @@ public class AddStudyTime extends AppCompatActivity  {
         return out;
     }
 
-
+/*
+    Formating the time
+ */
     public String formatTime(String inputString) {
         String out = "";
         try {
@@ -305,7 +339,7 @@ public class AddStudyTime extends AppCompatActivity  {
             public void onDateTimePickerConfirm(Date d) {
 
                // String date =d.getYear()+"-"+(d.getMonth()+1)+"-"+d.getDay();
-                String date =d.getYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+                String date =String.format("%02d-%02d-%02d",d.getYear(),(d.getMonth()+1),d.getDate());
                 //String time =d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"0";
                 //String time =String.format("%02d:%02d:02%",d.getHours(),d.getMinutes(),d.getSeconds());
                 String time =String.format("%02d:%02d:%02d",d.getHours(),d.getMinutes(),d.getSeconds());

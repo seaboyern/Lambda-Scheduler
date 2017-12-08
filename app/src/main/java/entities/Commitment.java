@@ -2,13 +2,16 @@ package entities;
 
 import android.content.ContentValues;
 
+import java.util.Date;
+
 import database.DatabaseObject;
+import entities.interfaces.CommitmentInterface;
 
 /**
  * Created by mahmudfasihulazam on 2017-11-11.
  */
 
-public abstract class Commitment implements DatabaseObject {
+public abstract class Commitment implements DatabaseObject, CommitmentInterface {
     private String title;
     private String googleId;
     private String desc;
@@ -51,4 +54,6 @@ public abstract class Commitment implements DatabaseObject {
     public void setGoogleId(String googleId) {
         this.googleId = googleId;
     }
+
+    public abstract Date getSequencingDateTime();
 }

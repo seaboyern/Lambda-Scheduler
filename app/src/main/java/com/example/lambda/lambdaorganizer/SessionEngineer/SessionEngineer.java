@@ -1,4 +1,4 @@
-package com.example.lambda.lambdaorganizer;
+package com.example.lambda.lambdaorganizer.SessionEngineer;
 
 import android.Manifest;
 import android.accounts.AccountManager;
@@ -11,17 +11,24 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewDebug;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.lambda.lambdaorganizer.MainActivity;
+import com.example.lambda.lambdaorganizer.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -41,14 +48,31 @@ import com.google.api.services.calendar.model.EventReminder;
 import com.google.api.services.calendar.model.Events;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.TimeZone;
 
+import adapters.SessionToStudyEventAdapter;
+import adapters.StudyEventToSessionAdapter;
+import database.tables.CommitmentTable;
+import database.tables.SessionTable;
+import entities.Commitment;
+import entities.Session;
+import entities.StudyEvent;
+import entities.interfaces.TimeSlot;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+/*
+    Creating Study event, search for study event and Create event on google API.
+ */
 
 public class SessionEngineer extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
     GoogleAccountCredential mCredential;
@@ -88,7 +112,28 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
     boolean createEvent =false;
     boolean getResult = false;
     StudyEvent newStudyEvent;
+    
+    public LinkedList<Commitment> getEventsByDate(Date date) {
+        LinkedList<Commitment> list = CommitmentTable.getInstance(getBaseContext())
+                .selectByDate(date);
+        return list;
+    }
 
+
+
+
+    /**
+     * Inserts a StudyEvent into the local database:
+     */
+    public void addStudyEventToDatabase(final StudyEvent e) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                StudyEventToSessionAdapter a = new StudyEventToSessionAdapter(e);
+                SessionTable.getInstance(getBaseContext()).insert(a);
+            }
+        }).start();
+    }
 
     /**
      * Create the main activity.
@@ -113,22 +158,9 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
         eventDescription =new String();
         eventStartTime=new String();
         eventEndTime=new String();
-
-        //newStudyEvent = new StudyEvent();
-
-
-        //startTime = new DateTime(System.currentTimeMillis());
-        //endTime = new DateTime(System.currentTimeMillis());
-
-
         mOutputText = new ArrayList<String>();
-
-        //mOutputText.add("Press Google Button To see the content.");
-
-
         adapter = new ArrayAdapter<String>
-                (this, R.layout.google_cal_result,R.id.listItem, mOutputText);
-
+                (this, android.R.layout.simple_list_item_1, mOutputText);
 
         googleResult = (TextView) findViewById(R.id.textviewAPIResult);
 
@@ -183,9 +215,182 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             @Override
             public void onClick(View v) {
 
-                mOutputText.add("RAM");
+                //mOutputText.add("RAM");
+                mOutputText.clear();
+                Date today = new Date();
+                LinkedList<Commitment> list = getEventsByDate(today);
+                ListIterator<Commitment> iter = list.listIterator();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssXXX");
+                SimpleDateFormat hour = new SimpleDateFormat("HH");
+                Log.d(TAG, "Slots from database: " + list.toString());
 
+                while(iter.hasNext()) {
+                    Commitment i = iter.next();
+                    if(!(i instanceof TimeSlot)) {
+                        iter.remove();
+                    } else {
+                        TimeSlot slot = (TimeSlot)i;
+                        Log.d(TAG, slot.getStart().toString());
+                        if(slot.getStart().compareTo(today) < 1) {
+                            Log.d(TAG, "Slot: " + slot.toString());
+                            iter.remove();
+                        }
+                    }
+                }
+
+                Log.d(TAG, "Slots from database after removal: " + list.toString());
+
+                TimeSlot array[] = new TimeSlot[list.size()];
+                for(int i = 0; i < list.size(); i++) {
+                    array[i] = (TimeSlot)list.get(i);
+                }
+
+                Arrays.sort(array);
+
+                Log.d(TAG, "After sorting: ");
+                for(TimeSlot i : array) {
+                    Log.d(TAG, "Slot :" + i.toString());
+                    //mOutputText.add(i.getEnd().toString());
+                    //String startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssXXX").format(i.getStart());
+                    //Log.d(TAG, "StartDateConversion : " + startDate);
+
+                }
+                if(array.length > 0 && array.length <=2){
+                    Log.d(TAG, "Number of Slot:" + array.length);
+                    String sStartDate =sdf.format(array[0].getEnd());
+                    Date fStartDate = new Date();
+                    Date fEndDate = new Date();
+                    long differenceDates = 0;
+                    long difference = 0;
+                    String sEndDate  = new SimpleDateFormat("yyyy-MM-dd").format(today)+" 23:59:59"+new SimpleDateFormat("XXX").format(today);
+                    try {
+                        fStartDate = sdf.parse(sStartDate);
+                        fEndDate = sdf.parse(sEndDate);
+
+                        //Comparing dates
+                        difference = Math.abs(fStartDate.getTime() - fEndDate.getTime());
+                       differenceDates = difference / ( 60 * 1000);
+
+
+                    }catch (ParseException exp) {
+                        exp.printStackTrace();
+                    }
+                    Log.d(TAG, "Time Difference Milisec:" + difference);
+                    Log.d(TAG, "Time Difference:" + differenceDates);
+                    if(differenceDates>(30)) { //if the gap more then 30 min
+                        mOutputText.add(sStartDate + " To " + sEndDate);
+                    }
+                }
+                else if(array.length > 0){
+                    for(int i=0; i<array.length-2;i++){
+                        long differenceDates =0;
+                        Log.d(TAG, "Number of Slot:" + array.length);
+                        String sStartDate =sdf.format(array[i].getEnd());
+                        String sEndDate =sdf.format(array[i+1].getStart());
+                        Date fStartDate = new Date();
+                        Date fEndDate = new Date();
+                        Date fDayEnd = new Date();
+
+                        try {
+                            fStartDate = sdf.parse(sStartDate);
+                            fEndDate = sdf.parse(sEndDate);
+
+
+                            //Comparing dates
+                            long difference = Math.abs(fStartDate.getTime() - fEndDate.getTime());
+                            differenceDates = difference / (60 * 1000);
+                            Log.d(TAG, "Time Difference:" + difference);
+                        }catch (ParseException exp) {
+                            exp.printStackTrace();
+                        }
+                        if(differenceDates>(30)) { //if the gap more then 30 min
+                            mOutputText.add(sStartDate + " To " + sEndDate);
+                        }
+
+                    }
+                    //check the last item
+                    long differenceDates=0;
+                    Log.d(TAG, "Number of Slot:" + array.length);
+                    String sStartDate =sdf.format(array[array.length-1].getEnd());
+                    Date fStartDate = new Date();
+                    Date fEndDate = new Date();
+                    String sEndDate  = new SimpleDateFormat("yyyy-MM-dd").format(today)+" 23:59:59"+new SimpleDateFormat("XXX").format(today);
+                    try {
+                        fStartDate = sdf.parse(sStartDate);
+                        fEndDate = sdf.parse(sEndDate);
+
+                        //Comparing dates
+                        long difference = Math.abs(fStartDate.getTime() - fEndDate.getTime());
+                        differenceDates = difference / ( 60 * 1000);
+                        Log.d(TAG, "Time Difference Milisec:" + difference);
+                        Log.d(TAG, "Time Difference:" + differenceDates);
+
+                    }catch (ParseException exp) {
+                        exp.printStackTrace();
+                    }
+
+                    if(differenceDates>(30)) { //if the gap more then 30 min
+                        mOutputText.add(sStartDate + " To " + sEndDate);
+                    }
+
+
+                } else {
+                    ; // do nothing
+                }
                 adapter.notifyDataSetChanged();
+            }
+        });
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)
+            {
+
+                String value = (String)adapter.getItemAtPosition(position);
+                Toast.makeText(getApplicationContext(), "Item Selected: " + value, Toast.LENGTH_LONG)
+                        .show();
+                Log.d(TAG,"ListViewSelectedItem :"+position);
+                String  startDate = value.substring(0,25);
+                String  endDate = value.substring(29,54);
+                Log.d(TAG,"startDateString : "+startDate);
+                Log.d(TAG,"endtDateString : "+endDate);
+
+
+
+
+               // Intent sendIntent = new Intent(getApplicationContext(), AddStudyTime.class);
+                //sendIntent.putExtra("eventStartDate", startDate);
+                //sendIntent.putExtra("eventEndDate", endDate);
+
+
+
+               ;
+                addStudyButton.setEnabled(false);
+                mCallApiButton.setEnabled(false);
+
+                Intent studyIntent=new Intent(getApplicationContext(), AddStudyTime.class);
+                studyIntent.putExtra("eventStartDate", startDate);
+                studyIntent.putExtra("eventEndDate", endDate);
+               studyIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                try{
+                    startActivityForResult(studyIntent,REQUEST_CODE_ADD_STUDY_TIME);
+                    Log.d(TAG, "Sending Requent to AddStudy.");
+                }catch (Exception e){
+                    googleResult.setText("addStudyButton:"+e.getMessage());
+                }
+                createEvent = true;
+                addStudyButton.setEnabled(true);
+                mCallApiButton.setEnabled(true);
+
+
+
+
+
+
+
+
             }
         });
 
@@ -226,7 +431,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
 
 
 
-
+//######### Based On the Google API Tutorial #########################
 
 
     /**
@@ -248,7 +453,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             googleResult.setText("No network connection available.");
 
         } else {
-                new MakeRequestTask(mCredential).execute();
+                new syncWithGoogleAPI(mCredential).execute();
 
         }
     }
@@ -273,7 +478,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             googleResult.setText("No network connection available.");
 
         } else {
-            new MakeRequestTask(mCredential, event).execute();
+            new syncWithGoogleAPI(mCredential, event).execute();
 
         }
     }
@@ -368,6 +573,8 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
 
                     Log.d(TAG, "onActivityResult: All Ref found :"+newStudyEvent.toString());
                     sendRequestToGoogleApi(newStudyEvent);
+                    addStudyEventToDatabase(newStudyEvent);
+
                 } else {
                     Log.d(TAG, "onActivityResult: No Ref. Found in newBundle.");
 
@@ -522,15 +729,16 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
      * An asynchronous task that handles the Google Calendar API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
-    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
+    private class syncWithGoogleAPI extends AsyncTask<Void, Void, List<String>> {
+
         private com.google.api.services.calendar.Calendar mService = null;
         private Exception mLastError = null;
         StudyEvent studyEvent;
         Boolean createNewEvent =false;
         Boolean eventCreated = false;
 
-        MakeRequestTask(GoogleAccountCredential credential, StudyEvent newStudyEvent) {
-
+        syncWithGoogleAPI(GoogleAccountCredential credential, StudyEvent newStudyEvent) {
+            Log.d(TAG, "It is here.................................................");
             if(newStudyEvent!=null) {
                 this.studyEvent = newStudyEvent;
 
@@ -545,7 +753,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
                     .build();
         }
 
-        MakeRequestTask(GoogleAccountCredential credential) {
+        syncWithGoogleAPI(GoogleAccountCredential credential) {
 
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -563,6 +771,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
         protected List<String> doInBackground(Void... params) {
 
             if(studyEvent!=null){
+
                 try {
                     createGoogleEvent();
                     studyEvent =null;
@@ -577,7 +786,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
             }else if(studyEvent==null){
 
                 try {
-                    return syncWithGoogleAPI();
+                    return getEventList();
                 } catch (Exception e) {
                     mLastError = e;
                     cancel(true);
@@ -596,7 +805,7 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
          * @return List of Strings describing returned events.
          * @throws IOException
          */
-        private List<String> syncWithGoogleAPI() throws IOException {
+        private List<String> getEventList() throws IOException {
             // List the next 10 events from the primary calendar.
 
             DateTime now = new DateTime(System.currentTimeMillis());
@@ -659,16 +868,16 @@ public class SessionEngineer extends AppCompatActivity implements EasyPermission
 
 
         //DateTime startDateTime = new DateTime(eventStartTime);
-        //DateTime startDateTime = new DateTime("2017-11-11T07:50:00-06:00");
+        //DateTime startDateTime = new DateTime("2017-12-07T19:50:00-06:00");
         DateTime startDateTime = new DateTime(studyEvent.getEventStartDate().toString()+"T"+studyEvent.getEventStarTime()+studyEvent.getEventTimeZone().toString());
-        Log.d(TAG, "createGoogleEvent: startDateTime"+startDateTime.toString());
+        Log.d(TAG, "createGoogleEvent: startDateTime: "+startDateTime.toString());
         EventDateTime start = new EventDateTime()
                 .setDateTime(startDateTime)
                 .setTimeZone(timezoneID);
         event.setStart(start);
 
         //DateTime endDateTime = new DateTime(eventEndTime);
-        //DateTime endDateTime = new DateTime("2017-11-13T20:55:00-06:00");
+        //DateTime endDateTime = new DateTime("2017-12-17T20:55:00-06:00");
         DateTime endDateTime = new DateTime(studyEvent.getEventEndDate().toString()+"T"+studyEvent.getEventEndTime()+studyEvent.getEventTimeZone().toString());
         Log.d(TAG, "createGoogleEvent: endDateTime"+endDateTime.toString());
         EventDateTime end = new EventDateTime()

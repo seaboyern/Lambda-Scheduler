@@ -6,11 +6,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import entities.interfaces.TimeSlot;
+
 /**
  * Created by mahmudfasihulazam on 2017-10-12.
  */
 
-public class Task extends Commitment {
+public class Task extends Commitment implements TimeSlot {
 
     /**
      * Fields:
@@ -27,6 +29,16 @@ public class Task extends Commitment {
     public Task(String title, String desc, int prio) {
         super(title, desc, prio);
         super.setGoogleId("");
+    }
+
+    @Override
+    public Date getSequencingDateTime() {
+        Date now = new Date();
+        if(now.compareTo(this.getStart()) < 0) {
+            return this.getStart();
+        } else {
+            return this.getEnd();
+        }
     }
 
     // Getters and setters:
@@ -48,6 +60,11 @@ public class Task extends Commitment {
 
     public Date getEnd() {
         return end;
+    }
+
+    @Override
+    public int compareTo(TimeSlot other) {
+        return this.getStart().compareTo(other.getStart());
     }
 
     public void setEnd(Date end) {

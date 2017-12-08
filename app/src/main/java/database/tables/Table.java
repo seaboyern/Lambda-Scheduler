@@ -2,6 +2,7 @@ package database.tables;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.HashMap;
 
@@ -16,6 +17,15 @@ public abstract class Table {
     protected Context context;
     protected String tableName;
     protected HashMap<String, String> typeMap;
+
+    protected static String uniDimQuery =
+            "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s\nWHERE %s.%s = '%s'";
+    protected static String uniDimLikeQuery =
+            "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s\nWHERE %s.%s LIKE '%s'";
+    protected static String selectAllQuery = "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s";
+
+    protected static String joinTwo = "SELECT * FROM %s\nJOIN %s\nON %s.%s = %s.%s";
+    protected static String joinTwoLike = "SELECT * FROM %s\nJOIN %s\nON %s.%s LIKE %s.%s";
 
     protected Table(Context c) {
         this.context = c;
@@ -48,6 +58,7 @@ public abstract class Table {
         } catch(Exception e) {
             throw e;
         } finally {
+            Log.d(this.getTableName(), dbHelper.getTableAsString(this.getTableName()));
             dbHelper.close();
             if(-1 == status) throw new RuntimeException("Insertion failed");
         }
@@ -61,6 +72,7 @@ public abstract class Table {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            Log.d(this.getTableName(), dbHelper.getTableAsString(this.getTableName()));
             dbHelper.close();
         }
     }

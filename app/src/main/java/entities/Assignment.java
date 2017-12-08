@@ -1,5 +1,7 @@
 package entities;
 
+import com.example.lambda.lambdaorganizer.FormatDateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,6 +19,11 @@ public class Assignment extends CourseCommitment {
         super(title, desc, prio);
     }
 
+    @Override
+    public Date getSequencingDateTime() {
+        return this.getDeadline();
+    }
+
     public Date getDeadline() {
         return deadline;
     }
@@ -27,9 +34,8 @@ public class Assignment extends CourseCommitment {
 
     @Override
     public String toString() {
-        SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd");
         return "Task: Title: " + this.getTitle()
-                + "; Due Date: " + dateFmt.format(this.deadline)
+                + "; Due Date: " + FormatDateTime.getDateTimeStringFromDate(this.deadline)
                 + "; Description: " + this.getDesc()
                 + "; Priority: " + this.getPrio();
     }
